@@ -1,4 +1,15 @@
-# Logs
+# Зависимости (ни в коем случае не коммитить)
+node_modules/
+.pnp
+.pnp.js
+
+# Результаты сборки (собираются автоматически через CI/CD)
+dist/
+dist-ssr/
+build/
+*.tsbuildinfo
+
+# Логи и отчеты об ошибках
 logs
 *.log
 npm-debug.log*
@@ -7,18 +18,26 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
-node_modules
-dist
-dist-ssr
-*.local
+# Переменные окружения и секреты
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+*.env
 
-# Editor directories and files
+# Файлы редакторов и IDE
 .vscode/*
 !.vscode/extensions.json
-.idea
-.DS_Store
+!.vscode/settings.json
+.idea/
 *.suo
 *.ntvs*
 *.njsproj
 *.sln
 *.sw?
+
+# Системные файлы ОС
+.DS_Store
+Thumbs.db
+Desktop.ini
