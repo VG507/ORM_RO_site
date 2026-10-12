@@ -60,42 +60,42 @@ export const CareerSelector: React.FC = () => {
   return (
     <section
       id="selector"
-      className="relative py-20 lg:py-32 bg-[#F4F6FB] text-[#062985] overflow-hidden"
+      className="relative py-16 sm:py-20 lg:py-32 bg-[#F4F6FB] text-[#062985] overflow-hidden"
     >
-      <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-12 relative z-10">
+      <div className="max-w-[1440px] mx-auto px-3 min-[380px]:px-4 sm:px-6 lg:px-12 relative z-10">
         {/* Section Header */}
-        <div className="flex flex-col items-center text-center mb-12 max-w-2xl mx-auto">
-          <div className="flex items-center gap-2 mb-3">
+        <div className="flex flex-col items-center text-center mb-10 sm:mb-12 max-w-2xl mx-auto">
+          <div className="flex flex-wrap items-center justify-center gap-2 mb-3">
             <StickerPill text="Интерактивный тест" bg="#9B49DC" textColor="#FFFFFF" rotate="-1deg" />
-            <span className="font-hand text-lg text-[#062985] font-bold">
+            <span className="font-hand text-base sm:text-lg text-[#062985] font-bold">
               / 3 простых вопроса
             </span>
           </div>
 
-          <h2 className="font-display font-extrabold text-3xl sm:text-5xl lg:text-6xl tracking-tight leading-tight uppercase mb-4 text-[#062985]">
+          <h2 className="font-display font-extrabold text-2xl min-[380px]:text-3xl sm:text-5xl lg:text-6xl tracking-tight leading-tight uppercase mb-4 text-[#062985] break-words">
             Найди свою точку <br />
-            <span className="bg-[#C4E538] px-3 py-0.5 inline-block -rotate-1 border-2 border-[#062985] rounded-xl shadow-[3px_3px_0px_#062985]">
+            <span className="bg-[#C4E538] px-2.5 sm:px-3 py-0.5 inline-block -rotate-1 border-2 border-[#062985] rounded-xl shadow-[3px_3px_0px_#062985]">
               входа в профессию
             </span>
           </h2>
 
-          <p className="font-body text-base sm:text-lg text-[#062985]/75 leading-relaxed">
+          <p className="font-body text-sm sm:text-base lg:text-lg text-[#062985]/75 leading-relaxed">
             Ответь на три ключевых вопроса, чтобы алгоритм платформы определил
             наиболее подходящую роль и порекомендовал стартовую ступень карьерного маршрута.
           </p>
         </div>
 
         {/* Questionnaire Box */}
-        <div className="max-w-3xl mx-auto bg-white rounded-3xl border-3 border-[#062985] shadow-[8px_8px_0px_#062985] p-6 sm:p-10 lg:p-12 relative">
+        <div className="max-w-3xl mx-auto bg-white rounded-2xl sm:rounded-3xl border-2 sm:border-3 border-[#062985] shadow-[4px_4px_0px_#062985] sm:shadow-[8px_8px_0px_#062985] p-4 min-[380px]:p-6 sm:p-10 lg:p-12 relative">
           {!isCompleted ? (
             <div>
               {/* Progress Bar */}
-              <div className="mb-8">
-                <div className="flex items-center justify-between text-xs font-bold uppercase text-[#062985]/70 mb-2">
+              <div className="mb-6 sm:mb-8">
+                <div className="flex items-center justify-between text-[11px] sm:text-xs font-bold uppercase text-[#062985]/70 mb-2">
                   <span>Вопрос {currentStepIndex + 1} из {totalQuestions}</span>
                   <span>{Math.round(((currentStepIndex + 1) / totalQuestions) * 100)}% пройдено</span>
                 </div>
-                <div className="w-full h-3 bg-[#F4F6FB] rounded-full border-2 border-[#062985] overflow-hidden">
+                <div className="w-full h-2.5 sm:h-3 bg-[#F4F6FB] rounded-full border-2 border-[#062985] overflow-hidden">
                   <div
                     className="h-full bg-[#C4E538] transition-all duration-300"
                     style={{
@@ -106,17 +106,17 @@ export const CareerSelector: React.FC = () => {
               </div>
 
               {/* Question Text */}
-              <div className="mb-8">
-                <h3 className="font-display font-extrabold text-xl sm:text-2xl lg:text-3xl text-[#062985] leading-snug mb-2">
+              <div className="mb-6 sm:mb-8">
+                <h3 className="font-display font-extrabold text-lg min-[380px]:text-xl sm:text-2xl lg:text-3xl text-[#062985] leading-snug mb-1.5 sm:mb-2 break-words">
                   {currentQuestion.title}
                 </h3>
-                <p className="font-hand text-base sm:text-lg text-[#9B49DC] font-bold">
+                <p className="font-hand text-sm sm:text-base lg:text-lg text-[#9B49DC] font-bold">
                   {currentQuestion.subtitle}
                 </p>
               </div>
 
               {/* Options List */}
-              <div className="space-y-3.5 mb-10">
+              <div className="space-y-3 sm:space-y-3.5 mb-8 sm:mb-10">
                 {currentQuestion.options.map((option) => {
                   const isSelected =
                     selectedAnswers[currentStepIndex]?.id === option.id;
@@ -126,17 +126,17 @@ export const CareerSelector: React.FC = () => {
                       key={option.id}
                       type="button"
                       onClick={() => handleSelectOption(option)}
-                      className={`w-full text-left p-4 sm:p-5 rounded-2xl border-2 sm:border-3 transition-all flex items-start justify-between gap-4 cursor-pointer ${
+                      className={`w-full text-left p-3.5 min-[380px]:p-4 sm:p-5 rounded-xl sm:rounded-2xl border-2 sm:border-3 transition-all flex items-start justify-between gap-3 sm:gap-4 cursor-pointer ${
                         isSelected
-                          ? 'bg-[#C4E538] text-[#062985] border-[#062985] shadow-[4px_4px_0px_#062985] scale-[1.01]'
+                          ? 'bg-[#C4E538] text-[#062985] border-[#062985] shadow-[3px_3px_0px_#062985] sm:shadow-[4px_4px_0px_#062985] scale-[1.01]'
                           : 'bg-[#F4F6FB] text-[#062985] border-[#062985]/20 hover:border-[#062985] hover:bg-white'
                       }`}
                     >
-                      <div>
-                        <span className="font-display font-bold text-sm sm:text-base leading-snug block mb-1">
+                      <div className="min-w-0">
+                        <span className="font-display font-bold text-xs min-[380px]:text-sm sm:text-base leading-snug block mb-1">
                           {option.text}
                         </span>
-                        <span className="text-xs text-[#062985]/70 block font-medium">
+                        <span className="text-[11px] sm:text-xs text-[#062985]/70 block font-medium">
                           {option.description}
                         </span>
                       </div>
@@ -232,10 +232,10 @@ export const CareerSelector: React.FC = () => {
               </div>
 
               {/* Action Buttons */}
-              <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 pt-4 border-t border-[#062985]/15">
+              <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-4 pt-4 border-t border-[#062985]/15">
                 <a
                   href="#route"
-                  className="inline-flex items-center justify-center gap-2 bg-[#062985] text-white font-display font-bold text-xs uppercase px-7 py-3.5 rounded-full hover:bg-[#9B49DC] transition-all shadow-[3px_3px_0px_#C4E538]"
+                  className="inline-flex items-center justify-center gap-2 bg-[#062985] text-white font-display font-bold text-[11px] sm:text-xs uppercase px-5 sm:px-7 py-3 sm:py-3.5 rounded-full hover:bg-[#9B49DC] transition-all shadow-[3px_3px_0px_#C4E538]"
                 >
                   <span>Перейти к этапу в маршруте</span>
                   <ArrowRight className="w-4 h-4" />
@@ -243,7 +243,7 @@ export const CareerSelector: React.FC = () => {
 
                 <a
                   href="#professions"
-                  className="inline-flex items-center justify-center gap-2 bg-transparent text-[#062985] font-display font-bold text-xs uppercase px-6 py-3.5 rounded-full border-2 border-[#062985] hover:bg-neutral-100 transition-all"
+                  className="inline-flex items-center justify-center gap-2 bg-transparent text-[#062985] font-display font-bold text-[11px] sm:text-xs uppercase px-5 sm:px-6 py-3 sm:py-3.5 rounded-full border-2 border-[#062985] hover:bg-neutral-100 transition-all"
                 >
                   <span>Смотреть роли каталога</span>
                 </a>
@@ -251,7 +251,7 @@ export const CareerSelector: React.FC = () => {
                 <button
                   type="button"
                   onClick={handleReset}
-                  className="inline-flex items-center justify-center gap-1.5 text-xs font-bold text-[#062985]/70 hover:text-[#062985] sm:ml-auto"
+                  className="inline-flex items-center justify-center gap-1.5 text-xs font-bold text-[#062985]/70 hover:text-[#062985] py-2 sm:py-0 sm:ml-auto"
                 >
                   <RotateCcw className="w-3.5 h-3.5" />
                   <span>Пройти заново</span>

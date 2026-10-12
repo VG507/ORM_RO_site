@@ -6,31 +6,31 @@ export const AboutSection: React.FC = () => {
   return (
     <section
       id="about"
-      className="relative py-20 lg:py-32 bg-[#F4F6FB] text-[#062985] overflow-hidden"
+      className="relative py-16 sm:py-20 lg:py-32 bg-[#F4F6FB] text-[#062985] overflow-hidden"
     >
       {/* Decorative Subtle Background Line */}
       <div className="absolute top-0 right-0 w-96 opacity-30 pointer-events-none">
         <SignatureWaveLime />
       </div>
 
-      <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-12 relative z-10">
+      <div className="max-w-[1440px] mx-auto px-3 min-[380px]:px-4 sm:px-6 lg:px-12 relative z-10">
         {/* Section Header */}
-        <div className="flex flex-col items-start mb-16 max-w-3xl">
-          <div className="flex items-center gap-2 mb-4">
+        <div className="flex flex-col items-start mb-10 sm:mb-16 max-w-3xl">
+          <div className="flex flex-wrap items-center gap-2 mb-3 sm:mb-4">
             <StickerPill text="О проекте" bg="#9B49DC" textColor="#FFFFFF" rotate="1deg" />
-            <span className="font-hand text-lg text-[#062985] font-bold">
+            <span className="font-hand text-base sm:text-lg text-[#062985] font-bold">
               / новая культура молодёжной работы
             </span>
           </div>
 
-          <h2 className="font-display font-extrabold text-3xl sm:text-5xl lg:text-6xl tracking-tight leading-tight uppercase mb-6 text-[#062985]">
+          <h2 className="font-display font-extrabold text-2xl min-[380px]:text-3xl sm:text-5xl lg:text-6xl tracking-tight leading-tight uppercase mb-4 sm:mb-6 text-[#062985] break-words">
             Путь начинается <br className="hidden sm:inline" />
-            <span className="bg-[#C4E538] px-3 py-1 inline-block -rotate-1 border-2 border-[#062985] rounded-xl shadow-[3px_3px_0px_#062985]">
+            <span className="bg-[#C4E538] px-2.5 sm:px-3 py-1 inline-block -rotate-1 border-2 border-[#062985] rounded-xl shadow-[3px_3px_0px_#062985]">
               с интереса
             </span>
           </h2>
 
-          <p className="font-body text-lg sm:text-xl text-[#062985]/80 leading-relaxed">
+          <p className="font-body text-base sm:text-lg lg:text-xl text-[#062985]/80 leading-relaxed">
             Молодёжная сфера Ростовской области — это не бюрократия и не формальные отчёты.
             Это динамичная среда, где специалисты создают молодёжные центры, выигрывают миллионные гранты,
             запускают всероссийские форумы и помогают молодым людям Дона находить своё призвание.
@@ -38,20 +38,20 @@ export const AboutSection: React.FC = () => {
         </div>
 
         {/* Asymmetrical Editorial Layout: 2 Columns */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 items-center">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-16 items-center">
           {/* Left Column: Mission Pillars & Value Box */}
           <div className="lg:col-span-7 flex flex-col gap-6">
             {/* Highlighted Quote Box */}
-            <div className="bg-white p-6 sm:p-8 rounded-3xl border-3 border-[#062985] shadow-[6px_6px_0px_#062985] relative">
-              <div className="absolute -top-4 right-8 bg-[#C4E538] px-3 py-1 rounded-full text-xs font-display font-bold uppercase border-2 border-[#062985]">
+            <div className="bg-white p-4 min-[380px]:p-6 sm:p-8 rounded-2xl sm:rounded-3xl border-2 sm:border-3 border-[#062985] shadow-[4px_4px_0px_#062985] sm:shadow-[6px_6px_0px_#062985] relative">
+              <div className="absolute -top-3.5 sm:-top-4 right-4 sm:right-8 bg-[#C4E538] px-2.5 sm:px-3 py-0.5 sm:py-1 rounded-full text-[10px] sm:text-xs font-display font-bold uppercase border-2 border-[#062985]">
                 Ключевой ориентир
               </div>
-              <p className="font-display font-bold text-lg sm:text-2xl text-[#062985] leading-snug mb-4">
+              <p className="font-display font-bold text-base min-[380px]:text-lg sm:text-2xl text-[#062985] leading-snug mb-4 pt-1 sm:pt-0">
                 «Наша цель — превратить каждый молодёжный центр Дона в точку притяжения энергии,
                 а каждого специалиста — в признанного лидера изменений.»
               </p>
               <div className="flex items-center gap-3 pt-4 border-t border-[#062985]/15">
-                <span className="font-hand text-base font-bold text-[#9B49DC]">
+                <span className="font-hand text-sm sm:text-base font-bold text-[#9B49DC]">
                   Стандарты Федерального агентства «Росмолодёжь»
                 </span>
               </div>

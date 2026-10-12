@@ -13,27 +13,27 @@ export const SkillsSection: React.FC = () => {
   return (
     <section
       id="skills"
-      className="relative py-20 lg:py-32 bg-[#F4FCDC] text-[#062985] overflow-hidden"
+      className="relative py-16 sm:py-20 lg:py-32 bg-[#F4FCDC] text-[#062985] overflow-hidden"
     >
-      <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-12 relative z-10">
+      <div className="max-w-[1440px] mx-auto px-3 min-[380px]:px-4 sm:px-6 lg:px-12 relative z-10">
         {/* Section Header */}
-        <div className="flex flex-col items-start mb-14 max-w-3xl">
-          <div className="flex items-center gap-2 mb-3">
+        <div className="flex flex-col items-start mb-10 sm:mb-14 max-w-3xl">
+          <div className="flex flex-wrap items-center gap-2 mb-3">
             <StickerPill text="Компетенции" bg="#062985" textColor="#C4E538" rotate="2deg" />
-            <span className="font-hand text-lg text-[#062985] font-bold">
+            <span className="font-hand text-base sm:text-lg text-[#062985] font-bold">
               / фундамент карьерного роста
             </span>
           </div>
 
-          <h2 className="font-display font-extrabold text-3xl sm:text-5xl lg:text-6xl tracking-tight leading-tight uppercase mb-4 text-[#062985]">
+          <h2 className="font-display font-extrabold text-2xl min-[380px]:text-3xl sm:text-5xl lg:text-6xl tracking-tight leading-tight uppercase mb-4 text-[#062985] break-words">
             Навыки и <br className="hidden sm:inline" />
             <span className="text-[#9B49DC] relative inline-block">
               профессиональное развитие
-              <span className="absolute -bottom-2 left-0 right-0 h-1.5 bg-[#062985] rounded-full" />
+              <span className="absolute -bottom-1.5 sm:-bottom-2 left-0 right-0 h-1 sm:h-1.5 bg-[#062985] rounded-full" />
             </span>
           </h2>
 
-          <p className="font-body text-base sm:text-lg text-[#062985]/80 leading-relaxed">
+          <p className="font-body text-sm sm:text-base lg:text-lg text-[#062985]/80 leading-relaxed">
             Молодёжная сфера объединяет гибкие лидерские качества (Soft Skills) и строгие
             инструментальные навыки (Hard Skills). Выбери категорию и изучи, как прокачать
             каждый навык на практике.
@@ -41,7 +41,7 @@ export const SkillsSection: React.FC = () => {
         </div>
 
         {/* Tab Switcher */}
-        <div className="inline-flex p-1.5 rounded-full bg-white border-3 border-[#062985] shadow-[4px_4px_0px_#062985] mb-10">
+        <div className="flex flex-col min-[520px]:inline-flex min-[520px]:flex-row p-1 min-[520px]:p-1.5 rounded-2xl min-[520px]:rounded-full bg-white border-2 sm:border-3 border-[#062985] shadow-[3px_3px_0px_#062985] sm:shadow-[4px_4px_0px_#062985] mb-8 sm:mb-10 gap-1 min-[520px]:gap-0">
           <button
             type="button"
             onClick={() => {
@@ -49,13 +49,13 @@ export const SkillsSection: React.FC = () => {
               const firstSoft = skillsData.find((s) => s.type === 'soft');
               if (firstSoft) setSelectedSkill(firstSoft);
             }}
-            className={`flex items-center gap-2 px-6 py-2.5 rounded-full text-xs font-display font-extrabold uppercase transition-all ${
+            className={`flex items-center justify-center gap-2 px-4 sm:px-6 py-2.5 rounded-xl min-[520px]:rounded-full text-xs font-display font-extrabold uppercase transition-all ${
               activeTab === 'soft'
                 ? 'bg-[#062985] text-white shadow-sm'
                 : 'text-[#062985] hover:bg-neutral-100'
             }`}
           >
-            <Brain className="w-4 h-4" />
+            <Brain className="w-4 h-4 shrink-0" />
             <span>Гибкие навыки (Soft Skills)</span>
           </button>
 
@@ -66,21 +66,21 @@ export const SkillsSection: React.FC = () => {
               const firstHard = skillsData.find((s) => s.type === 'hard');
               if (firstHard) setSelectedSkill(firstHard);
             }}
-            className={`flex items-center gap-2 px-6 py-2.5 rounded-full text-xs font-display font-extrabold uppercase transition-all ${
+            className={`flex items-center justify-center gap-2 px-4 sm:px-6 py-2.5 rounded-xl min-[520px]:rounded-full text-xs font-display font-extrabold uppercase transition-all ${
               activeTab === 'hard'
                 ? 'bg-[#9B49DC] text-white shadow-sm'
                 : 'text-[#062985] hover:bg-neutral-100'
             }`}
           >
-            <Wrench className="w-4 h-4" />
+            <Wrench className="w-4 h-4 shrink-0" />
             <span>Твёрдые навыки (Hard Skills)</span>
           </button>
         </div>
 
         {/* Interactive Skills Showcase: Grid + Detail Card */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-8 items-start">
           {/* Skill Cards List */}
-          <div className="lg:col-span-7 grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div className="lg:col-span-7 grid grid-cols-1 sm:grid-cols-2 gap-3.5 sm:gap-4">
             {currentSkills.map((skill) => {
               const isSelected = skill.id === selectedSkill.id;
               return (
@@ -136,17 +136,17 @@ export const SkillsSection: React.FC = () => {
           </div>
 
           {/* Right Selected Skill Deep Dive Card */}
-          <div className="lg:col-span-5 bg-[#062985] text-white p-6 sm:p-8 rounded-3xl border-3 border-[#062985] shadow-[8px_8px_0px_#C4E538] sticky top-28">
-            <div className="flex items-center gap-2 mb-3">
-              <span className="px-3 py-0.5 rounded-full text-xs font-bold uppercase bg-[#C4E538] text-[#062985]">
+          <div className="lg:col-span-5 bg-[#062985] text-white p-4 min-[380px]:p-6 sm:p-8 rounded-2xl sm:rounded-3xl border-2 sm:border-3 border-[#062985] shadow-[4px_4px_0px_#C4E538] sm:shadow-[8px_8px_0px_#C4E538] lg:sticky lg:top-28">
+            <div className="flex flex-wrap items-center gap-2 mb-3">
+              <span className="px-2.5 sm:px-3 py-0.5 rounded-full text-[10px] sm:text-xs font-bold uppercase bg-[#C4E538] text-[#062985]">
                 {selectedSkill.type === 'soft' ? 'Гибкий навык' : 'Твёрдый навык'}
               </span>
-              <span className="text-xs font-hand text-[#51C3DD] font-bold text-base">
+              <span className="font-hand text-[#51C3DD] font-bold text-sm sm:text-base">
                 / {selectedSkill.category}
               </span>
             </div>
 
-            <h3 className="font-display font-black text-2xl sm:text-3xl text-white mb-4 leading-tight">
+            <h3 className="font-display font-black text-xl min-[380px]:text-2xl sm:text-3xl text-white mb-4 leading-tight break-words">
               {selectedSkill.name}
             </h3>
 

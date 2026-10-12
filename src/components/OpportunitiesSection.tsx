@@ -22,26 +22,26 @@ export const OpportunitiesSection: React.FC = () => {
   return (
     <section
       id="opportunities"
-      className="relative py-20 lg:py-32 bg-white text-[#062985] overflow-hidden border-t-2 border-[#062985]/10"
+      className="relative py-16 sm:py-20 lg:py-32 bg-white text-[#062985] overflow-hidden border-t-2 border-[#062985]/10"
     >
-      <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-12 relative z-10">
+      <div className="max-w-[1440px] mx-auto px-3 min-[380px]:px-4 sm:px-6 lg:px-12 relative z-10">
         {/* Section Header */}
-        <div className="flex flex-col items-start mb-16 max-w-3xl">
-          <div className="flex items-center gap-2 mb-3">
+        <div className="flex flex-col items-start mb-10 sm:mb-16 max-w-3xl">
+          <div className="flex flex-wrap items-center gap-2 mb-3">
             <StickerPill text="Экосистема" bg="#062985" textColor="#C4E538" rotate="2deg" />
-            <span className="font-hand text-lg text-[#062985] font-bold">
+            <span className="font-hand text-base sm:text-lg text-[#062985] font-bold">
               / федеральные и региональные ресурсы
             </span>
           </div>
 
-          <h2 className="font-display font-extrabold text-3xl sm:text-5xl lg:text-6xl tracking-tight leading-tight uppercase mb-4 text-[#062985]">
+          <h2 className="font-display font-extrabold text-2xl min-[380px]:text-3xl sm:text-5xl lg:text-6xl tracking-tight leading-tight uppercase mb-4 text-[#062985] break-words">
             Дополнительные <br className="hidden sm:inline" />
-            <span className="text-[#062985] underline decoration-[#51C3DD] decoration-4">
+            <span className="text-[#062985] underline decoration-[#51C3DD] decoration-3 sm:decoration-4">
               возможности
             </span>
           </h2>
 
-          <p className="font-body text-base sm:text-lg text-[#062985]/75 leading-relaxed">
+          <p className="font-body text-sm sm:text-base lg:text-lg text-[#062985]/75 leading-relaxed">
             Специалист по работе с молодёжью опирается на мощную систему государственной
             поддержки: всероссийские грантовые конкурсы, федеральные форумы,
             сеть Добро.Центров и образовательные программы Академии Росмолодёжи.
@@ -49,7 +49,7 @@ export const OpportunitiesSection: React.FC = () => {
         </div>
 
         {/* Opportunities Grid: 4 Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
           {opportunitiesData.map((item) => {
             const cardClasses = getCardStyle(item.colorScheme);
             const isNavy = item.colorScheme === 'navy';
@@ -57,7 +57,7 @@ export const OpportunitiesSection: React.FC = () => {
             return (
               <div
                 key={item.id}
-                className={`p-6 sm:p-7 rounded-3xl border-3 transition-all duration-200 flex flex-col justify-between hover:-translate-y-1 ${cardClasses}`}
+                className={`p-5 min-[380px]:p-6 sm:p-7 rounded-2xl sm:rounded-3xl border-2 sm:border-3 transition-all duration-200 flex flex-col justify-between hover:-translate-y-1 ${cardClasses}`}
               >
                 <div>
                   <div className="flex items-start justify-between gap-2 mb-4">

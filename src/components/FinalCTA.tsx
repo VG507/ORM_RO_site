@@ -22,58 +22,58 @@ export const FinalCTA: React.FC = () => {
   };
 
   return (
-    <section className="relative py-24 lg:py-36 bg-[#062985] text-white overflow-hidden border-t-3 border-[#C4E538]">
+    <section className="relative py-16 sm:py-24 lg:py-36 bg-[#062985] text-white overflow-hidden border-t-3 border-[#C4E538]">
       {/* Background Grids */}
       <div className="absolute inset-0 bg-grid-pattern-dark pointer-events-none opacity-30" />
 
       {/* Floating Sparks */}
-      <div className="absolute top-12 left-10 pointer-events-none">
-        <SparkStar size={36} color="#C4E538" className="animate-spin" />
+      <div className="absolute top-12 left-6 sm:left-10 pointer-events-none">
+        <SparkStar size={32} color="#C4E538" className="animate-spin" />
       </div>
-      <div className="absolute bottom-16 right-16 pointer-events-none">
-        <SparkStar size={44} color="#51C3DD" />
+      <div className="absolute bottom-16 right-6 sm:right-16 pointer-events-none">
+        <SparkStar size={36} color="#51C3DD" />
       </div>
 
-      <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-12 relative z-10 text-center">
+      <div className="max-w-[1440px] mx-auto px-3 min-[380px]:px-4 sm:px-6 lg:px-12 relative z-10 text-center">
         {/* Badge */}
-        <div className="inline-flex items-center gap-2 mb-6">
+        <div className="flex flex-wrap items-center justify-center gap-2 mb-4 sm:mb-6">
           <StickerPill text="Время действовать" bg="#C4E538" textColor="#062985" rotate="-2deg" />
-          <span className="font-hand text-xl text-[#51C3DD] font-bold">
+          <span className="font-hand text-lg sm:text-xl text-[#51C3DD] font-bold">
             / Ростовская область
           </span>
         </div>
 
         {/* Headline */}
-        <h2 className="font-display font-black text-3xl sm:text-5xl md:text-6xl lg:text-7xl tracking-tight leading-[1.05] uppercase mb-6 max-w-4xl mx-auto">
+        <h2 className="font-display font-black text-2xl min-[380px]:text-3xl sm:text-5xl md:text-6xl lg:text-7xl tracking-tight leading-[1.1] uppercase mb-4 sm:mb-6 max-w-4xl mx-auto break-words">
           Твой следующий шаг <br />
           <span className="text-[#C4E538]">начинается здесь</span>
         </h2>
 
         {/* Slogan */}
-        <p className="font-hand text-2xl sm:text-3xl lg:text-4xl text-[#51C3DD] font-bold mb-8">
+        <p className="font-hand text-xl min-[380px]:text-2xl sm:text-3xl lg:text-4xl text-[#51C3DD] font-bold mb-6 sm:mb-8">
           «Молодость. Карьера. Успех.»
         </p>
 
-        <p className="font-body text-base sm:text-lg lg:text-xl text-white/85 max-w-2xl mx-auto leading-relaxed mb-12">
+        <p className="font-body text-sm sm:text-base lg:text-xl text-white/85 max-w-2xl mx-auto leading-relaxed mb-8 sm:mb-12">
           Присоединяйся к региональному сообществу специалистов по работе с молодёжью Дона.
           Исследуй вакансии, перенимай лучшие практики и развивай свой район.
         </p>
 
         {/* CTAs */}
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-4 max-w-md mx-auto mb-14">
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 max-w-md mx-auto mb-10 sm:mb-14">
           <a
             href="#route"
             onClick={(e) => scrollTo(e, '#route')}
-            className="group w-full sm:w-auto inline-flex items-center justify-center gap-3 bg-[#C4E538] hover:bg-[#D9FB5F] text-[#062985] font-display font-extrabold text-sm uppercase px-8 py-4 rounded-full border-3 border-[#062985] shadow-[5px_5px_0px_#FFFFFF] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_#FFFFFF] transition-all"
+            className="group w-full sm:w-auto inline-flex items-center justify-center gap-2.5 bg-[#C4E538] hover:bg-[#D9FB5F] text-[#062985] font-display font-extrabold text-xs sm:text-sm uppercase px-6 sm:px-8 py-3.5 sm:py-4 rounded-full border-2 sm:border-3 border-[#062985] shadow-[3px_3px_0px_#FFFFFF] sm:shadow-[5px_5px_0px_#FFFFFF] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_#FFFFFF] transition-all"
           >
             <span>Пройти карьерный маршрут</span>
-            <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+            <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5 group-hover:translate-x-1 transition-transform" />
           </a>
 
           <a
             href="#selector"
             onClick={(e) => scrollTo(e, '#selector')}
-            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-transparent hover:bg-[#51C3DD]/10 text-[#51C3DD] font-display font-bold text-sm uppercase px-7 py-4 rounded-full border-2 border-[#51C3DD] transition-all"
+            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-transparent hover:bg-[#51C3DD]/10 text-[#51C3DD] font-display font-bold text-xs sm:text-sm uppercase px-6 sm:px-7 py-3.5 sm:py-4 rounded-full border-2 border-[#51C3DD] transition-all"
           >
             <Compass className="w-4 h-4 text-[#51C3DD]" />
             <span>Пройти тест</span>

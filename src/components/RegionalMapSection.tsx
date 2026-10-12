@@ -38,27 +38,27 @@ export const RegionalMapSection: React.FC = () => {
   return (
     <section
       id="map"
-      className="relative py-20 lg:py-32 bg-[#F4FCDC] text-[#062985] overflow-hidden border-t-2 border-[#062985]/10"
+      className="relative py-16 sm:py-20 lg:py-32 bg-[#F4FCDC] text-[#062985] overflow-hidden border-t-2 border-[#062985]/10"
     >
-      <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-12 relative z-10">
+      <div className="max-w-[1440px] mx-auto px-3 min-[380px]:px-4 sm:px-6 lg:px-12 relative z-10">
         {/* Section Header */}
-        <div className="flex flex-col items-start mb-12 max-w-3xl">
-          <div className="flex items-center gap-2 mb-3">
+        <div className="flex flex-col items-start mb-10 sm:mb-12 max-w-3xl">
+          <div className="flex flex-wrap items-center gap-2 mb-3">
             <StickerPill text="География возможностей" bg="#062985" textColor="#C4E538" rotate="-1deg" />
-            <span className="font-hand text-lg text-[#062985] font-bold">
+            <span className="font-hand text-base sm:text-lg text-[#062985] font-bold">
               / 55 муниципалитетов Дона
             </span>
           </div>
 
-          <h2 className="font-display font-extrabold text-3xl sm:text-5xl lg:text-6xl tracking-tight leading-tight uppercase mb-4 text-[#062985]">
+          <h2 className="font-display font-extrabold text-2xl min-[380px]:text-3xl sm:text-5xl lg:text-6xl tracking-tight leading-tight uppercase mb-4 text-[#062985] break-words">
             Карта молодёжной <br className="hidden sm:inline" />
             <span className="text-[#9B49DC] relative inline-block">
               инфраструктуры
-              <span className="absolute -bottom-2 left-0 right-0 h-1.5 bg-[#062985] rounded-full" />
+              <span className="absolute -bottom-1.5 sm:-bottom-2 left-0 right-0 h-1 sm:h-1.5 bg-[#062985] rounded-full" />
             </span>
           </h2>
 
-          <p className="font-body text-base sm:text-lg text-[#062985]/80 leading-relaxed">
+          <p className="font-body text-sm sm:text-base lg:text-lg text-[#062985]/80 leading-relaxed">
             Исследуй молодёжные центры, профильные отделы администраций и открытые вакансии
             в различных уголках Ростовской области. Выбери территорию на интерактивной карте
             или найди свой район в поиске.
@@ -66,13 +66,13 @@ export const RegionalMapSection: React.FC = () => {
         </div>
 
         {/* View Switcher and Search */}
-        <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4 mb-8">
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 sm:gap-4 mb-6 sm:mb-8">
           {/* Switcher */}
-          <div className="inline-flex p-1 rounded-full bg-white border-2 border-[#062985] shadow-[2px_2px_0px_#062985]">
+          <div className="flex flex-col min-[480px]:inline-flex min-[480px]:flex-row p-1 rounded-2xl min-[480px]:rounded-full bg-white border-2 border-[#062985] shadow-[2px_2px_0px_#062985] gap-1 min-[480px]:gap-0">
             <button
               type="button"
               onClick={() => setViewMode('map')}
-              className={`flex items-center gap-1.5 px-5 py-2 rounded-full text-xs font-display font-bold uppercase transition-all ${
+              className={`flex items-center justify-center gap-1.5 px-3.5 sm:px-5 py-2.5 min-[480px]:py-2 rounded-xl min-[480px]:rounded-full text-xs font-display font-bold uppercase transition-all ${
                 viewMode === 'map'
                   ? 'bg-[#062985] text-white shadow-sm'
                   : 'text-[#062985] hover:bg-neutral-100'
@@ -85,7 +85,7 @@ export const RegionalMapSection: React.FC = () => {
             <button
               type="button"
               onClick={() => setViewMode('list')}
-              className={`flex items-center gap-1.5 px-5 py-2 rounded-full text-xs font-display font-bold uppercase transition-all ${
+              className={`flex items-center justify-center gap-1.5 px-3.5 sm:px-5 py-2.5 min-[480px]:py-2 rounded-xl min-[480px]:rounded-full text-xs font-display font-bold uppercase transition-all ${
                 viewMode === 'list'
                   ? 'bg-[#062985] text-white shadow-sm'
                   : 'text-[#062985] hover:bg-neutral-100'
@@ -97,7 +97,7 @@ export const RegionalMapSection: React.FC = () => {
           </div>
 
           {/* Quick Search Input */}
-          <div className="relative min-w-[260px] sm:min-w-[320px]">
+          <div className="relative w-full sm:w-auto min-w-0 sm:min-w-[320px]">
             <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#062985]/50" />
             <input
               type="text"
@@ -110,9 +110,9 @@ export const RegionalMapSection: React.FC = () => {
         </div>
 
         {/* Interactive Layout: Map Area + Municipality Dossier Panel */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-8 items-start">
           {/* Left Main View (Interactive SVG Regional Map or List) */}
-          <div className="lg:col-span-7 bg-white rounded-3xl border-3 border-[#062985] p-6 shadow-[8px_8px_0px_#062985] relative overflow-hidden">
+          <div className="lg:col-span-7 bg-white rounded-2xl sm:rounded-3xl border-2 sm:border-3 border-[#062985] p-3.5 min-[380px]:p-5 sm:p-6 shadow-[4px_4px_0px_#062985] sm:shadow-[8px_8px_0px_#062985] relative overflow-hidden">
             {viewMode === 'map' ? (
               <div className="relative">
                 <div className="flex items-center justify-between mb-4 pb-3 border-b border-[#062985]/10">
@@ -309,10 +309,10 @@ export const RegionalMapSection: React.FC = () => {
           </div>
 
           {/* Right Column: Selected Territory Dossier */}
-          <div className="lg:col-span-5 bg-[#062985] text-white p-6 sm:p-8 rounded-3xl border-3 border-[#062985] shadow-[8px_8px_0px_#C4E538]">
+          <div className="lg:col-span-5 bg-[#062985] text-white p-4 min-[380px]:p-6 sm:p-8 rounded-2xl sm:rounded-3xl border-2 sm:border-3 border-[#062985] shadow-[4px_4px_0px_#C4E538] sm:shadow-[8px_8px_0px_#C4E538]">
             <div className="flex items-start justify-between gap-4 mb-4 pb-4 border-b border-white/15">
-              <div>
-                <div className="flex items-center gap-2 mb-1">
+              <div className="min-w-0">
+                <div className="flex flex-wrap items-center gap-2 mb-1">
                   <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase bg-[#C4E538] text-[#062985]">
                     {selectedMunicipality.type}
                   </span>
@@ -320,7 +320,7 @@ export const RegionalMapSection: React.FC = () => {
                     / карточка территории
                   </span>
                 </div>
-                <h3 className="font-display font-black text-2xl sm:text-3xl text-white">
+                <h3 className="font-display font-black text-xl min-[380px]:text-2xl sm:text-3xl text-white break-words">
                   {selectedMunicipality.name}
                 </h3>
               </div>
@@ -328,7 +328,7 @@ export const RegionalMapSection: React.FC = () => {
               <button
                 type="button"
                 onClick={() => setSelectedMunicipalityId('rostov-on-don')}
-                className="p-2 rounded-xl bg-white/10 hover:bg-white/20 text-white/80 hover:text-white transition-colors"
+                className="p-2 rounded-xl bg-white/10 hover:bg-white/20 text-white/80 hover:text-white transition-colors shrink-0"
                 title="Сбросить к Ростову-на-Дону"
               >
                 <RotateCcw className="w-4 h-4" />
@@ -338,8 +338,8 @@ export const RegionalMapSection: React.FC = () => {
             {/* Organizations in Territory */}
             <div className="mb-6">
               <h4 className="font-display font-bold text-xs uppercase text-[#C4E538] tracking-wider mb-3 flex items-center gap-1.5">
-                <Building className="w-3.5 h-3.5" />
-                Молодёжные центры и органы управления ({selectedMunicipality.organizations.length})
+                <Building className="w-3.5 h-3.5 shrink-0" />
+                <span>Молодёжные центры и органы управления ({selectedMunicipality.organizations.length})</span>
               </h4>
 
               <div className="space-y-3">
@@ -355,21 +355,21 @@ export const RegionalMapSection: React.FC = () => {
                       {org.type} · {org.address}
                     </span>
 
-                    <div className="flex flex-wrap items-center gap-3 pt-1 text-[11px] text-white/70">
+                    <div className="flex flex-col min-[380px]:flex-row flex-wrap items-start min-[380px]:items-center gap-2 sm:gap-3 pt-1 text-[11px] text-white/70">
                       <span className="flex items-center gap-1">
-                        <Phone className="w-3 h-3 text-[#C4E538]" />
-                        {org.phone}
+                        <Phone className="w-3 h-3 text-[#C4E538] shrink-0" />
+                        <span className="break-all">{org.phone}</span>
                       </span>
                       <span className="flex items-center gap-1">
-                        <Mail className="w-3 h-3 text-[#C4E538]" />
-                        {org.email}
+                        <Mail className="w-3 h-3 text-[#C4E538] shrink-0" />
+                        <span className="break-all">{org.email}</span>
                       </span>
                       {org.vkUrl && (
                         <a
                           href={org.vkUrl}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="flex items-center gap-1 text-[#C4E538] hover:underline ml-auto"
+                          className="flex items-center gap-1 text-[#C4E538] hover:underline"
                         >
                           <span>Сообщество VK</span>
                           <ExternalLink className="w-2.5 h-2.5" />

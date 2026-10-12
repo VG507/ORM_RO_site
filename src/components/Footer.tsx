@@ -29,44 +29,44 @@ export const Footer: React.FC = () => {
   };
 
   return (
-    <footer className="relative bg-[#03164D] text-white pt-16 pb-12 border-t-3 border-[#062985] overflow-hidden">
-      <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-12 relative z-10">
+    <footer className="relative bg-[#03164D] text-white pt-12 sm:pt-16 pb-10 sm:pb-12 border-t-3 border-[#062985] overflow-hidden">
+      <div className="max-w-[1440px] mx-auto px-3 min-[380px]:px-4 sm:px-6 lg:px-12 relative z-10">
         {/* Top Footer Banner */}
-        <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-8 pb-12 border-b border-white/15">
+        <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6 sm:gap-8 pb-8 sm:pb-12 border-b border-white/15">
           {/* Brand Info */}
-          <div className="flex items-start gap-4">
-            <div className="w-12 h-12 rounded-2xl bg-[#C4E538] flex items-center justify-center text-[#062985] font-black font-condensed text-3xl shadow-[3px_3px_0px_#FFFFFF] shrink-0">
-              <HashSymbol size={28} color="#062985" />
+          <div className="flex items-start gap-3.5 sm:gap-4">
+            <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl bg-[#C4E538] flex items-center justify-center text-[#062985] font-black font-condensed text-2xl sm:text-3xl shadow-[3px_3px_0px_#FFFFFF] shrink-0">
+              <HashSymbol size={24} color="#062985" />
             </div>
             <div>
-              <span className="font-display font-black text-xl tracking-tight leading-tight block text-white">
+              <span className="font-display font-black text-lg sm:text-xl tracking-tight leading-tight block text-white">
                 КАРЬЕРНЫЙ МАРШРУТ
               </span>
-              <span className="font-hand text-base text-[#C4E538] font-bold block">
+              <span className="font-hand text-sm sm:text-base text-[#C4E538] font-bold block">
                 молодёжная сфера Ростовской области
               </span>
-              <p className="text-xs text-white/60 mt-1 max-w-md">
+              <p className="text-[11px] sm:text-xs text-white/60 mt-1 max-w-md">
                 Региональная цифровая платформа профессиональной навигации и развития специалистов по работе с молодёжью.
               </p>
             </div>
           </div>
 
           {/* Slogan Pill and Scroll-To-Top */}
-          <div className="flex items-center gap-4">
+          <div className="flex flex-wrap items-center justify-between w-full lg:w-auto gap-3 sm:gap-4 pt-2 lg:pt-0">
             <StickerPill text="Молодость. Карьера. Успех." bg="#51C3DD" textColor="#062985" rotate="1deg" />
             <button
               type="button"
               onClick={scrollToTop}
-              className="p-3 rounded-full bg-[#C4E538] text-[#062985] hover:bg-white transition-all shadow-[2px_2px_0px_#FFFFFF] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#C4E538]"
+              className="p-2.5 sm:p-3 rounded-full bg-[#C4E538] text-[#062985] hover:bg-white transition-all shadow-[2px_2px_0px_#FFFFFF] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#C4E538]"
               aria-label="Наверх страницы"
             >
-              <ArrowUp className="w-5 h-5" />
+              <ArrowUp className="w-4 h-4 sm:w-5 sm:h-5" />
             </button>
           </div>
         </div>
 
         {/* Navigation Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 py-12 border-b border-white/15">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8 py-8 sm:py-12 border-b border-white/15">
           {/* Col 1 */}
           <div>
             <h4 className="font-display font-bold text-xs uppercase text-[#C4E538] tracking-widest mb-4">

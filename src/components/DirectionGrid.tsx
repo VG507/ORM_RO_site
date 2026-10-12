@@ -26,27 +26,27 @@ export const DirectionGrid: React.FC = () => {
   return (
     <section
       id="directions"
-      className="relative py-20 lg:py-32 bg-[#F4F6FB] text-[#062985] overflow-hidden"
+      className="relative py-16 sm:py-20 lg:py-32 bg-[#F4F6FB] text-[#062985] overflow-hidden"
     >
-      <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-12 relative z-10">
+      <div className="max-w-[1440px] mx-auto px-3 min-[380px]:px-4 sm:px-6 lg:px-12 relative z-10">
         {/* Section Header */}
-        <div className="flex flex-col items-start mb-14 max-w-3xl">
-          <div className="flex items-center gap-2 mb-3">
+        <div className="flex flex-col items-start mb-10 sm:mb-14 max-w-3xl">
+          <div className="flex flex-wrap items-center gap-2 mb-3">
             <StickerPill text="Сферы реализации" bg="#51C3DD" textColor="#062985" rotate="2deg" />
-            <span className="font-hand text-lg text-[#062985] font-bold">
+            <span className="font-hand text-base sm:text-lg text-[#062985] font-bold">
               / выбери своё призвание
             </span>
           </div>
 
-          <h2 className="font-display font-extrabold text-3xl sm:text-5xl lg:text-6xl tracking-tight leading-tight uppercase mb-4 text-[#062985]">
+          <h2 className="font-display font-extrabold text-2xl min-[380px]:text-3xl sm:text-5xl lg:text-6xl tracking-tight leading-tight uppercase mb-4 text-[#062985] break-words">
             Направления <br className="hidden sm:inline" />
             <span className="text-[#51C3DD] relative inline-block">
               деятельности
-              <span className="absolute -bottom-2 left-0 right-0 h-1.5 bg-[#062985] rounded-full" />
+              <span className="absolute -bottom-1.5 sm:-bottom-2 left-0 right-0 h-1 sm:h-1.5 bg-[#062985] rounded-full" />
             </span>
           </h2>
 
-          <p className="font-body text-base sm:text-lg text-[#062985]/75 leading-relaxed">
+          <p className="font-body text-sm sm:text-base lg:text-lg text-[#062985]/75 leading-relaxed">
             В молодёжной политике нет однообразных задач. Каждое направление требует
             своего набора компетенций, характера и драйва. Кликни по направлению,
             чтобы узнать ключевые проекты и форматы участия.
@@ -54,7 +54,7 @@ export const DirectionGrid: React.FC = () => {
         </div>
 
         {/* Asymmetrical Modular Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-6 lg:gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-4 sm:gap-6 lg:gap-8">
           {directionsData.map((item, index) => {
             const cardClasses = getCardStyle(item.colorScheme);
 
@@ -68,7 +68,7 @@ export const DirectionGrid: React.FC = () => {
               <div
                 key={item.id}
                 onClick={() => setActiveModalDirection(item)}
-                className={`group p-6 sm:p-8 rounded-3xl transition-all duration-200 cursor-pointer flex flex-col justify-between hover:-translate-y-1 ${cardClasses} ${colSpan}`}
+                className={`group p-5 min-[380px]:p-6 sm:p-8 rounded-2xl sm:rounded-3xl transition-all duration-200 cursor-pointer flex flex-col justify-between hover:-translate-y-1 ${cardClasses} ${colSpan}`}
                 role="button"
                 tabIndex={0}
                 onKeyDown={(e) => {
@@ -84,12 +84,12 @@ export const DirectionGrid: React.FC = () => {
                     <span className="px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-black/10 inline-block border border-current/20">
                       {item.badge}
                     </span>
-                    <div className="w-9 h-9 rounded-full bg-current/10 flex items-center justify-center group-hover:scale-110 group-hover:rotate-12 transition-transform">
-                      <ArrowUpRight className="w-5 h-5" />
+                    <div className="w-8 sm:w-9 h-8 sm:h-9 rounded-full bg-current/10 flex items-center justify-center group-hover:scale-110 group-hover:rotate-12 transition-transform shrink-0">
+                      <ArrowUpRight className="w-4 sm:w-5 h-4 sm:h-5" />
                     </div>
                   </div>
 
-                  <h3 className="font-display font-extrabold text-xl sm:text-2xl lg:text-3xl tracking-tight leading-snug mb-2">
+                  <h3 className="font-display font-extrabold text-lg min-[380px]:text-xl sm:text-2xl lg:text-3xl tracking-tight leading-snug mb-2 break-words">
                     {item.title}
                   </h3>
 
@@ -120,34 +120,34 @@ export const DirectionGrid: React.FC = () => {
       {/* Modal / Dialog for Direction Detail */}
       {activeModalDirection && (
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm"
+          className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/60 backdrop-blur-sm"
           role="dialog"
           aria-modal="true"
           aria-labelledby="modal-direction-title"
         >
-          <div className="relative w-full max-w-2xl bg-white rounded-3xl border-3 border-[#062985] shadow-[8px_8px_0px_#C4E538] p-6 sm:p-10 max-h-[90vh] overflow-y-auto">
+          <div className="relative w-full max-w-2xl bg-white rounded-2xl sm:rounded-3xl border-2 sm:border-3 border-[#062985] shadow-[4px_4px_0px_#C4E538] sm:shadow-[8px_8px_0px_#C4E538] p-4 min-[380px]:p-6 sm:p-10 max-h-[90vh] overflow-y-auto">
             {/* Close Button */}
             <button
               type="button"
               onClick={() => setActiveModalDirection(null)}
-              className="absolute top-6 right-6 p-2 rounded-full bg-[#062985] text-white hover:bg-[#C4E538] hover:text-[#062985] transition-colors"
+              className="absolute top-4 right-4 sm:top-6 sm:right-6 p-2 rounded-full bg-[#062985] text-white hover:bg-[#C4E538] hover:text-[#062985] transition-colors"
               aria-label="Закрыть окно"
             >
-              <X className="w-5 h-5" />
+              <X className="w-4 h-4 sm:w-5 sm:h-5" />
             </button>
 
-            <div className="flex items-center gap-2 mb-3">
-              <span className="px-3 py-1 rounded-full text-xs font-bold uppercase bg-[#C4E538] text-[#062985] border border-[#062985]">
+            <div className="flex flex-wrap items-center gap-2 mb-3 pr-10">
+              <span className="px-2.5 sm:px-3 py-1 rounded-full text-[10px] sm:text-xs font-bold uppercase bg-[#C4E538] text-[#062985] border border-[#062985]">
                 {activeModalDirection.badge}
               </span>
-              <span className="font-hand text-sm font-bold text-[#9B49DC]">
+              <span className="font-hand text-xs sm:text-sm font-bold text-[#9B49DC]">
                 / подробный профиль направления
               </span>
             </div>
 
             <h3
               id="modal-direction-title"
-              className="font-display font-black text-2xl sm:text-3xl text-[#062985] mb-2 leading-tight"
+              className="font-display font-black text-xl min-[380px]:text-2xl sm:text-3xl text-[#062985] mb-2 leading-tight break-words pr-8"
             >
               {activeModalDirection.title}
             </h3>

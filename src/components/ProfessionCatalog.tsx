@@ -35,26 +35,26 @@ export const ProfessionCatalog: React.FC = () => {
   return (
     <section
       id="professions"
-      className="relative py-20 lg:py-32 bg-white text-[#062985] overflow-hidden border-t-2 border-[#062985]/10"
+      className="relative py-16 sm:py-20 lg:py-32 bg-white text-[#062985] overflow-hidden border-t-2 border-[#062985]/10"
     >
-      <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-12 relative z-10">
+      <div className="max-w-[1440px] mx-auto px-3 min-[380px]:px-4 sm:px-6 lg:px-12 relative z-10">
         {/* Section Header */}
-        <div className="flex flex-col items-start mb-12 max-w-3xl">
-          <div className="flex items-center gap-2 mb-3">
+        <div className="flex flex-col items-start mb-10 sm:mb-12 max-w-3xl">
+          <div className="flex flex-wrap items-center gap-2 mb-3">
             <StickerPill text="Каталог ролей" bg="#C4E538" textColor="#062985" rotate="-1deg" />
-            <span className="font-hand text-lg text-[#062985] font-bold">
+            <span className="font-hand text-base sm:text-lg text-[#062985] font-bold">
               / кем работать в молодёжке Дона
             </span>
           </div>
 
-          <h2 className="font-display font-extrabold text-3xl sm:text-5xl lg:text-6xl tracking-tight leading-tight uppercase mb-4 text-[#062985]">
+          <h2 className="font-display font-extrabold text-2xl min-[380px]:text-3xl sm:text-5xl lg:text-6xl tracking-tight leading-tight uppercase mb-4 text-[#062985] break-words">
             Профессии и <br className="hidden sm:inline" />
-            <span className="text-[#062985] underline decoration-[#C4E538] decoration-4">
+            <span className="text-[#062985] underline decoration-[#C4E538] decoration-3 sm:decoration-4">
               карьерные роли
             </span>
           </h2>
 
-          <p className="font-body text-base sm:text-lg text-[#062985]/75 leading-relaxed">
+          <p className="font-body text-sm sm:text-base lg:text-lg text-[#062985]/75 leading-relaxed">
             Исследуй ключевые должности в сфере молодёжной политики Ростовской области.
             Воспользуйся фильтрами или поисковой строкой, чтобы найти подходящую позицию
             и узнать требования, задачи и горизонты развития.
@@ -62,15 +62,15 @@ export const ProfessionCatalog: React.FC = () => {
         </div>
 
         {/* Controls: Search and Filter Tabs */}
-        <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4 mb-10">
-          {/* Category Tabs */}
-          <div className="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-none">
+        <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3 sm:gap-4 mb-8 sm:mb-10">
+          {/* Category Tabs (Smooth touch scrolling on mobile) */}
+          <div className="flex items-center gap-1.5 sm:gap-2 overflow-x-auto pb-2 scrollbar-none -mx-3 px-3 sm:mx-0 sm:px-0">
             {categories.map((cat) => (
               <button
                 key={cat.id}
                 type="button"
                 onClick={() => setSelectedCategory(cat.id)}
-                className={`px-4 py-2 rounded-full text-xs font-bold uppercase tracking-wider whitespace-nowrap transition-all border-2 ${
+                className={`px-3.5 sm:px-4 py-2 rounded-full text-[11px] sm:text-xs font-bold uppercase tracking-wider whitespace-nowrap transition-all border-2 shrink-0 ${
                   selectedCategory === cat.id
                     ? 'bg-[#062985] text-white border-[#062985] shadow-[2px_2px_0px_#C4E538]'
                     : 'bg-[#F4F6FB] text-[#062985] border-transparent hover:border-[#062985]/30'
@@ -82,20 +82,21 @@ export const ProfessionCatalog: React.FC = () => {
           </div>
 
           {/* Search Input */}
-          <div className="relative min-w-[280px] sm:min-w-[340px]">
+          <div className="relative w-full md:w-auto min-w-0 md:min-w-[340px]">
             <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#062985]/50" />
             <input
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Поиск по названию или навыкам..."
-              className="w-full pl-10 pr-4 py-2.5 rounded-full bg-[#F4F6FB] border-2 border-[#062985]/20 focus:border-[#062985] text-xs sm:text-sm text-[#062985] placeholder-[#062985]/50 outline-none transition-all"
+              className="w-full pl-10 pr-9 py-2.5 rounded-full bg-[#F4F6FB] border-2 border-[#062985]/20 focus:border-[#062985] text-xs sm:text-sm text-[#062985] placeholder-[#062985]/50 outline-none transition-all shadow-sm"
             />
             {searchQuery && (
               <button
                 type="button"
                 onClick={() => setSearchQuery('')}
                 className="absolute right-3 top-1/2 -translate-y-1/2 p-1 text-[#062985]/50 hover:text-[#062985]"
+                aria-label="Очистить поиск"
               >
                 <X className="w-3.5 h-3.5" />
               </button>
@@ -201,30 +202,30 @@ export const ProfessionCatalog: React.FC = () => {
       {/* Role Detailed Modal */}
       {selectedRole && (
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm"
+          className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/60 backdrop-blur-sm"
           role="dialog"
           aria-modal="true"
         >
-          <div className="relative w-full max-w-2xl bg-white rounded-3xl border-3 border-[#062985] shadow-[8px_8px_0px_#062985] p-6 sm:p-10 max-h-[90vh] overflow-y-auto">
+          <div className="relative w-full max-w-2xl bg-white rounded-2xl sm:rounded-3xl border-2 sm:border-3 border-[#062985] shadow-[4px_4px_0px_#062985] sm:shadow-[8px_8px_0px_#062985] p-4 min-[380px]:p-6 sm:p-10 max-h-[90vh] overflow-y-auto">
             <button
               type="button"
               onClick={() => setSelectedRole(null)}
-              className="absolute top-6 right-6 p-2 rounded-full bg-[#062985] text-white hover:bg-[#C4E538] hover:text-[#062985] transition-colors"
+              className="absolute top-4 right-4 sm:top-6 sm:right-6 p-2 rounded-full bg-[#062985] text-white hover:bg-[#C4E538] hover:text-[#062985] transition-colors"
               aria-label="Закрыть"
             >
-              <X className="w-5 h-5" />
+              <X className="w-4 h-4 sm:w-5 sm:h-5" />
             </button>
 
-            <div className="flex items-center gap-2 mb-3">
-              <span className="px-3 py-1 rounded-full text-xs font-bold uppercase bg-[#062985] text-white">
+            <div className="flex flex-wrap items-center gap-2 mb-3 pr-10">
+              <span className="px-2.5 sm:px-3 py-1 rounded-full text-[10px] sm:text-xs font-bold uppercase bg-[#062985] text-white">
                 {selectedRole.categoryLabel}
               </span>
-              <span className="text-xs font-hand text-[#9B49DC] font-bold text-base">
+              <span className="font-hand text-[#9B49DC] font-bold text-sm sm:text-base">
                 / уровень: {selectedRole.level}
               </span>
             </div>
 
-            <h3 className="font-display font-black text-2xl sm:text-3xl text-[#062985] mb-2 leading-tight">
+            <h3 className="font-display font-black text-xl min-[380px]:text-2xl sm:text-3xl text-[#062985] mb-2 leading-tight break-words pr-8">
               {selectedRole.title}
             </h3>
 

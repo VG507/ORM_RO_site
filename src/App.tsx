@@ -17,7 +17,7 @@ import { Footer } from './components/Footer';
 
 export const App: React.FC = () => {
   return (
-    <div className="min-h-screen flex flex-col bg-[#F4F6FB] text-[#062985] selection:bg-[#C4E538] selection:text-[#062985]">
+    <div className="min-h-screen flex flex-col bg-[#F4F6FB] text-[#062985] selection:bg-[#C4E538] selection:text-[#062985] overflow-x-hidden w-full relative">
       {/* 1. Header with sticky & scroll states */}
       <Header />
 

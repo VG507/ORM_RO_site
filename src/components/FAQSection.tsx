@@ -15,40 +15,40 @@ export const FAQSection: React.FC = () => {
   return (
     <section
       id="faq"
-      className="relative py-20 lg:py-32 bg-[#F4F6FB] text-[#062985] overflow-hidden"
+      className="relative py-16 sm:py-20 lg:py-32 bg-[#F4F6FB] text-[#062985] overflow-hidden"
     >
-      <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-12 relative z-10">
+      <div className="max-w-[1440px] mx-auto px-3 min-[380px]:px-4 sm:px-6 lg:px-12 relative z-10">
         {/* Section Header */}
-        <div className="flex flex-col items-center text-center mb-14 max-w-2xl mx-auto">
-          <div className="flex items-center gap-2 mb-3">
+        <div className="flex flex-col items-center text-center mb-10 sm:mb-14 max-w-2xl mx-auto">
+          <div className="flex flex-wrap items-center justify-center gap-2 mb-3">
             <StickerPill text="Ответы на вопросы" bg="#C4E538" textColor="#062985" rotate="-1deg" />
-            <span className="font-hand text-lg text-[#062985] font-bold">
+            <span className="font-hand text-base sm:text-lg text-[#062985] font-bold">
               / всё о карьере в ОРМ
             </span>
           </div>
 
-          <h2 className="font-display font-extrabold text-3xl sm:text-5xl lg:text-6xl tracking-tight leading-tight uppercase mb-4 text-[#062985]">
+          <h2 className="font-display font-extrabold text-2xl min-[380px]:text-3xl sm:text-5xl lg:text-6xl tracking-tight leading-tight uppercase mb-4 text-[#062985] break-words">
             Часто задаваемые <br />
             <span className="text-[#9B49DC]">вопросы</span>
           </h2>
 
-          <p className="font-body text-base sm:text-lg text-[#062985]/75 leading-relaxed">
+          <p className="font-body text-sm sm:text-base lg:text-lg text-[#062985]/75 leading-relaxed">
             Разбираем главные вопросы о требованиях к образованию, зарплатах,
             получении грантов и возможностях работы в муниципалитетах Ростовской области.
           </p>
         </div>
 
         {/* Accordion Container */}
-        <div className="max-w-3xl mx-auto space-y-4">
+        <div className="max-w-3xl mx-auto space-y-3 sm:space-y-4">
           {faqData.map((item) => {
             const isOpen = openIds.includes(item.id);
 
             return (
               <div
                 key={item.id}
-                className={`rounded-2xl border-2 sm:border-3 border-[#062985] transition-all overflow-hidden ${
+                className={`rounded-xl sm:rounded-2xl border-2 sm:border-3 border-[#062985] transition-all overflow-hidden ${
                   isOpen
-                    ? 'bg-white shadow-[4px_4px_0px_#062985]'
+                    ? 'bg-white shadow-[3px_3px_0px_#062985] sm:shadow-[4px_4px_0px_#062985]'
                     : 'bg-white/80 hover:bg-white shadow-[2px_2px_0px_#062985]'
                 }`}
               >
@@ -56,13 +56,13 @@ export const FAQSection: React.FC = () => {
                   type="button"
                   onClick={() => toggleFAQ(item.id)}
                   aria-expanded={isOpen}
-                  className="w-full text-left p-5 sm:p-6 flex items-start justify-between gap-4 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#9B49DC]"
+                  className="w-full text-left p-4 sm:p-6 flex items-start justify-between gap-3 sm:gap-4 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#9B49DC]"
                 >
-                  <div>
-                    <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-md bg-[#062985]/10 text-[#062985] inline-block mb-2">
+                  <div className="min-w-0">
+                    <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-md bg-[#062985]/10 text-[#062985] inline-block mb-1.5 sm:mb-2">
                       {item.category}
                     </span>
-                    <h3 className="font-display font-bold text-base sm:text-lg text-[#062985] leading-snug">
+                    <h3 className="font-display font-bold text-sm min-[380px]:text-base sm:text-lg text-[#062985] leading-snug break-words">
                       {item.question}
                     </h3>
                   </div>

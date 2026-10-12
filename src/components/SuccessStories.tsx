@@ -10,30 +10,30 @@ export const SuccessStories: React.FC = () => {
   return (
     <section
       id="stories"
-      className="relative py-20 lg:py-32 bg-[#062985] text-white overflow-hidden"
+      className="relative py-16 sm:py-20 lg:py-32 bg-[#062985] text-white overflow-hidden"
     >
       {/* Background Grids */}
       <div className="absolute inset-0 bg-grid-pattern-dark pointer-events-none opacity-20" />
 
-      <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-12 relative z-10">
+      <div className="max-w-[1440px] mx-auto px-3 min-[380px]:px-4 sm:px-6 lg:px-12 relative z-10">
         {/* Section Header */}
-        <div className="flex flex-col items-start mb-16 max-w-3xl">
-          <div className="flex items-center gap-2 mb-3">
+        <div className="flex flex-col items-start mb-10 sm:mb-16 max-w-3xl">
+          <div className="flex flex-wrap items-center gap-2 mb-3">
             <StickerPill text="Люди Дона" bg="#C4E538" textColor="#062985" rotate="-2deg" />
-            <span className="font-hand text-lg text-[#51C3DD] font-bold">
+            <span className="font-hand text-base sm:text-lg text-[#51C3DD] font-bold">
               / реальные карьерные маршруты
             </span>
           </div>
 
-          <h2 className="font-display font-extrabold text-3xl sm:text-5xl lg:text-6xl tracking-tight leading-tight uppercase mb-4 text-white">
+          <h2 className="font-display font-extrabold text-2xl min-[380px]:text-3xl sm:text-5xl lg:text-6xl tracking-tight leading-tight uppercase mb-4 text-white break-words">
             Истории и <br className="hidden sm:inline" />
             <span className="text-[#C4E538] relative inline-block">
               реальные примеры
-              <span className="absolute -bottom-2 left-0 right-0 h-1.5 bg-[#51C3DD] rounded-full" />
+              <span className="absolute -bottom-1.5 sm:-bottom-2 left-0 right-0 h-1 sm:h-1.5 bg-[#51C3DD] rounded-full" />
             </span>
           </h2>
 
-          <p className="font-body text-base sm:text-lg text-white/80 leading-relaxed">
+          <p className="font-body text-sm sm:text-base lg:text-lg text-white/80 leading-relaxed">
             За каждым проектом и молодёжным центром стоят конкретные люди, которые
             когда-то пришли волонтёрами, а сегодня ведут за собой тысячи молодых жителей
             Ростовской области.
@@ -41,12 +41,12 @@ export const SuccessStories: React.FC = () => {
         </div>
 
         {/* Asymmetrical 3-Card Stories Showcase */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
           {successStoriesData.map((story) => (
             <div
               key={story.id}
               onClick={() => setSelectedStory(story)}
-              className="group bg-white text-[#062985] rounded-3xl border-3 border-[#C4E538] overflow-hidden shadow-[8px_8px_0px_#9B49DC] hover:shadow-[4px_4px_0px_#9B49DC] hover:translate-x-[2px] hover:translate-y-[2px] transition-all cursor-pointer flex flex-col justify-between"
+              className="group bg-white text-[#062985] rounded-2xl sm:rounded-3xl border-2 sm:border-3 border-[#C4E538] overflow-hidden shadow-[4px_4px_0px_#9B49DC] sm:shadow-[8px_8px_0px_#9B49DC] hover:shadow-[2px_2px_0px_#9B49DC] hover:translate-x-[2px] hover:translate-y-[2px] transition-all cursor-pointer flex flex-col justify-between"
               role="button"
               tabIndex={0}
               onKeyDown={(e) => {
@@ -127,38 +127,38 @@ export const SuccessStories: React.FC = () => {
       {/* Story Detail Modal */}
       {selectedStory && (
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm"
+          className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/70 backdrop-blur-sm"
           role="dialog"
           aria-modal="true"
         >
-          <div className="relative w-full max-w-3xl bg-white text-[#062985] rounded-3xl border-3 border-[#062985] shadow-[10px_10px_0px_#C4E538] p-6 sm:p-10 max-h-[90vh] overflow-y-auto">
+          <div className="relative w-full max-w-3xl bg-white text-[#062985] rounded-2xl sm:rounded-3xl border-2 sm:border-3 border-[#062985] shadow-[4px_4px_0px_#C4E538] sm:shadow-[10px_10px_0px_#C4E538] p-4 min-[380px]:p-6 sm:p-10 max-h-[90vh] overflow-y-auto">
             <button
               type="button"
               onClick={() => setSelectedStory(null)}
-              className="absolute top-6 right-6 p-2 rounded-full bg-[#062985] text-white hover:bg-[#C4E538] hover:text-[#062985] transition-colors"
+              className="absolute top-4 right-4 sm:top-6 sm:right-6 p-2 rounded-full bg-[#062985] text-white hover:bg-[#C4E538] hover:text-[#062985] transition-colors"
               aria-label="Закрыть"
             >
-              <X className="w-5 h-5" />
+              <X className="w-4 h-4 sm:w-5 sm:h-5" />
             </button>
 
-            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-6 mb-6 pb-6 border-b border-[#062985]/15">
-              <div className="w-24 h-24 rounded-2xl overflow-hidden border-2 border-[#062985] shrink-0 shadow-md">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 sm:gap-6 mb-6 pb-6 border-b border-[#062985]/15 pr-10 sm:pr-0">
+              <div className="w-16 h-16 sm:w-24 sm:h-24 rounded-xl sm:rounded-2xl overflow-hidden border-2 border-[#062985] shrink-0 shadow-md">
                 <img
                   src={selectedStory.image}
                   alt={selectedStory.name}
                   className="w-full h-full object-cover"
                 />
               </div>
-              <div>
-                <div className="flex items-center gap-2 mb-1">
-                  <span className="px-2.5 py-0.5 rounded-full text-xs font-bold bg-[#C4E538] text-[#062985] border border-[#062985]">
+              <div className="min-w-0">
+                <div className="flex flex-wrap items-center gap-2 mb-1">
+                  <span className="px-2.5 py-0.5 rounded-full text-[10px] sm:text-xs font-bold bg-[#C4E538] text-[#062985] border border-[#062985]">
                     {selectedStory.municipality}
                   </span>
-                  <span className="font-hand text-sm font-bold text-[#9B49DC]">
+                  <span className="font-hand text-xs sm:text-sm font-bold text-[#9B49DC]">
                     / карьерный кейс
                   </span>
                 </div>
-                <h3 className="font-display font-black text-2xl sm:text-3xl text-[#062985]">
+                <h3 className="font-display font-black text-xl min-[380px]:text-2xl sm:text-3xl text-[#062985] break-words">
                   {selectedStory.name}
                 </h3>
                 <p className="text-xs sm:text-sm text-[#062985]/80 font-medium">
