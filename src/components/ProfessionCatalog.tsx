@@ -1,27 +1,44 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { professionRolesData } from '../data/professionsData';
 import type { ProfessionRole } from '../types';
-import { Search, Briefcase, Check, X, ArrowRight, TrendingUp } from 'lucide-react';
+import { Search, Briefcase, Check, X, ArrowRight, TrendingUp, Bookmark, Copy, CheckCheck, Compass } from 'lucide-react';
 import { StickerPill } from './decorations/DecorativeSVGs';
+import { getFavoriteRoleIds, toggleFavoriteRole, subscribeToFavorites } from '../utils/favorites';
 
 export const ProfessionCatalog: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [selectedRole, setSelectedRole] = useState<ProfessionRole | null>(null);
+  const [favorites, setFavorites] = useState<string[]>([]);
+  const [copiedRole, setCopiedRole] = useState(false);
 
-  const categories = [
+  useEffect(() => {
+    setFavorites(getFavoriteRoleIds());
+    const unsub = subscribeToFavorites((ids) => setFavorites(ids));
+    return unsub;
+  }, []);
+
+  const categories = useMemo(() => [
     { id: 'all', label: 'Все роли' },
+    ...(favorites.length > 0 ? [{ id: 'favorites', label: `★ Сохранённые (${favorites.length})` }] : []),
     { id: 'community', label: 'Работа с сообществами' },
     { id: 'projects', label: 'Проектный офис' },
     { id: 'infrastructure', label: 'Инфраструктура' },
     { id: 'media', label: 'Медиа и PR' },
     { id: 'management', label: 'Управление' },
-  ];
+  ], [favorites.length]);
 
   const filteredRoles = useMemo(() => {
     return professionRolesData.filter((role) => {
-      const matchesCategory =
-        selectedCategory === 'all' || role.category === selectedCategory;
+      let matchesCategory = false;
+      if (selectedCategory === 'all') {
+        matchesCategory = true;
+      } else if (selectedCategory === 'favorites') {
+        matchesCategory = favorites.includes(role.id);
+      } else {
+        matchesCategory = role.category === selectedCategory;
+      }
+
       const query = searchQuery.toLowerCase().trim();
       const matchesSearch =
         !query ||
@@ -30,7 +47,14 @@ export const ProfessionCatalog: React.FC = () => {
         role.skills.some((s) => s.toLowerCase().includes(query));
       return matchesCategory && matchesSearch;
     });
-  }, [searchQuery, selectedCategory]);
+  }, [searchQuery, selectedCategory, favorites]);
+
+  const handleCopyRole = (role: ProfessionRole) => {
+    const text = `${role.title} (${role.categoryLabel})\nУровень: ${role.level}\nОриентир дохода: ${role.salaryRange || 'по результатам собеседования'}\n\nОписание:\n${role.description}\n\nКлючевые навыки:\n${role.skills.join(', ')}\n\nПлатформа «Карьерный маршрут: молодёжная сфера Ростовской области»`;
+    navigator.clipboard.writeText(text);
+    setCopiedRole(true);
+    setTimeout(() => setCopiedRole(false), 2000);
+  };
 
   return (
     <section
@@ -107,29 +131,50 @@ export const ProfessionCatalog: React.FC = () => {
         {/* Roles Grid */}
         {filteredRoles.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {filteredRoles.map((role) => (
-              <div
-                key={role.id}
-                onClick={() => setSelectedRole(role)}
-                className="group bg-[#F4F6FB] p-6 rounded-3xl border-2 border-[#062985] shadow-[4px_4px_0px_#062985] hover:shadow-[2px_2px_0px_#062985] hover:translate-x-[2px] hover:translate-y-[2px] transition-all cursor-pointer flex flex-col justify-between"
-                role="button"
-                tabIndex={0}
-                onKeyDown={(e) => {
-                  if (e.key === 'Enter' || e.key === ' ') {
-                    e.preventDefault();
-                    setSelectedRole(role);
-                  }
-                }}
-              >
-                <div>
-                  <div className="flex items-center justify-between gap-2 mb-3">
-                    <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-md bg-[#062985] text-white">
-                      {role.categoryLabel}
-                    </span>
-                    <span className="text-[11px] font-condensed font-bold text-[#9B49DC]">
-                      {role.level}
-                    </span>
-                  </div>
+            {filteredRoles.map((role) => {
+              const isSaved = favorites.includes(role.id);
+
+              return (
+                <div
+                  key={role.id}
+                  onClick={() => setSelectedRole(role)}
+                  className="group bg-[#F4F6FB] p-6 rounded-3xl border-2 border-[#062985] shadow-[4px_4px_0px_#062985] hover:shadow-[2px_2px_0px_#062985] hover:translate-x-[2px] hover:translate-y-[2px] transition-all cursor-pointer flex flex-col justify-between"
+                  role="button"
+                  tabIndex={0}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                      e.preventDefault();
+                      setSelectedRole(role);
+                    }
+                  }}
+                >
+                  <div>
+                    <div className="flex items-center justify-between gap-2 mb-3">
+                      <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-md bg-[#062985] text-white">
+                        {role.categoryLabel}
+                      </span>
+                      <div className="flex items-center gap-1.5">
+                        <span className="text-[11px] font-condensed font-bold text-[#9B49DC]">
+                          {role.level}
+                        </span>
+                        <button
+                          type="button"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            toggleFavoriteRole(role.id);
+                          }}
+                          className={`p-1 rounded-md transition-colors ${
+                            isSaved
+                              ? 'text-[#9B49DC] bg-[#9B49DC]/10'
+                              : 'text-[#062985]/35 hover:text-[#062985] hover:bg-black/5'
+                          }`}
+                          title={isSaved ? 'Удалить из избранного' : 'Сохранить в избранное'}
+                          aria-label={isSaved ? 'Удалить из избранного' : 'Сохранить в избранное'}
+                        >
+                          <Bookmark className={`w-3.5 h-3.5 ${isSaved ? 'fill-current' : ''}`} />
+                        </button>
+                      </div>
+                    </div>
 
                   <h3 className="font-display font-bold text-base sm:text-lg text-[#062985] leading-snug mb-2 group-hover:text-[#9B49DC] transition-colors">
                     {role.title}
@@ -174,8 +219,9 @@ export const ProfessionCatalog: React.FC = () => {
                   </div>
                 </div>
               </div>
-            ))}
-          </div>
+            );
+          })}
+        </div>
         ) : (
           <div className="bg-[#F4F6FB] rounded-3xl border-2 border-dashed border-[#062985]/30 p-12 text-center max-w-lg mx-auto">
             <Briefcase className="w-12 h-12 text-[#062985]/40 mx-auto mb-4" />
@@ -281,14 +327,59 @@ export const ProfessionCatalog: React.FC = () => {
               </div>
             </div>
 
-            <div className="flex justify-end pt-4 border-t border-[#062985]/15">
-              <button
-                type="button"
-                onClick={() => setSelectedRole(null)}
-                className="bg-[#062985] text-white hover:bg-[#9B49DC] font-display font-bold text-xs uppercase px-6 py-3 rounded-full transition-colors"
-              >
-                Закрыть карточку
-              </button>
+            <div className="flex flex-wrap items-center justify-between gap-3 pt-5 border-t border-[#062985]/15">
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={() => toggleFavoriteRole(selectedRole.id)}
+                  className={`inline-flex items-center gap-1.5 px-4 py-2.5 rounded-full border-2 text-xs font-bold transition-all ${
+                    favorites.includes(selectedRole.id)
+                      ? 'bg-[#9B49DC] text-white border-[#C4E538]'
+                      : 'bg-[#F4F6FB] text-[#062985] border-[#062985]/20 hover:border-[#062985]'
+                  }`}
+                >
+                  <Bookmark className={`w-3.5 h-3.5 ${favorites.includes(selectedRole.id) ? 'fill-current text-[#C4E538]' : ''}`} />
+                  <span>{favorites.includes(selectedRole.id) ? 'В избранном' : 'В избранное'}</span>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => handleCopyRole(selectedRole)}
+                  className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-full border-2 border-[#062985]/20 text-[#062985] hover:border-[#062985] text-xs font-bold transition-all bg-white"
+                  title="Скопировать описание роли"
+                >
+                  {copiedRole ? (
+                    <>
+                      <CheckCheck className="w-3.5 h-3.5 text-green-600" />
+                      <span className="text-green-700">Скопировано!</span>
+                    </>
+                  ) : (
+                    <>
+                      <Copy className="w-3.5 h-3.5" />
+                      <span>Скопировать</span>
+                    </>
+                  )}
+                </button>
+              </div>
+
+              <div className="flex items-center gap-2 ml-auto">
+                <a
+                  href="#route"
+                  onClick={() => setSelectedRole(null)}
+                  className="inline-flex items-center gap-1.5 bg-[#C4E538] hover:bg-[#D9FB5F] text-[#062985] font-display font-bold text-xs uppercase px-5 py-2.5 rounded-full border-2 border-[#062985] transition-all"
+                >
+                  <Compass className="w-3.5 h-3.5" />
+                  <span>В маршрут</span>
+                </a>
+
+                <button
+                  type="button"
+                  onClick={() => setSelectedRole(null)}
+                  className="bg-[#062985] text-white hover:bg-[#9B49DC] font-display font-bold text-xs uppercase px-5 py-2.5 rounded-full transition-colors"
+                >
+                  Закрыть
+                </button>
+              </div>
             </div>
           </div>
         </div>

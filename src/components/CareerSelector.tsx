@@ -3,13 +3,14 @@ import { selectorQuestionsData } from '../data/selectorQuestionsData';
 import { professionRolesData } from '../data/professionsData';
 import { careerStages } from '../data/careerRouteData';
 import type { SelectorOption } from '../types';
-import { ArrowRight, RotateCcw, Check, Target } from 'lucide-react';
+import { ArrowRight, RotateCcw, Check, Target, Copy, Sparkles } from 'lucide-react';
 import { StickerPill } from './decorations/DecorativeSVGs';
 
 export const CareerSelector: React.FC = () => {
   const [currentStepIndex, setCurrentStepIndex] = useState(0);
   const [selectedAnswers, setSelectedAnswers] = useState<Record<number, SelectorOption>>({});
   const [isCompleted, setIsCompleted] = useState(false);
+  const [copiedResult, setCopiedResult] = useState(false);
 
   const currentQuestion = selectorQuestionsData[currentStepIndex];
   const totalQuestions = selectorQuestionsData.length;
@@ -56,6 +57,20 @@ export const CareerSelector: React.FC = () => {
 
   const startingStage =
     careerStages.find((s) => s.id === startingStageId) || careerStages[0];
+
+  const handleCopyResult = () => {
+    const text = [
+      `🎯 Мой карьерный профиль в молодёжной политике Ростовской области:`,
+      `• Рекомендуемая роль: ${recommendedRole.title} (${recommendedRole.categoryLabel})`,
+      `• Стартовая ступень: Этап ${startingStage.stepNumber} — ${startingStage.title}`,
+      `• Описание: ${startingStage.subtitle}`,
+      `\nПройти интерактивный маршрут: ${window.location.origin}/#selector`,
+    ].join('\n');
+
+    navigator.clipboard.writeText(text);
+    setCopiedResult(true);
+    setTimeout(() => setCopiedResult(false), 2200);
+  };
 
   return (
     <section
@@ -189,10 +204,50 @@ export const CareerSelector: React.FC = () => {
             </div>
           ) : (
             /* Results Screen */
-            <div>
-              <div className="flex items-center gap-2 mb-4">
+            <div className="relative">
+              {/* Celebratory Decorative Ribbon */}
+              <div className="flex flex-wrap items-center justify-between gap-2 mb-6 p-3 sm:p-4 rounded-2xl bg-gradient-to-r from-[#F4FCDC] via-[#E7F8FC] to-[#F6ECFC] border-2 border-[#062985]">
+                <div className="flex items-center gap-2">
+                  <div className="w-8 h-8 rounded-full bg-[#062985] text-[#C4E538] flex items-center justify-center shrink-0">
+                    <Sparkles className="w-4 h-4" />
+                  </div>
+                  <div>
+                    <span className="font-display font-black text-xs sm:text-sm uppercase text-[#062985] block">
+                      Маршрут построен!
+                    </span>
+                    <span className="text-[11px] text-[#062985]/70 font-medium">
+                      Твой персональный вектор развития в Ростовской области
+                    </span>
+                  </div>
+                </div>
+
+                <button
+                  type="button"
+                  onClick={handleCopyResult}
+                  className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-display font-bold uppercase transition-all cursor-pointer border ${
+                    copiedResult
+                      ? 'bg-[#C4E538] text-[#062985] border-[#062985] shadow-[2px_2px_0px_#062985]'
+                      : 'bg-white hover:bg-[#062985] text-[#062985] hover:text-white border-[#062985]/30 shadow-sm'
+                  }`}
+                  aria-label="Скопировать результат теста"
+                >
+                  {copiedResult ? (
+                    <>
+                      <Check className="w-3.5 h-3.5 stroke-[3] text-[#062985]" />
+                      <span>Скопировано!</span>
+                    </>
+                  ) : (
+                    <>
+                      <Copy className="w-3.5 h-3.5" />
+                      <span>Скопировать результат</span>
+                    </>
+                  )}
+                </button>
+              </div>
+
+              <div className="flex items-center gap-2 mb-3">
                 <span className="px-3 py-1 rounded-full text-xs font-bold uppercase bg-[#C4E538] text-[#062985] border border-[#062985]">
-                  Результат готов
+                  Результат теста
                 </span>
                 <span className="font-hand text-sm font-bold text-[#9B49DC]">
                   / твой индивидуальный карьерный профиль
@@ -211,31 +266,31 @@ export const CareerSelector: React.FC = () => {
               </p>
 
               {/* Recommended Stage Card */}
-              <div className="bg-[#F4FCDC] p-6 rounded-2xl border-2 border-[#062985] mb-8">
+              <div className="bg-[#F4FCDC] p-5 sm:p-6 rounded-2xl border-2 sm:border-3 border-[#062985] shadow-[4px_4px_0px_#062985] mb-8">
                 <div className="flex items-center gap-2 mb-2">
                   <Target className="w-4 h-4 text-[#062985]" />
                   <span className="text-xs font-bold uppercase text-[#062985]">
                     Рекомендуемая стартовая ступень маршрута:
                   </span>
                 </div>
-                <div className="flex items-center gap-3">
-                  <span className="font-condensed font-black text-3xl text-[#062985]">
+                <div className="flex flex-wrap items-center gap-3">
+                  <span className="font-condensed font-black text-2xl sm:text-3xl text-[#062985]">
                     Этап {startingStage.stepNumber}
                   </span>
-                  <span className="font-display font-bold text-base text-[#062985]">
+                  <span className="font-display font-bold text-base sm:text-lg text-[#062985]">
                     — {startingStage.title}
                   </span>
                 </div>
-                <p className="text-xs text-[#062985]/80 mt-1">
+                <p className="text-xs sm:text-sm text-[#062985]/80 mt-1.5">
                   {startingStage.subtitle}
                 </p>
               </div>
 
-              {/* Action Buttons */}
+              {/* Action Buttons with Tactile Depression */}
               <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-4 pt-4 border-t border-[#062985]/15">
                 <a
                   href="#route"
-                  className="inline-flex items-center justify-center gap-2 bg-[#062985] text-white font-display font-bold text-[11px] sm:text-xs uppercase px-5 sm:px-7 py-3 sm:py-3.5 rounded-full hover:bg-[#9B49DC] transition-all shadow-[3px_3px_0px_#C4E538]"
+                  className="btn-tactile inline-flex items-center justify-center gap-2 bg-[#062985] text-white font-display font-bold text-[11px] sm:text-xs uppercase px-5 sm:px-7 py-3 sm:py-3.5 rounded-full hover:bg-[#9B49DC] transition-all shadow-[3px_3px_0px_#C4E538] cursor-pointer"
                 >
                   <span>Перейти к этапу в маршруте</span>
                   <ArrowRight className="w-4 h-4" />
@@ -243,7 +298,7 @@ export const CareerSelector: React.FC = () => {
 
                 <a
                   href="#professions"
-                  className="inline-flex items-center justify-center gap-2 bg-transparent text-[#062985] font-display font-bold text-[11px] sm:text-xs uppercase px-5 sm:px-6 py-3 sm:py-3.5 rounded-full border-2 border-[#062985] hover:bg-neutral-100 transition-all"
+                  className="btn-tactile inline-flex items-center justify-center gap-2 bg-transparent text-[#062985] font-display font-bold text-[11px] sm:text-xs uppercase px-5 sm:px-6 py-3 sm:py-3.5 rounded-full border-2 border-[#062985] hover:bg-neutral-100 transition-all cursor-pointer"
                 >
                   <span>Смотреть роли каталога</span>
                 </a>
@@ -251,7 +306,7 @@ export const CareerSelector: React.FC = () => {
                 <button
                   type="button"
                   onClick={handleReset}
-                  className="inline-flex items-center justify-center gap-1.5 text-xs font-bold text-[#062985]/70 hover:text-[#062985] py-2 sm:py-0 sm:ml-auto"
+                  className="inline-flex items-center justify-center gap-1.5 text-xs font-bold text-[#062985]/70 hover:text-[#062985] py-2 sm:py-0 sm:ml-auto cursor-pointer"
                 >
                   <RotateCcw className="w-3.5 h-3.5" />
                   <span>Пройти заново</span>

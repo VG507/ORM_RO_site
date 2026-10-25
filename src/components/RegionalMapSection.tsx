@@ -10,23 +10,49 @@ import {
   ExternalLink,
   RotateCcw,
   Layers,
+  Copy,
+  Check,
+  X,
+  Filter,
 } from 'lucide-react';
 import { StickerPill } from './decorations/DecorativeSVGs';
+
+type TerritoryFilterType = 'all' | 'vacancies' | 'city' | 'district';
 
 export const RegionalMapSection: React.FC = () => {
   const [selectedMunicipalityId, setSelectedMunicipalityId] = useState<string>('rostov-on-don');
   const [searchQuery, setSearchQuery] = useState('');
   const [viewMode, setViewMode] = useState<'map' | 'list'>('map');
+  const [activeFilter, setActiveFilter] = useState<TerritoryFilterType>('all');
+  const [copiedContacts, setCopiedContacts] = useState(false);
+
+  // Filter counts
+  const counts = useMemo(() => {
+    return {
+      all: municipalitiesData.length,
+      vacancies: municipalitiesData.filter((m) => m.vacancies.length > 0).length,
+      city: municipalitiesData.filter((m) => m.type === 'городской округ').length,
+      district: municipalitiesData.filter((m) => m.type === 'муниципальный район').length,
+    };
+  }, []);
 
   const filteredMunicipalities = useMemo(() => {
-    const q = searchQuery.toLowerCase().trim();
-    if (!q) return municipalitiesData;
-    return municipalitiesData.filter(
-      (m) =>
+    return municipalitiesData.filter((m) => {
+      // 1. Text search
+      const q = searchQuery.toLowerCase().trim();
+      const matchesSearch =
+        !q ||
         m.name.toLowerCase().includes(q) ||
-        m.organizations.some((o) => o.name.toLowerCase().includes(q))
-    );
-  }, [searchQuery]);
+        m.organizations.some((o) => o.name.toLowerCase().includes(q));
+      if (!matchesSearch) return false;
+
+      // 2. Territory category pill filter
+      if (activeFilter === 'vacancies') return m.vacancies.length > 0;
+      if (activeFilter === 'city') return m.type === 'городской округ';
+      if (activeFilter === 'district') return m.type === 'муниципальный район';
+      return true;
+    });
+  }, [searchQuery, activeFilter]);
 
   const selectedMunicipality = useMemo(() => {
     return (
@@ -34,6 +60,23 @@ export const RegionalMapSection: React.FC = () => {
       municipalitiesData[0]
     );
   }, [selectedMunicipalityId]);
+
+  const handleCopyContacts = () => {
+    const textLines = [
+      `📍 ${selectedMunicipality.name} (${selectedMunicipality.type})`,
+      ...selectedMunicipality.organizations.map(
+        (org) => `• ${org.name}\n  Адрес: ${org.address}\n  Тел: ${org.phone}\n  Email: ${org.email}${org.vkUrl ? `\n  VK: ${org.vkUrl}` : ''}`
+      ),
+      selectedMunicipality.vacancies.length > 0
+        ? `\n💼 Открытые вакансии (${selectedMunicipality.vacancies.length}):\n` +
+          selectedMunicipality.vacancies.map((v) => `  - ${v.title} (${v.salaryText})`).join('\n')
+        : '',
+    ].filter(Boolean);
+
+    navigator.clipboard.writeText(textLines.join('\n\n'));
+    setCopiedContacts(true);
+    setTimeout(() => setCopiedContacts(false), 2200);
+  };
 
   return (
     <section
@@ -65,47 +108,112 @@ export const RegionalMapSection: React.FC = () => {
           </p>
         </div>
 
-        {/* View Switcher and Search */}
-        <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 sm:gap-4 mb-6 sm:mb-8">
-          {/* Switcher */}
-          <div className="flex flex-col min-[480px]:inline-flex min-[480px]:flex-row p-1 rounded-2xl min-[480px]:rounded-full bg-white border-2 border-[#062985] shadow-[2px_2px_0px_#062985] gap-1 min-[480px]:gap-0">
-            <button
-              type="button"
-              onClick={() => setViewMode('map')}
-              className={`flex items-center justify-center gap-1.5 px-3.5 sm:px-5 py-2.5 min-[480px]:py-2 rounded-xl min-[480px]:rounded-full text-xs font-display font-bold uppercase transition-all ${
-                viewMode === 'map'
-                  ? 'bg-[#062985] text-white shadow-sm'
-                  : 'text-[#062985] hover:bg-neutral-100'
-              }`}
-            >
-              <MapPin className="w-3.5 h-3.5" />
-              <span>Интерактивная карта</span>
-            </button>
+        {/* View Switcher, Category Filters, and Search */}
+        <div className="flex flex-col gap-3 mb-6 sm:mb-8">
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 sm:gap-4">
+            {/* View Switcher */}
+            <div className="flex flex-col min-[480px]:inline-flex min-[480px]:flex-row p-1 rounded-2xl min-[480px]:rounded-full bg-white border-2 border-[#062985] shadow-[2px_2px_0px_#062985] gap-1 min-[480px]:gap-0">
+              <button
+                type="button"
+                onClick={() => setViewMode('map')}
+                className={`flex items-center justify-center gap-1.5 px-3.5 sm:px-5 py-2.5 min-[480px]:py-2 rounded-xl min-[480px]:rounded-full text-xs font-display font-bold uppercase transition-all cursor-pointer ${
+                  viewMode === 'map'
+                    ? 'bg-[#062985] text-white shadow-sm'
+                    : 'text-[#062985] hover:bg-neutral-100'
+                }`}
+              >
+                <MapPin className="w-3.5 h-3.5" />
+                <span>Интерактивная карта</span>
+              </button>
 
-            <button
-              type="button"
-              onClick={() => setViewMode('list')}
-              className={`flex items-center justify-center gap-1.5 px-3.5 sm:px-5 py-2.5 min-[480px]:py-2 rounded-xl min-[480px]:rounded-full text-xs font-display font-bold uppercase transition-all ${
-                viewMode === 'list'
-                  ? 'bg-[#062985] text-white shadow-sm'
-                  : 'text-[#062985] hover:bg-neutral-100'
-              }`}
-            >
-              <Layers className="w-3.5 h-3.5" />
-              <span>Список районов ({municipalitiesData.length})</span>
-            </button>
+              <button
+                type="button"
+                onClick={() => setViewMode('list')}
+                className={`flex items-center justify-center gap-1.5 px-3.5 sm:px-5 py-2.5 min-[480px]:py-2 rounded-xl min-[480px]:rounded-full text-xs font-display font-bold uppercase transition-all cursor-pointer ${
+                  viewMode === 'list'
+                    ? 'bg-[#062985] text-white shadow-sm'
+                    : 'text-[#062985] hover:bg-neutral-100'
+                }`}
+              >
+                <Layers className="w-3.5 h-3.5" />
+                <span>Список ({filteredMunicipalities.length})</span>
+              </button>
+            </div>
+
+            {/* Quick Search Input with Clear Button */}
+            <div className="relative w-full sm:w-auto min-w-0 sm:min-w-[320px]">
+              <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#062985]/50 pointer-events-none" />
+              <input
+                type="text"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder="Найти муниципалитет или МЦ..."
+                className="w-full pl-10 pr-9 py-2.5 rounded-full bg-white border-2 border-[#062985]/20 focus:border-[#062985] text-xs sm:text-sm text-[#062985] placeholder-[#062985]/50 outline-none transition-all shadow-sm"
+              />
+              {searchQuery && (
+                <button
+                  type="button"
+                  onClick={() => setSearchQuery('')}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 p-1 text-[#062985]/60 hover:text-[#062985] rounded-full hover:bg-neutral-100 cursor-pointer"
+                  aria-label="Очистить поиск"
+                >
+                  <X className="w-3.5 h-3.5" />
+                </button>
+              )}
+            </div>
           </div>
 
-          {/* Quick Search Input */}
-          <div className="relative w-full sm:w-auto min-w-0 sm:min-w-[320px]">
-            <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#062985]/50" />
-            <input
-              type="text"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Найти муниципалитет..."
-              className="w-full pl-10 pr-4 py-2.5 rounded-full bg-white border-2 border-[#062985]/20 focus:border-[#062985] text-xs sm:text-sm text-[#062985] placeholder-[#062985]/50 outline-none transition-all shadow-sm"
-            />
+          {/* Quick Filter Pills */}
+          <div className="flex flex-wrap items-center gap-2 pt-1">
+            <span className="text-[11px] font-bold uppercase tracking-wider text-[#062985]/60 flex items-center gap-1 mr-1">
+              <Filter className="w-3 h-3" />
+              Фильтр:
+            </span>
+            <button
+              type="button"
+              onClick={() => setActiveFilter('all')}
+              className={`px-3 py-1.5 rounded-full text-xs font-display font-bold uppercase transition-all cursor-pointer border ${
+                activeFilter === 'all'
+                  ? 'bg-[#062985] text-white border-[#062985] shadow-[2px_2px_0px_#C4E538]'
+                  : 'bg-white text-[#062985] border-[#062985]/20 hover:border-[#062985]'
+              }`}
+            >
+              Все 55 ({counts.all})
+            </button>
+            <button
+              type="button"
+              onClick={() => setActiveFilter('vacancies')}
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-display font-bold uppercase transition-all cursor-pointer border ${
+                activeFilter === 'vacancies'
+                  ? 'bg-[#062985] text-[#C4E538] border-[#062985] shadow-[2px_2px_0px_#C4E538]'
+                  : 'bg-white text-[#062985] border-[#062985]/20 hover:border-[#062985]'
+              }`}
+            >
+              <span className="w-2 h-2 rounded-full bg-[#C4E538] inline-block ring-2 ring-[#062985]/20" />
+              С вакансиями ({counts.vacancies})
+            </button>
+            <button
+              type="button"
+              onClick={() => setActiveFilter('city')}
+              className={`px-3 py-1.5 rounded-full text-xs font-display font-bold uppercase transition-all cursor-pointer border ${
+                activeFilter === 'city'
+                  ? 'bg-[#062985] text-white border-[#062985] shadow-[2px_2px_0px_#C4E538]'
+                  : 'bg-white text-[#062985] border-[#062985]/20 hover:border-[#062985]'
+              }`}
+            >
+              Городские округа ({counts.city})
+            </button>
+            <button
+              type="button"
+              onClick={() => setActiveFilter('district')}
+              className={`px-3 py-1.5 rounded-full text-xs font-display font-bold uppercase transition-all cursor-pointer border ${
+                activeFilter === 'district'
+                  ? 'bg-[#062985] text-white border-[#062985] shadow-[2px_2px_0px_#C4E538]'
+                  : 'bg-white text-[#062985] border-[#062985]/20 hover:border-[#062985]'
+              }`}
+            >
+              Районы области ({counts.district})
+            </button>
           </div>
         </div>
 
@@ -159,11 +267,16 @@ export const RegionalMapSection: React.FC = () => {
                     {municipalitiesData.map((m) => {
                       const isSelected = m.id === selectedMunicipalityId;
                       const hasVacancies = m.vacancies.length > 0;
+                      const matchesFilter = filteredMunicipalities.some((item) => item.id === m.id);
 
                       return (
                         <g
                           key={m.id}
-                          className="cursor-pointer transition-transform duration-200 hover:scale-110"
+                          className={`cursor-pointer transition-all duration-300 ${
+                            matchesFilter
+                              ? 'opacity-100 hover:scale-110'
+                              : 'opacity-20 hover:opacity-70'
+                          }`}
                           onClick={() => setSelectedMunicipalityId(m.id)}
                         >
                           {/* Outer pulse circle for selected */}
@@ -173,8 +286,21 @@ export const RegionalMapSection: React.FC = () => {
                               cy={m.svgCoords.y}
                               r="26"
                               fill="#9B49DC"
-                              opacity="0.25"
+                              opacity="0.3"
                               className="animate-ping"
+                            />
+                          )}
+
+                          {/* Gentle vacancy pulsing aura ring for territories with job openings */}
+                          {hasVacancies && !isSelected && matchesFilter && (
+                            <circle
+                              cx={m.svgCoords.x}
+                              cy={m.svgCoords.y}
+                              r="18"
+                              fill="none"
+                              stroke="#C4E538"
+                              strokeWidth="2.5"
+                              className="animate-pulse"
                             />
                           )}
 
@@ -325,14 +451,41 @@ export const RegionalMapSection: React.FC = () => {
                 </h3>
               </div>
 
-              <button
-                type="button"
-                onClick={() => setSelectedMunicipalityId('rostov-on-don')}
-                className="p-2 rounded-xl bg-white/10 hover:bg-white/20 text-white/80 hover:text-white transition-colors shrink-0"
-                title="Сбросить к Ростову-на-Дону"
-              >
-                <RotateCcw className="w-4 h-4" />
-              </button>
+              <div className="flex items-center gap-2 shrink-0">
+                <button
+                  type="button"
+                  onClick={handleCopyContacts}
+                  className={`flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-display font-bold uppercase transition-all border cursor-pointer ${
+                    copiedContacts
+                      ? 'bg-[#C4E538] text-[#062985] border-[#C4E538] shadow-[2px_2px_0px_#FFFFFF]'
+                      : 'bg-white/10 hover:bg-[#C4E538] hover:text-[#062985] text-white border-white/20'
+                  }`}
+                  title="Скопировать контакты района"
+                  aria-label="Скопировать контакты района"
+                >
+                  {copiedContacts ? (
+                    <>
+                      <Check className="w-3.5 h-3.5 stroke-[3]" />
+                      <span className="text-[11px]">Скопировано!</span>
+                    </>
+                  ) : (
+                    <>
+                      <Copy className="w-3.5 h-3.5" />
+                      <span className="text-[11px] hidden min-[400px]:inline">Контакты</span>
+                    </>
+                  )}
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => setSelectedMunicipalityId('rostov-on-don')}
+                  className="p-2 rounded-xl bg-white/10 hover:bg-white/20 text-white/80 hover:text-white transition-colors shrink-0 cursor-pointer"
+                  title="Сбросить к Ростову-на-Дону"
+                  aria-label="Сбросить к Ростову-на-Дону"
+                >
+                  <RotateCcw className="w-4 h-4" />
+                </button>
+              </div>
             </div>
 
             {/* Organizations in Territory */}
