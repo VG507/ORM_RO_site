@@ -1,170 +1,37 @@
-import React from 'react';
-import { Target, Users, Zap, CheckCircle2 } from 'lucide-react';
-import teamPhotoOne from '../assets/team-photo-1.jpg';
-import teamPhotoThree from '../assets/team-photo-3.jpg';
-import { StickerPill, SignatureWaveLime } from './decorations/DecorativeSVGs';
+import { StickerPill } from './decorations/DecorativeSVGs';
 
-export const AboutSection: React.FC = () => {
+const eventPhoto = `${import.meta.env.BASE_URL}assets/event-photo.jpg`;
+
+export function AboutSection() {
   return (
-    <section
-      id="about"
-      className="relative py-16 sm:py-20 lg:py-32 bg-[#F4F6FB] text-[#062985] overflow-hidden"
-    >
-      {/* Decorative Subtle Background Line */}
-      <div className="absolute top-0 right-0 w-96 opacity-30 pointer-events-none">
-        <SignatureWaveLime />
-      </div>
-
-      <div className="max-w-[1440px] mx-auto px-3 min-[380px]:px-4 sm:px-6 lg:px-12 relative z-10">
-        {/* Section Header */}
-        <div className="flex flex-col items-start mb-10 sm:mb-16 max-w-3xl">
-          <div className="flex flex-wrap items-center gap-2 mb-3 sm:mb-4">
-            <StickerPill text="О проекте" bg="#9B49DC" textColor="#FFFFFF" rotate="1deg" />
-            <span className="font-hand text-base sm:text-lg text-[#062985] font-bold">
-              / новая культура молодёжной работы
-            </span>
-          </div>
-
-          <h2 className="font-display font-extrabold text-2xl min-[380px]:text-3xl sm:text-5xl lg:text-6xl tracking-tight leading-tight uppercase mb-4 sm:mb-6 text-[#062985] break-words">
-            Путь начинается <br className="hidden sm:inline" />
-            <span className="bg-[#C4E538] px-2.5 sm:px-3 py-1 inline-block -rotate-1 border-2 border-[#062985] rounded-xl shadow-[3px_3px_0px_#062985]">
-              с интереса
-            </span>
+    <section id="about" className="py-16 sm:py-20 lg:py-24 bg-[#F4F6FB] text-[#062985]">
+      <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-12 grid gap-8 lg:gap-12 lg:grid-cols-2 items-center">
+        <div>
+          <StickerPill text="О проекте" bg="#C4E538" textColor="#062985" />
+          <h2 className="font-display font-extrabold text-2xl sm:text-4xl xl:text-5xl tracking-tight leading-tight mt-4 mb-5">
+            Работа с молодёжью на Дону
           </h2>
-
-          <p className="font-body text-base sm:text-lg lg:text-xl text-[#062985]/80 leading-relaxed">
-            Молодёжная сфера Ростовской области — это не бюрократия и не формальные отчёты.
-            Это динамичная среда, где специалисты создают молодёжные центры, выигрывают миллионные гранты,
-            запускают всероссийские форумы и помогают молодым людям Дона находить своё призвание.
+          <p className="text-base sm:text-lg text-[#062985]/85 leading-relaxed max-w-xl">
+            Специалисты по работе с молодёжью организуют события, координируют волонтёров,
+            ведут проекты и развивают молодёжные пространства Ростовской области.
+          </p>
+          <p className="text-base sm:text-lg text-[#062985]/85 leading-relaxed max-w-xl mt-4">
+            На сайте можно познакомиться с этой работой, подобрать роль и узнать,
+            с чего начать профессиональный путь.
           </p>
         </div>
-
-        {/* Asymmetrical Editorial Layout: 2 Columns */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-16 items-center">
-          {/* Left Column: Mission Pillars & Value Box */}
-          <div className="lg:col-span-7 flex flex-col gap-6">
-            {/* Highlighted Quote Box */}
-            <div className="bg-white p-4 min-[380px]:p-6 sm:p-8 rounded-2xl sm:rounded-3xl border-2 sm:border-3 border-[#062985] shadow-[4px_4px_0px_#062985] sm:shadow-[6px_6px_0px_#062985] relative">
-              <div className="absolute -top-3.5 sm:-top-4 right-4 sm:right-8 bg-[#C4E538] px-2.5 sm:px-3 py-0.5 sm:py-1 rounded-full text-[10px] sm:text-xs font-display font-bold uppercase border-2 border-[#062985]">
-                Ключевой ориентир
-              </div>
-              <p className="font-display font-bold text-base min-[380px]:text-lg sm:text-2xl text-[#062985] leading-snug mb-4 pt-1 sm:pt-0">
-                «Наша цель — превратить каждый молодёжный центр Дона в точку притяжения энергии,
-                а каждого специалиста — в признанного лидера изменений.»
-              </p>
-              <div className="flex items-center gap-3 pt-4 border-t border-[#062985]/15">
-                <span className="font-hand text-sm sm:text-base font-bold text-[#9B49DC]">
-                  Стандарты Федерального агентства «Росмолодёжь»
-                </span>
-              </div>
-            </div>
-
-            {/* 3 Pillars Grid */}
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-4">
-              <div className="bg-[#F4FCDC] p-5 rounded-2xl border-2 border-[#062985] shadow-[3px_3px_0px_#062985]">
-                <div className="w-10 h-10 rounded-xl bg-[#062985] text-[#C4E538] flex items-center justify-center mb-3">
-                  <Target className="w-5 h-5" />
-                </div>
-                <h3 className="font-display font-bold text-sm uppercase text-[#062985] mb-2">
-                  Инициатива
-                </h3>
-                <p className="text-xs text-[#062985]/80 leading-relaxed">
-                  Поддержка идей от локального кружка до масштабного проекта с грантовым бюджетом.
-                </p>
-              </div>
-
-              <div className="bg-[#E7F8FC] p-5 rounded-2xl border-2 border-[#062985] shadow-[3px_3px_0px_#062985]">
-                <div className="w-10 h-10 rounded-xl bg-[#51C3DD] text-[#062985] flex items-center justify-center mb-3">
-                  <Users className="w-5 h-5" />
-                </div>
-                <h3 className="font-display font-bold text-sm uppercase text-[#062985] mb-2">
-                  Синергия
-                </h3>
-                <p className="text-xs text-[#062985]/80 leading-relaxed">
-                  Обмен практиками между командами городских округов и районов Дона.
-                </p>
-              </div>
-
-              <div className="bg-[#F6ECFC] p-5 rounded-2xl border-2 border-[#062985] shadow-[3px_3px_0px_#062985]">
-                <div className="w-10 h-10 rounded-xl bg-[#9B49DC] text-white flex items-center justify-center mb-3">
-                  <Zap className="w-5 h-5" />
-                </div>
-                <h3 className="font-display font-bold text-sm uppercase text-[#062985] mb-2">
-                  Развитие
-                </h3>
-                <p className="text-xs text-[#062985]/80 leading-relaxed">
-                  Понятный прозрачный карьерный маршрут и доступ к передовым образовательным программам.
-                </p>
-              </div>
-            </div>
-
-            {/* Practical Stats List */}
-            <ul className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
-              <li className="flex items-center gap-2.5 text-xs sm:text-sm font-medium text-[#062985]">
-                <CheckCircle2 className="w-4 h-4 text-[#9B49DC] shrink-0" />
-                <span>Официальный статус и программы поддержки специалистов</span>
-              </li>
-              <li className="flex items-center gap-2.5 text-xs sm:text-sm font-medium text-[#062985]">
-                <CheckCircle2 className="w-4 h-4 text-[#9B49DC] shrink-0" />
-                <span>Грантовые фонды Росмолодёжи до 1.5 млн рублей</span>
-              </li>
-              <li className="flex items-center gap-2.5 text-xs sm:text-sm font-medium text-[#062985]">
-                <CheckCircle2 className="w-4 h-4 text-[#9B49DC] shrink-0" />
-                <span>Участие в окружных форумах и стажировках</span>
-              </li>
-              <li className="flex items-center gap-2.5 text-xs sm:text-sm font-medium text-[#062985]">
-                <CheckCircle2 className="w-4 h-4 text-[#9B49DC] shrink-0" />
-                <span>Включение в кадровый резерв лидеров Дона</span>
-              </li>
-            </ul>
-          </div>
-
-          {/* Right Column: Editorial Photo Collage */}
-          <div className="lg:col-span-5 relative">
-            <div className="relative mx-auto max-w-sm sm:max-w-md">
-              {/* Back Photo Card */}
-              <div className="relative rounded-3xl overflow-hidden border-3 border-[#062985] shadow-[8px_8px_0px_#9B49DC] bg-white">
-                <img
-                src={teamPhotoThree}
-                  alt="Командная работа специалистов по работе с молодёжью"
-                  className="w-full h-80 sm:h-96 object-cover object-center"
-                  loading="lazy"
-                />
-                <div className="p-4 bg-white border-t-2 border-[#062985]">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <span className="font-display font-bold text-xs uppercase text-[#062985] block">
-                        Командный интенсив
-                      </span>
-                      <span className="text-xs text-[#062985]/70">
-                        Обмен муниципальными практиками
-                      </span>
-                    </div>
-                    <span className="px-3 py-1 bg-[#C4E538] text-[#062985] rounded-full text-xs font-bold border border-[#062985]">
-                      Ростов-на-Дону
-                    </span>
-                  </div>
-                </div>
-              </div>
-
-              {/* Overlapping Small Photo Card */}
-              <div className="absolute -bottom-8 -left-6 sm:-left-10 w-44 sm:w-56 rounded-2xl overflow-hidden border-3 border-[#062985] shadow-[6px_6px_0px_#C4E538] bg-white hidden sm:block">
-                <img
-                src={teamPhotoOne}
-                  alt="Молодой специалист"
-                  className="w-full h-32 sm:h-40 object-cover object-center"
-                  loading="lazy"
-                />
-                <div className="p-2 bg-[#062985] text-white text-center">
-                  <span className="font-hand text-xs text-[#C4E538] font-bold block">
-                    «Творим историю вместе»
-                  </span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+        <figure>
+          <img
+            src={eventPhoto}
+            alt="Участники молодёжного мероприятия сидят в зале и складывают руки в форме сердца"
+            className="block w-full h-auto rounded-2xl border-2 border-[#062985]"
+            width={1440}
+            height={1080}
+            loading="lazy"
+          />
+          <figcaption className="text-sm text-[#062985]/75 mt-2">Участники молодёжного мероприятия</figcaption>
+        </figure>
       </div>
     </section>
   );
-};
+}

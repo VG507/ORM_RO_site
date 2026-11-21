@@ -56,6 +56,7 @@ export interface SuccessStory {
   role: string;
   municipality: string;
   image: string;
+  imageAlt: string;
   quote: string;
   background: string;
   milestones: string[];

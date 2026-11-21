@@ -169,7 +169,7 @@ export const CareerSelector: React.FC = () => {
                         <span className="font-display font-bold text-xs min-[380px]:text-sm sm:text-base leading-snug block mb-1">
                           {option.text}
                         </span>
-                        <span className="text-[11px] sm:text-xs text-[#062985]/70 block font-medium">
+                          <span className="text-sm text-[#062985]/80 block">
                           {option.description}
                         </span>
                       </div>

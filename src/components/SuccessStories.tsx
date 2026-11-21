@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { successStoriesData } from '../data/storiesData';
 import type { SuccessStory } from '../types';
 import { Quote, MapPin, ArrowRight, X, Share2, Check } from 'lucide-react';
-import { StickerPill } from './decorations/DecorativeSVGs';
 
 export const SuccessStories: React.FC = () => {
   const [selectedStory, setSelectedStory] = useState<SuccessStory | null>(null);
@@ -40,26 +39,13 @@ export const SuccessStories: React.FC = () => {
 
       <div className="max-w-[1440px] mx-auto px-3 min-[380px]:px-4 sm:px-6 lg:px-12 relative z-10">
         {/* Section Header */}
-        <div className="flex flex-col items-start mb-10 sm:mb-16 max-w-3xl">
-          <div className="flex flex-wrap items-center gap-2 mb-3">
-            <StickerPill text="Люди Дона" bg="#C4E538" textColor="#062985" rotate="-2deg" />
-            <span className="font-hand text-base sm:text-lg text-[#51C3DD] font-bold">
-              / реальные карьерные маршруты
-            </span>
-          </div>
-
-          <h2 className="font-display font-extrabold text-2xl min-[380px]:text-3xl sm:text-5xl lg:text-6xl tracking-tight leading-tight uppercase mb-4 text-white break-words">
-            Истории и <br className="hidden sm:inline" />
-            <span className="text-[#C4E538] relative inline-block">
-              реальные примеры
-              <span className="absolute -bottom-1.5 sm:-bottom-2 left-0 right-0 h-1 sm:h-1.5 bg-[#51C3DD] rounded-full" />
-            </span>
+        <div className="mb-8 sm:mb-10 max-w-3xl">
+          <h2 className="font-display font-extrabold text-2xl sm:text-4xl xl:text-5xl tracking-tight leading-tight mb-3">
+            Карьерные истории
           </h2>
-
-          <p className="font-body text-sm sm:text-base lg:text-lg text-white/80 leading-relaxed">
-            За каждым проектом и молодёжным центром стоят конкретные люди, которые
-            когда-то пришли волонтёрами, а сегодня ведут за собой тысячи молодых жителей
-            Ростовской области.
+          <p className="text-base sm:text-lg text-white/85 leading-relaxed">
+            Примеры пути от волонтёрства до управления проектами и молодёжными центрами.
+            Фото с молодёжных мероприятий использованы как иллюстрации.
           </p>
         </div>
 
@@ -80,41 +66,30 @@ export const SuccessStories: React.FC = () => {
               }}
             >
               <div>
-                {/* Photo with Overlay Badge */}
-                <div className="relative h-64 sm:h-72 overflow-hidden bg-neutral-900">
+                <div className="aspect-[4/3] overflow-hidden bg-[#F4F6FB]">
                   <img
                     src={story.image}
-                    alt={story.name}
-                    className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500"
+                    alt={story.imageAlt}
+                    className="w-full h-full object-cover object-[center_15%]"
                     loading="lazy"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
-
-                  {/* Top Location Pill */}
-                  <div className="absolute top-4 left-4">
-                    <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-[#062985] text-white border border-[#C4E538]">
-                      <MapPin className="w-3.5 h-3.5 text-[#C4E538]" />
-                      {story.municipality}
-                    </span>
-                  </div>
-
-                  {/* Bottom Photo Title */}
-                  <div className="absolute bottom-4 left-4 right-4 text-white">
-                    <h3 className="font-display font-extrabold text-xl leading-tight mb-0.5">
-                      {story.name}
-                    </h3>
-                    <p className="text-xs text-[#C4E538] font-medium">
-                      {story.role}
-                    </p>
-                  </div>
                 </div>
 
-                {/* Card Content */}
-                <div className="p-6">
+                <div className="p-5 sm:p-6">
+                  <span className="inline-flex items-center gap-1.5 text-sm font-medium mb-2">
+                    <MapPin className="w-4 h-4 text-[#7B2EBC]" aria-hidden="true" />
+                    {story.municipality}
+                  </span>
+                  <h3 className="font-display font-extrabold text-lg sm:text-xl leading-tight mb-1">
+                    {story.name}
+                  </h3>
+                  <p className="text-sm text-[#062985]/80 font-medium mb-4">
+                    {story.role}
+                  </p>
                   {/* Quote Snippet */}
                   <div className="relative pl-6 mb-4">
                     <Quote className="w-5 h-5 text-[#9B49DC] absolute left-0 top-0 opacity-80" />
-                    <p className="text-xs sm:text-sm italic text-[#062985]/85 line-clamp-3 leading-relaxed">
+                    <p className="text-sm italic text-[#062985]/85 line-clamp-3 leading-relaxed">
                       {story.quote}
                     </p>
                   </div>
@@ -124,7 +99,7 @@ export const SuccessStories: React.FC = () => {
                     {story.tags.map((tag, tIdx) => (
                       <span
                         key={tIdx}
-                        className="text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-[#F4F6FB] text-[#062985] border border-[#062985]/15"
+                        className="text-xs font-medium px-2.5 py-0.5 rounded-full bg-[#F4F6FB] text-[#062985] border border-[#062985]/15"
                       >
                         #{tag}
                       </span>
@@ -135,8 +110,8 @@ export const SuccessStories: React.FC = () => {
 
               {/* Card Footer Button */}
               <div className="px-6 pb-6 pt-2 border-t border-[#062985]/10 flex items-center justify-between">
-                <span className="font-hand text-sm font-bold text-[#9B49DC]">
-                  Читать историю пути
+                <span className="text-sm font-semibold text-[#7B2EBC]">
+                  Читать историю
                 </span>
                 <div className="w-8 h-8 rounded-full bg-[#062985] text-[#C4E538] flex items-center justify-center group-hover:translate-x-1 transition-transform">
                   <ArrowRight className="w-4 h-4" />
@@ -165,13 +140,6 @@ export const SuccessStories: React.FC = () => {
             </button>
 
             <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 sm:gap-6 mb-6 pb-6 border-b border-[#062985]/15 pr-10 sm:pr-0">
-              <div className="w-16 h-16 sm:w-24 sm:h-24 rounded-xl sm:rounded-2xl overflow-hidden border-2 border-[#062985] shrink-0 shadow-md">
-                <img
-                  src={selectedStory.image}
-                  alt={selectedStory.name}
-                  className="w-full h-full object-cover"
-                />
-              </div>
               <div className="min-w-0">
                 <div className="flex flex-wrap items-center gap-2 mb-1">
                   <span className="px-2.5 py-0.5 rounded-full text-[10px] sm:text-xs font-bold bg-[#C4E538] text-[#062985] border border-[#062985]">
