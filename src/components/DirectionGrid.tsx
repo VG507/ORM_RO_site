@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { directionsData } from '../data/directionsData';
 import type { Direction } from '../types';
-import { ArrowUpRight, Check, X, Sparkles, FolderKanban } from 'lucide-react';
+import { ArrowUpRight, Check, X, Sparkles } from 'lucide-react';
 
 export const DirectionGrid: React.FC = () => {
   const [activeModalDirection, setActiveModalDirection] = useState<Direction | null>(null);
@@ -85,16 +85,12 @@ export const DirectionGrid: React.FC = () => {
                     {item.tagline}
                   </p>
 
-                  <p className={`text-sm sm:text-base leading-relaxed mb-6 ${item.size === 'large' ? '' : 'line-clamp-3'}`}>
+                  <p className="text-sm sm:text-base leading-relaxed mb-6">
                     {item.description}
                   </p>
                 </div>
 
-                <div className="pt-4 border-t border-current/15 flex items-center justify-between">
-                  <span className="text-xs font-bold uppercase tracking-wider flex items-center gap-1.5">
-                    <FolderKanban className="w-4 h-4" />
-                    {item.keyProjects.length} ключевых проекта
-                  </span>
+                <div className="pt-4 border-t border-current/15 flex justify-end">
                   <span className="text-xs underline font-display font-bold group-hover:translate-x-1 transition-transform">
                     Подробнее →
                   </span>
@@ -145,7 +141,7 @@ export const DirectionGrid: React.FC = () => {
             </p>
 
             <p className="text-sm sm:text-base text-[#062985]/80 leading-relaxed mb-6">
-              {activeModalDirection.description}
+              {activeModalDirection.fullDetails ?? activeModalDirection.description}
             </p>
 
             <div className="p-4 rounded-2xl bg-[#F4F6FB] border-2 border-[#062985]/20 mb-6">
