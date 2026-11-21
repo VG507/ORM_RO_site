@@ -1,5 +1,7 @@
 import React from 'react';
 import { Target, Users, Zap, CheckCircle2 } from 'lucide-react';
+import teamPhotoOne from '../assets/team-photo-1.jpg';
+import teamPhotoThree from '../assets/team-photo-3.jpg';
 import { StickerPill, SignatureWaveLime } from './decorations/DecorativeSVGs';
 
 export const AboutSection: React.FC = () => {
@@ -79,7 +81,7 @@ export const AboutSection: React.FC = () => {
                   Синергия
                 </h3>
                 <p className="text-xs text-[#062985]/80 leading-relaxed">
-                  Единая сеть специалистов и обмен лучшими практиками во всех 55 районах региона.
+                  Обмен практиками между командами городских округов и районов Дона.
                 </p>
               </div>
 
@@ -123,7 +125,7 @@ export const AboutSection: React.FC = () => {
               {/* Back Photo Card */}
               <div className="relative rounded-3xl overflow-hidden border-3 border-[#062985] shadow-[8px_8px_0px_#9B49DC] bg-white">
                 <img
-                  src="/assets/team-photo-3.png"
+                src={teamPhotoThree}
                   alt="Командная работа специалистов по работе с молодёжью"
                   className="w-full h-80 sm:h-96 object-cover object-center"
                   loading="lazy"
@@ -148,7 +150,7 @@ export const AboutSection: React.FC = () => {
               {/* Overlapping Small Photo Card */}
               <div className="absolute -bottom-8 -left-6 sm:-left-10 w-44 sm:w-56 rounded-2xl overflow-hidden border-3 border-[#062985] shadow-[6px_6px_0px_#C4E538] bg-white hidden sm:block">
                 <img
-                  src="/assets/team-photo-1.png"
+                src={teamPhotoOne}
                   alt="Молодой специалист"
                   className="w-full h-32 sm:h-40 object-cover object-center"
                   loading="lazy"

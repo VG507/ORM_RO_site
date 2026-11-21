@@ -6,12 +6,10 @@ import { getFavoriteRoleIds, subscribeToFavorites } from '../utils/favorites';
 export const Header: React.FC = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [scrollProgress, setScrollProgress] = useState(0);
-  const [favoritesCount, setFavoritesCount] = useState(0);
+  const [favoritesCount, setFavoritesCount] = useState(() => getFavoriteRoleIds().length);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   useEffect(() => {
-    // Initial favorites
-    setFavoritesCount(getFavoriteRoleIds().length);
     const unsubscribe = subscribeToFavorites((ids) => {
       setFavoritesCount(ids.length);
     });
@@ -59,7 +57,6 @@ export const Header: React.FC = () => {
 
   const navLinks = [
     { label: 'О проекте', href: '#about' },
-    { label: 'Карта Дона', href: '#map' },
     { label: 'Маршрут', href: '#route' },
     { label: 'Направления', href: '#directions' },
     { label: 'Роли и профессии', href: '#professions' },
@@ -165,7 +162,7 @@ export const Header: React.FC = () => {
                 ? 'bg-[#9B49DC] text-white border-[#C4E538] shadow-[2px_2px_0px_#C4E538]'
                 : 'bg-white/10 text-white/80 border-white/20 hover:bg-white/20 hover:text-white'
             }`}
-            title="Сохранённые вакансии и роли"
+            title="Сохранённые роли"
             aria-label={`Сохранённые роли: ${favoritesCount}`}
           >
             <Bookmark className={`w-3.5 h-3.5 ${favoritesCount > 0 ? 'fill-current text-[#C4E538]' : ''}`} />

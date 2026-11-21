@@ -167,7 +167,7 @@ export const TaglineManifesto: React.FC = () => {
                 Региональное сообщество
               </span>
               <p className="text-xs text-white/75 leading-relaxed">
-                55 муниципалитетов Дона, единая база практик и кадровый резерв.
+              Справочник 55 городских округов и районов Дона.
               </p>
             </div>
           </div>

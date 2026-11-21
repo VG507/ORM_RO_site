@@ -1,6 +1,6 @@
 import type { SelectorQuestion } from '../types';
 
-export const selectorQuestionsData: SelectorQuestion[] = [
+export const selectorQuestionsData = [
   {
     id: 1,
     title: 'Что тебя больше всего вдохновляет в работе?',
@@ -9,29 +9,49 @@ export const selectorQuestionsData: SelectorQuestion[] = [
       {
         id: 'opt-1-projects',
         text: 'Придумывать новые проекты, писать концепции и привлекать ресурсы на их воплощение',
-        directionTag: 'projects-grants',
-        recommendedRoleId: 'grant-writer',
+        label: 'проекты и гранты',
+        rolesByFormat: {
+          'opt-2-action': 'specialist-orm',
+          'opt-2-analytics': 'grant-writer',
+          'opt-2-creative': 'media-manager',
+          'opt-2-leader': 'director-youth-center',
+        },
         description: 'Твой фокус — проектное мышление и социальный импакт.'
       },
       {
         id: 'opt-1-community',
         text: 'Общаться с людьми, объединять волонтёров и помогать решать социальные задачи',
-        directionTag: 'volunteering',
-        recommendedRoleId: 'volunteer-coordinator',
+        label: 'работа с сообществами',
+        rolesByFormat: {
+          'opt-2-action': 'volunteer-coordinator',
+          'opt-2-analytics': 'career-navigator',
+          'opt-2-creative': 'media-manager',
+          'opt-2-leader': 'volunteer-coordinator',
+        },
         description: 'Твой фокус — поддержка людей, эмпатия и командное взаимодействие.'
       },
       {
         id: 'opt-1-spaces',
         text: 'Создавать уютные пространства, атмосферу драйва, организовывать события и клубы',
-        directionTag: 'spaces-infrastructure',
-        recommendedRoleId: 'space-manager',
+        label: 'молодёжные пространства',
+        rolesByFormat: {
+          'opt-2-action': 'space-manager',
+          'opt-2-analytics': 'grant-writer',
+          'opt-2-creative': 'space-manager',
+          'opt-2-leader': 'director-youth-center',
+        },
         description: 'Твой фокус — гостеприимство, комьюнити и креативная инфраструктура.'
       },
       {
         id: 'opt-1-media',
         text: 'Рассказывать истории через видео, фото, тексты и делать так, чтобы о нас узнали все',
-        directionTag: 'media-communications',
-        recommendedRoleId: 'media-manager',
+        label: 'медиа и коммуникации',
+        rolesByFormat: {
+          'opt-2-action': 'specialist-orm',
+          'opt-2-analytics': 'media-manager',
+          'opt-2-creative': 'media-manager',
+          'opt-2-leader': 'director-youth-center',
+        },
         description: 'Твой фокус — медиа, сторителлинг и визуальный брендинг.'
       }
     ]
@@ -44,29 +64,25 @@ export const selectorQuestionsData: SelectorQuestion[] = [
       {
         id: 'opt-2-action',
         text: '«В поле»: прямое общение с ребятами, сцены, форумы, живые интерактивы',
-        directionTag: 'community',
-        recommendedRoleId: 'specialist-orm',
+        label: 'живое общение и события',
         description: 'Тебе подходит живая динамика и постоянный контакт с аудиторией.'
       },
       {
         id: 'opt-2-analytics',
         text: '«За экраном»: структурирование смет, аналитика, чёткие дедлайны и документы',
-        directionTag: 'projects-grants',
-        recommendedRoleId: 'grant-writer',
+        label: 'аналитика и планирование',
         description: 'Системность и методичность — твоё главное конкурентное преимущество.'
       },
       {
         id: 'opt-2-creative',
         text: '«В творческом потоке»: дизайн, камера, монтаж, креативные штурмы и тренды',
-        directionTag: 'media-communications',
-        recommendedRoleId: 'media-manager',
+        label: 'творческая работа',
         description: 'Ты умеешь упаковывать смыслы в трендовые форматы.'
       },
       {
         id: 'opt-2-leader',
         text: '«Во главе процесса»: координация людей, распределение задач и контроль результата',
-        directionTag: 'management',
-        recommendedRoleId: 'director-youth-center',
+        label: 'координация команды',
         description: 'В тебе заложен управленческий потенциал и готовность брать ответственность.'
       }
     ]
@@ -79,31 +95,27 @@ export const selectorQuestionsData: SelectorQuestion[] = [
       {
         id: 'opt-3-beginner',
         text: 'Я только присматриваюсь: есть желание попробовать себя, но нет профильного опыта',
-        directionTag: 'stage-1',
-        recommendedRoleId: 'volunteer-coordinator',
+        stageId: 'stage-1',
         description: 'Рекомендуемая ступень: Этап 01 «Старт и инициатива».'
       },
       {
         id: 'opt-3-volunteer',
         text: 'Был волонтёром, участвовал в студенческих советах или форумах',
-        directionTag: 'stage-2',
-        recommendedRoleId: 'specialist-orm',
+        stageId: 'stage-2',
         description: 'Рекомендуемая ступень: Этап 02 «Профессиональный вход».'
       },
       {
         id: 'opt-3-experienced',
         text: 'Уже реализую свои проекты, выигрывал гранты или организовывал события',
-        directionTag: 'stage-3',
-        recommendedRoleId: 'grant-writer',
+        stageId: 'stage-3',
         description: 'Рекомендуемая ступень: Этап 03 «Проектное мастерство».'
       },
       {
         id: 'opt-3-manager',
         text: 'Руковожу коллективом, пространством или направлением в организации',
-        directionTag: 'stage-4',
-        recommendedRoleId: 'director-youth-center',
+        stageId: 'stage-4',
         description: 'Рекомендуемая ступень: Этап 04 «Руководство центром».'
       }
     ]
   }
-];
+] as const satisfies readonly SelectorQuestion[];

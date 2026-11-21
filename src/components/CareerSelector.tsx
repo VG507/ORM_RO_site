@@ -1,28 +1,42 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { selectorQuestionsData } from '../data/selectorQuestionsData';
-import { professionRolesData } from '../data/professionsData';
-import { careerStages } from '../data/careerRouteData';
-import type { SelectorOption } from '../types';
+import { getCareerRecommendation } from '../utils/careerRecommendation';
 import { ArrowRight, RotateCcw, Check, Target, Copy, Sparkles } from 'lucide-react';
 import { StickerPill } from './decorations/DecorativeSVGs';
 
 export const CareerSelector: React.FC = () => {
   const [currentStepIndex, setCurrentStepIndex] = useState(0);
-  const [selectedAnswers, setSelectedAnswers] = useState<Record<number, SelectorOption>>({});
+  const [selectedAnswers, setSelectedAnswers] = useState<Record<number, string>>({});
   const [isCompleted, setIsCompleted] = useState(false);
   const [copiedResult, setCopiedResult] = useState(false);
+  const [copyError, setCopyError] = useState(false);
+  const headingRef = useRef<HTMLHeadingElement>(null);
+  const shouldFocusHeading = useRef(false);
 
   const currentQuestion = selectorQuestionsData[currentStepIndex];
   const totalQuestions = selectorQuestionsData.length;
+  const progress = Math.round((Object.keys(selectedAnswers).length / totalQuestions) * 100);
+  const recommendation = isCompleted
+    ? getCareerRecommendation(selectedAnswers[0], selectedAnswers[1], selectedAnswers[2])
+    : null;
 
-  const handleSelectOption = (option: SelectorOption) => {
+  useEffect(() => {
+    if (shouldFocusHeading.current) {
+      headingRef.current?.focus();
+      shouldFocusHeading.current = false;
+    }
+  }, [currentStepIndex, isCompleted]);
+
+  const handleSelectOption = (optionId: string) => {
     setSelectedAnswers((prev) => ({
       ...prev,
-      [currentStepIndex]: option,
+      [currentStepIndex]: optionId,
     }));
   };
 
   const handleNext = () => {
+    if (!selectedAnswers[currentStepIndex]) return;
+    shouldFocusHeading.current = true;
     if (currentStepIndex < totalQuestions - 1) {
       setCurrentStepIndex((prev) => prev + 1);
     } else {
@@ -32,44 +46,40 @@ export const CareerSelector: React.FC = () => {
 
   const handleBack = () => {
     if (currentStepIndex > 0) {
+      shouldFocusHeading.current = true;
       setCurrentStepIndex((prev) => prev - 1);
     }
   };
 
   const handleReset = () => {
+    shouldFocusHeading.current = true;
     setCurrentStepIndex(0);
     setSelectedAnswers({});
     setIsCompleted(false);
+    setCopiedResult(false);
+    setCopyError(false);
   };
 
-  // Determine recommended role and starting stage from answers
-  const recommendedRoleId =
-    selectedAnswers[0]?.recommendedRoleId ||
-    selectedAnswers[1]?.recommendedRoleId ||
-    'specialist-orm';
-
-  const recommendedRole =
-    professionRolesData.find((r) => r.id === recommendedRoleId) ||
-    professionRolesData[0];
-
-  const startingStageId =
-    selectedAnswers[2]?.directionTag || recommendedRole.careerPathStageId || 'stage-1';
-
-  const startingStage =
-    careerStages.find((s) => s.id === startingStageId) || careerStages[0];
-
-  const handleCopyResult = () => {
+  const handleCopyResult = async () => {
+    if (!recommendation) return;
+    const { role, stage, interest, format } = recommendation;
     const text = [
       `🎯 Мой карьерный профиль в молодёжной политике Ростовской области:`,
-      `• Рекомендуемая роль: ${recommendedRole.title} (${recommendedRole.categoryLabel})`,
-      `• Стартовая ступень: Этап ${startingStage.stepNumber} — ${startingStage.title}`,
-      `• Описание: ${startingStage.subtitle}`,
-      `\nПройти интерактивный маршрут: ${window.location.origin}/#selector`,
+      `• Интересы: ${interest}. Формат работы: ${format}.`,
+      `• Рекомендуемая роль: ${role.title}`,
+      `• Стартовая ступень: Этап ${stage.stepNumber} — ${stage.title}`,
+      `• Описание: ${stage.subtitle}`,
+      `\nПройти интерактивный маршрут: ${new URL('#selector', window.location.href)}`,
     ].join('\n');
 
-    navigator.clipboard.writeText(text);
-    setCopiedResult(true);
-    setTimeout(() => setCopiedResult(false), 2200);
+    try {
+      await navigator.clipboard.writeText(text);
+      setCopiedResult(true);
+      setCopyError(false);
+    } catch {
+      setCopiedResult(false);
+      setCopyError(true);
+    }
   };
 
   return (
@@ -102,27 +112,30 @@ export const CareerSelector: React.FC = () => {
 
         {/* Questionnaire Box */}
         <div className="max-w-3xl mx-auto bg-white rounded-2xl sm:rounded-3xl border-2 sm:border-3 border-[#062985] shadow-[4px_4px_0px_#062985] sm:shadow-[8px_8px_0px_#062985] p-4 min-[380px]:p-6 sm:p-10 lg:p-12 relative">
-          {!isCompleted ? (
+          {!recommendation ? (
             <div>
               {/* Progress Bar */}
               <div className="mb-6 sm:mb-8">
                 <div className="flex items-center justify-between text-[11px] sm:text-xs font-bold uppercase text-[#062985]/70 mb-2">
                   <span>Вопрос {currentStepIndex + 1} из {totalQuestions}</span>
-                  <span>{Math.round(((currentStepIndex + 1) / totalQuestions) * 100)}% пройдено</span>
+                  <span>{progress}% пройдено</span>
                 </div>
-                <div className="w-full h-2.5 sm:h-3 bg-[#F4F6FB] rounded-full border-2 border-[#062985] overflow-hidden">
+                <div
+                  role="progressbar"
+                  aria-label="Прогресс теста"
+                  aria-valuenow={progress}
+                  className="w-full h-2.5 sm:h-3 bg-[#F4F6FB] rounded-full border-2 border-[#062985] overflow-hidden"
+                >
                   <div
                     className="h-full bg-[#C4E538] transition-all duration-300"
-                    style={{
-                      width: `${((currentStepIndex + 1) / totalQuestions) * 100}%`,
-                    }}
+                    style={{ width: `${progress}%` }}
                   />
                 </div>
               </div>
 
               {/* Question Text */}
               <div className="mb-6 sm:mb-8">
-                <h3 className="font-display font-extrabold text-lg min-[380px]:text-xl sm:text-2xl lg:text-3xl text-[#062985] leading-snug mb-1.5 sm:mb-2 break-words">
+                <h3 ref={headingRef} tabIndex={-1} id="selector-question" className="font-display font-extrabold text-lg min-[380px]:text-xl sm:text-2xl lg:text-3xl text-[#062985] leading-snug mb-1.5 sm:mb-2 break-words">
                   {currentQuestion.title}
                 </h3>
                 <p className="font-hand text-sm sm:text-base lg:text-lg text-[#9B49DC] font-bold">
@@ -131,23 +144,28 @@ export const CareerSelector: React.FC = () => {
               </div>
 
               {/* Options List */}
-              <div className="space-y-3 sm:space-y-3.5 mb-8 sm:mb-10">
+              <div role="radiogroup" aria-labelledby="selector-question" className="space-y-3 sm:space-y-3.5 mb-8 sm:mb-10">
                 {currentQuestion.options.map((option) => {
                   const isSelected =
-                    selectedAnswers[currentStepIndex]?.id === option.id;
+                    selectedAnswers[currentStepIndex] === option.id;
 
                   return (
-                    <button
+                    <label
                       key={option.id}
-                      type="button"
-                      onClick={() => handleSelectOption(option)}
                       className={`w-full text-left p-3.5 min-[380px]:p-4 sm:p-5 rounded-xl sm:rounded-2xl border-2 sm:border-3 transition-all flex items-start justify-between gap-3 sm:gap-4 cursor-pointer ${
                         isSelected
                           ? 'bg-[#C4E538] text-[#062985] border-[#062985] shadow-[3px_3px_0px_#062985] sm:shadow-[4px_4px_0px_#062985] scale-[1.01]'
                           : 'bg-[#F4F6FB] text-[#062985] border-[#062985]/20 hover:border-[#062985] hover:bg-white'
                       }`}
                     >
-                      <div className="min-w-0">
+                      <input
+                        type="radio"
+                        name="career-answer"
+                        checked={isSelected}
+                        onChange={() => handleSelectOption(option.id)}
+                        className="peer sr-only"
+                      />
+                      <div className="min-w-0 peer-focus-visible:outline-2 peer-focus-visible:outline-offset-4 peer-focus-visible:outline-[#9B49DC]">
                         <span className="font-display font-bold text-xs min-[380px]:text-sm sm:text-base leading-snug block mb-1">
                           {option.text}
                         </span>
@@ -165,7 +183,7 @@ export const CareerSelector: React.FC = () => {
                       >
                         {isSelected && <Check className="w-3.5 h-3.5 stroke-[3]" />}
                       </div>
-                    </button>
+                    </label>
                   );
                 })}
               </div>
@@ -245,6 +263,10 @@ export const CareerSelector: React.FC = () => {
                 </button>
               </div>
 
+              <span role="status" className={copyError ? 'block mb-4 text-sm text-[#062985]' : 'sr-only'}>
+                {copyError ? 'Браузер не смог скопировать результат.' : copiedResult && 'Результат скопирован.'}
+              </span>
+
               <div className="flex items-center gap-2 mb-3">
                 <span className="px-3 py-1 rounded-full text-xs font-bold uppercase bg-[#C4E538] text-[#062985] border border-[#062985]">
                   Результат теста
@@ -254,15 +276,14 @@ export const CareerSelector: React.FC = () => {
                 </span>
               </div>
 
-              <h3 className="font-display font-black text-2xl sm:text-3xl lg:text-4xl text-[#062985] leading-tight mb-2">
+              <h3 ref={headingRef} tabIndex={-1} className="font-display font-black text-2xl sm:text-3xl lg:text-4xl text-[#062985] leading-tight mb-2">
                 Рекомендуемая роль: <br />
-                <span className="text-[#9B49DC]">{recommendedRole.title}</span>
+                <span className="text-[#9B49DC]">{recommendation.role.title}</span>
               </h3>
 
               <p className="text-sm sm:text-base text-[#062985]/80 leading-relaxed mb-6">
-                На основе твоих ответов о предпочитаемом формате работы и текущем опыте,
-                наилучшая точка входа для тебя — это направление{' '}
-                <strong>«{recommendedRole.categoryLabel}»</strong>.
+                Тебя интересуют <strong>{recommendation.interest}</strong>, а подходящий формат работы —{' '}
+                <strong>{recommendation.format}</strong>. Стартовая ступень ниже подобрана по твоему опыту.
               </p>
 
               {/* Recommended Stage Card */}
@@ -275,14 +296,14 @@ export const CareerSelector: React.FC = () => {
                 </div>
                 <div className="flex flex-wrap items-center gap-3">
                   <span className="font-condensed font-black text-2xl sm:text-3xl text-[#062985]">
-                    Этап {startingStage.stepNumber}
+                    Этап {recommendation.stage.stepNumber}
                   </span>
                   <span className="font-display font-bold text-base sm:text-lg text-[#062985]">
-                    — {startingStage.title}
+                    — {recommendation.stage.title}
                   </span>
                 </div>
                 <p className="text-xs sm:text-sm text-[#062985]/80 mt-1.5">
-                  {startingStage.subtitle}
+                  {recommendation.stage.subtitle}
                 </p>
               </div>
 
@@ -292,7 +313,7 @@ export const CareerSelector: React.FC = () => {
                   href="#route"
                   className="btn-tactile inline-flex items-center justify-center gap-2 bg-[#062985] text-white font-display font-bold text-[11px] sm:text-xs uppercase px-5 sm:px-7 py-3 sm:py-3.5 rounded-full hover:bg-[#9B49DC] transition-all shadow-[3px_3px_0px_#C4E538] cursor-pointer"
                 >
-                  <span>Перейти к этапу в маршруте</span>
+                  <span>Открыть карьерный маршрут</span>
                   <ArrowRight className="w-4 h-4" />
                 </a>
 

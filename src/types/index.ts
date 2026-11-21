@@ -23,7 +23,6 @@ export interface Direction {
   badge: string;
   keyProjects: string[];
   targetAudience: string;
-  image?: string;
 }
 
 export interface ProfessionRole {
@@ -67,16 +66,17 @@ export interface SuccessStory {
 export interface SelectorOption {
   id: string;
   text: string;
-  directionTag: string;
-  recommendedRoleId: string;
   description: string;
+  label?: string;
+  rolesByFormat?: Record<string, string>;
+  stageId?: string;
 }
 
 export interface SelectorQuestion {
   id: number;
   title: string;
   subtitle: string;
-  options: SelectorOption[];
+  options: readonly SelectorOption[];
 }
 
 export interface OpportunityItem {

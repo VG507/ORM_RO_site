@@ -83,7 +83,7 @@ export const FinalCTA: React.FC = () => {
         {/* Territory Indicator */}
         <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 border border-white/20 text-xs text-white/80">
           <MapPin className="w-3.5 h-3.5 text-[#C4E538]" />
-          <span>Единая платформа для 55 муниципалитетов Ростовской области</span>
+        <span>55 городских округов и районов в справочнике</span>
         </div>
       </div>
 

@@ -47,7 +47,7 @@ export const DirectionGrid: React.FC = () => {
           </h2>
 
           <p className="font-body text-sm sm:text-base lg:text-lg text-[#062985]/75 leading-relaxed">
-            В молодёжной политике нет однообразных задач. Каждое направление требует
+            Для специалиста по работе с молодежью нет однообразных задач. Каждое направление требует
             своего набора компетенций, характера и драйва. Кликни по направлению,
             чтобы узнать ключевые проекты и форматы участия.
           </p>
@@ -97,7 +97,7 @@ export const DirectionGrid: React.FC = () => {
                     {item.tagline}
                   </p>
 
-                  <p className="text-xs sm:text-sm opacity-85 leading-relaxed line-clamp-3 mb-6">
+                  <p className={`text-xs sm:text-sm opacity-85 leading-relaxed mb-6 ${item.size === 'large' ? '' : 'line-clamp-3'}`}>
                     {item.description}
                   </p>
                 </div>

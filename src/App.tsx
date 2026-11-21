@@ -4,7 +4,6 @@ import { HeroSection } from './components/HeroSection';
 import { Marquee } from './components/Marquee';
 import { TaglineManifesto } from './components/TaglineManifesto';
 import { AboutSection } from './components/AboutSection';
-import { RegionalMapSection } from './components/RegionalMapSection';
 import { CareerRoute } from './components/CareerRoute';
 import { DirectionGrid } from './components/DirectionGrid';
 import { ProfessionCatalog } from './components/ProfessionCatalog';
@@ -35,38 +34,35 @@ export const App: React.FC = () => {
         {/* 5. About Section */}
         <AboutSection />
 
-        {/* 6. Regional Infrastructure Map */}
-        <RegionalMapSection />
-
-        {/* 7. Main Career Route */}
+        {/* 6. Main Career Route */}
         <CareerRoute />
 
-        {/* 8. Directions of Activity */}
+        {/* 7. Directions of Activity */}
         <DirectionGrid />
 
-        {/* 9. Professions & Roles Catalog */}
+        {/* 8. Professions & Roles Catalog */}
         <ProfessionCatalog />
 
-        {/* 10. Skills & Professional Growth */}
+        {/* 9. Skills & Professional Growth */}
         <SkillsSection />
 
-        {/* 11. Success Stories & Case Studies */}
+        {/* 10. Success Stories & Case Studies */}
         <SuccessStories />
 
-        {/* 12. Interactive Career Selector */}
+        {/* 11. Interactive Career Selector */}
         <CareerSelector />
 
-        {/* 13. Additional Opportunities & Ecosystem */}
+        {/* 12. Additional Opportunities & Ecosystem */}
         <OpportunitiesSection />
 
-        {/* 14. Frequently Asked Questions */}
+        {/* 13. Frequently Asked Questions */}
         <FAQSection />
 
-        {/* 15. Final CTA Block */}
+        {/* 14. Final CTA Block */}
         <FinalCTA />
       </main>
 
-      {/* 16. Footer */}
+      {/* 15. Footer */}
       <Footer />
     </div>
   );

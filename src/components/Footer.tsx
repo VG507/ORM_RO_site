@@ -2,6 +2,8 @@ import React from 'react';
 import { ArrowUp, MapPin, ExternalLink, Heart } from 'lucide-react';
 import { HashSymbol, StickerPill } from './decorations/DecorativeSVGs';
 
+const currentYear = new Date().getFullYear();
+
 export const Footer: React.FC = () => {
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -146,7 +148,7 @@ export const Footer: React.FC = () => {
 
         {/* Bottom Sub-footer */}
         <div className="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-white/50">
-          <p>© {new Date().getFullYear()} «Карьерный маршрут: молодёжная сфера». Все права защищены.</p>
+          <p>© {currentYear} «Карьерный маршрут: молодёжная сфера». Все права защищены.</p>
           <div className="flex items-center gap-2 font-hand text-sm text-[#C4E538]">
             <span>Сделано для молодёжи Дона</span>
             <Heart className="w-3.5 h-3.5 fill-[#C4E538] text-[#C4E538]" />

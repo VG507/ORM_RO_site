@@ -24,7 +24,7 @@ export const SuccessStories: React.FC = () => {
 
   const handleShareStory = () => {
     if (!selectedStory) return;
-    const shareText = `«${selectedStory.name}» (${selectedStory.role}, ${selectedStory.municipality}) — история успеха в молодёжной политике Ростовской области:\n«${selectedStory.quote}»\n\nПодробнее: ${window.location.origin}/#stories`;
+    const shareText = `«${selectedStory.name}» (${selectedStory.role}, ${selectedStory.municipality}) — история успеха в молодёжной политике Ростовской области:\n«${selectedStory.quote}»\n\nПодробнее: ${new URL('#stories', window.location.href)}`;
     navigator.clipboard.writeText(shareText);
     setCopiedShare(true);
     setTimeout(() => setCopiedShare(false), 2200);

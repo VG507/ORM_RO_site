@@ -1,583 +1,228 @@
-import React, { useState, useMemo } from 'react';
-import { municipalitiesData } from '../data/municipalitiesData';
+import { useState } from 'react';
+import type { KeyboardEvent } from 'react';
+import { Briefcase, ExternalLink, List, MapPin, Search } from 'lucide-react';
 import {
-  MapPin,
-  Search,
-  Building,
-  Briefcase,
-  Phone,
-  Mail,
-  ExternalLink,
-  RotateCcw,
-  Layers,
-  Copy,
-  Check,
-  X,
-  Filter,
-} from 'lucide-react';
+  municipalitiesData,
+  regionalYouthContact,
+  territorySourceUrl,
+  vacancySearchUrl,
+} from '../data/municipalitiesData';
+import type { MunicipalityItem } from '../data/municipalitiesData';
 import { StickerPill } from './decorations/DecorativeSVGs';
 
-type TerritoryFilterType = 'all' | 'vacancies' | 'city' | 'district';
+const filters = [
+  { id: 'all', label: 'Все территории', total: municipalitiesData.length },
+  { id: 'city', label: 'Городские округа', total: municipalitiesData.filter((item) => item.type === 'городской округ').length },
+  { id: 'district', label: 'Муниципальные районы', total: municipalitiesData.filter((item) => item.type === 'муниципальный район').length },
+  { id: 'contact', label: 'С местным контактом', total: municipalitiesData.filter((item) => item.contact).length },
+] as const;
 
-export const RegionalMapSection: React.FC = () => {
-  const [selectedMunicipalityId, setSelectedMunicipalityId] = useState<string>('rostov-on-don');
-  const [searchQuery, setSearchQuery] = useState('');
-  const [viewMode, setViewMode] = useState<'map' | 'list'>('map');
-  const [activeFilter, setActiveFilter] = useState<TerritoryFilterType>('all');
-  const [copiedContacts, setCopiedContacts] = useState(false);
+function normalizeSearch(value: string) {
+  return value.toLocaleLowerCase('ru').replaceAll('ё', 'е');
+}
 
-  // Filter counts
-  const counts = useMemo(() => {
-    return {
-      all: municipalitiesData.length,
-      vacancies: municipalitiesData.filter((m) => m.vacancies.length > 0).length,
-      city: municipalitiesData.filter((m) => m.type === 'городской округ').length,
-      district: municipalitiesData.filter((m) => m.type === 'муниципальный район').length,
-    };
-  }, []);
+export function RegionalMapSection() {
+  const [selectedId, setSelectedId] = useState('rostov-on-don');
+  const [query, setQuery] = useState('');
+  const [view, setView] = useState<'map' | 'list'>(() =>
+    typeof window !== 'undefined' && window.matchMedia('(min-width: 640px)').matches ? 'map' : 'list',
+  );
+  const [filter, setFilter] = useState<(typeof filters)[number]['id']>('all');
 
-  const filteredMunicipalities = useMemo(() => {
-    return municipalitiesData.filter((m) => {
-      // 1. Text search
-      const q = searchQuery.toLowerCase().trim();
-      const matchesSearch =
-        !q ||
-        m.name.toLowerCase().includes(q) ||
-        m.organizations.some((o) => o.name.toLowerCase().includes(q));
-      if (!matchesSearch) return false;
+  const search = normalizeSearch(query.trim());
+  const results = municipalitiesData.filter((item) => {
+    if (filter === 'city' && item.type !== 'городской округ') return false;
+    if (filter === 'district' && item.type !== 'муниципальный район') return false;
+    if (filter === 'contact' && !item.contact) return false;
+    return normalizeSearch(`${item.name} ${item.contact?.name ?? ''}`).includes(search);
+  });
+  const selected = results.find((item) => item.id === selectedId) ?? results[0];
 
-      // 2. Territory category pill filter
-      if (activeFilter === 'vacancies') return m.vacancies.length > 0;
-      if (activeFilter === 'city') return m.type === 'городской округ';
-      if (activeFilter === 'district') return m.type === 'муниципальный район';
-      return true;
-    });
-  }, [searchQuery, activeFilter]);
+  function handlePinKeyDown(event: KeyboardEvent<SVGGElement>, item: MunicipalityItem) {
+    if (event.key === 'Enter' || event.key === ' ') {
+      event.preventDefault();
+      setSelectedId(item.id);
+    }
+    const direction = event.key === 'ArrowRight' || event.key === 'ArrowDown' ? 1
+      : event.key === 'ArrowLeft' || event.key === 'ArrowUp' ? -1 : 0;
+    if (direction === 0) return;
 
-  const selectedMunicipality = useMemo(() => {
-    return (
-      municipalitiesData.find((m) => m.id === selectedMunicipalityId) ||
-      municipalitiesData[0]
-    );
-  }, [selectedMunicipalityId]);
-
-  const handleCopyContacts = () => {
-    const textLines = [
-      `📍 ${selectedMunicipality.name} (${selectedMunicipality.type})`,
-      ...selectedMunicipality.organizations.map(
-        (org) => `• ${org.name}\n  Адрес: ${org.address}\n  Тел: ${org.phone}\n  Email: ${org.email}${org.vkUrl ? `\n  VK: ${org.vkUrl}` : ''}`
-      ),
-      selectedMunicipality.vacancies.length > 0
-        ? `\n💼 Открытые вакансии (${selectedMunicipality.vacancies.length}):\n` +
-          selectedMunicipality.vacancies.map((v) => `  - ${v.title} (${v.salaryText})`).join('\n')
-        : '',
-    ].filter(Boolean);
-
-    navigator.clipboard.writeText(textLines.join('\n\n'));
-    setCopiedContacts(true);
-    setTimeout(() => setCopiedContacts(false), 2200);
-  };
+    event.preventDefault();
+    const index = results.indexOf(item);
+    const next = results[(index + direction + results.length) % results.length];
+    setSelectedId(next.id);
+    document.getElementById(`map-pin-${next.id}`)?.focus();
+  }
 
   return (
-    <section
-      id="map"
-      className="relative py-16 sm:py-20 lg:py-32 bg-[#F4FCDC] text-[#062985] overflow-hidden border-t-2 border-[#062985]/10"
-    >
-      <div className="max-w-[1440px] mx-auto px-3 min-[380px]:px-4 sm:px-6 lg:px-12 relative z-10">
-        {/* Section Header */}
-        <div className="flex flex-col items-start mb-10 sm:mb-12 max-w-3xl">
-          <div className="flex flex-wrap items-center gap-2 mb-3">
-            <StickerPill text="География возможностей" bg="#062985" textColor="#C4E538" rotate="-1deg" />
-            <span className="font-hand text-base sm:text-lg text-[#062985] font-bold">
-              / 55 муниципалитетов Дона
-            </span>
-          </div>
-
-          <h2 className="font-display font-extrabold text-2xl min-[380px]:text-3xl sm:text-5xl lg:text-6xl tracking-tight leading-tight uppercase mb-4 text-[#062985] break-words">
-            Карта молодёжной <br className="hidden sm:inline" />
-            <span className="text-[#9B49DC] relative inline-block">
-              инфраструктуры
-              <span className="absolute -bottom-1.5 sm:-bottom-2 left-0 right-0 h-1 sm:h-1.5 bg-[#062985] rounded-full" />
-            </span>
+    <section id="map" className="relative py-16 sm:py-20 lg:py-32 bg-[#F4FCDC] text-[#062985] border-t-2 border-[#062985]/10">
+      <div className="max-w-[1440px] mx-auto px-3 min-[380px]:px-4 sm:px-6 lg:px-12">
+        <div className="mb-7 sm:mb-10 max-w-3xl">
+          <StickerPill text="Инфраструктура региона" bg="#C4E538" textColor="#062985" rotate="-1deg" />
+          <h2 className="font-display font-extrabold text-2xl min-[380px]:text-3xl sm:text-5xl lg:text-6xl tracking-tight leading-tight uppercase mt-4 mb-4">
+            Карта <span className="text-[#7B2EBC]">Дона</span>
           </h2>
-
-          <p className="font-body text-sm sm:text-base lg:text-lg text-[#062985]/80 leading-relaxed">
-            Исследуй молодёжные центры, профильные отделы администраций и открытые вакансии
-            в различных уголках Ростовской области. Выбери территорию на интерактивной карте
-            или найди свой район в поиске.
+          <p className="text-sm sm:text-base leading-relaxed">
+            Найди свой округ или район. В карточке территории есть контакты для вопросов о молодёжных проектах и ссылка на поиск вакансий.
           </p>
         </div>
 
-        {/* View Switcher, Category Filters, and Search */}
-        <div className="flex flex-col gap-3 mb-6 sm:mb-8">
-          <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 sm:gap-4">
-            {/* View Switcher */}
-            <div className="flex flex-col min-[480px]:inline-flex min-[480px]:flex-row p-1 rounded-2xl min-[480px]:rounded-full bg-white border-2 border-[#062985] shadow-[2px_2px_0px_#062985] gap-1 min-[480px]:gap-0">
-              <button
-                type="button"
-                onClick={() => setViewMode('map')}
-                className={`flex items-center justify-center gap-1.5 px-3.5 sm:px-5 py-2.5 min-[480px]:py-2 rounded-xl min-[480px]:rounded-full text-xs font-display font-bold uppercase transition-all cursor-pointer ${
-                  viewMode === 'map'
-                    ? 'bg-[#062985] text-white shadow-sm'
-                    : 'text-[#062985] hover:bg-neutral-100'
-                }`}
-              >
-                <MapPin className="w-3.5 h-3.5" />
-                <span>Интерактивная карта</span>
-              </button>
-
-              <button
-                type="button"
-                onClick={() => setViewMode('list')}
-                className={`flex items-center justify-center gap-1.5 px-3.5 sm:px-5 py-2.5 min-[480px]:py-2 rounded-xl min-[480px]:rounded-full text-xs font-display font-bold uppercase transition-all cursor-pointer ${
-                  viewMode === 'list'
-                    ? 'bg-[#062985] text-white shadow-sm'
-                    : 'text-[#062985] hover:bg-neutral-100'
-                }`}
-              >
-                <Layers className="w-3.5 h-3.5" />
-                <span>Список ({filteredMunicipalities.length})</span>
-              </button>
-            </div>
-
-            {/* Quick Search Input with Clear Button */}
-            <div className="relative w-full sm:w-auto min-w-0 sm:min-w-[320px]">
-              <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#062985]/50 pointer-events-none" />
-              <input
-                type="text"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="Найти муниципалитет или МЦ..."
-                className="w-full pl-10 pr-9 py-2.5 rounded-full bg-white border-2 border-[#062985]/20 focus:border-[#062985] text-xs sm:text-sm text-[#062985] placeholder-[#062985]/50 outline-none transition-all shadow-sm"
-              />
-              {searchQuery && (
-                <button
-                  type="button"
-                  onClick={() => setSearchQuery('')}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 p-1 text-[#062985]/60 hover:text-[#062985] rounded-full hover:bg-neutral-100 cursor-pointer"
-                  aria-label="Очистить поиск"
-                >
-                  <X className="w-3.5 h-3.5" />
+        <div className="bg-white border-2 border-[#062985] rounded-2xl p-3.5 sm:p-5 mb-6 shadow-[3px_3px_0px_#062985]">
+          <div className="flex flex-wrap gap-3 items-center justify-between">
+            <div className="flex flex-wrap gap-2" role="group" aria-label="Вид справочника">
+              {([
+                { id: 'map', label: 'Схема', Icon: MapPin },
+                { id: 'list', label: 'Список', Icon: List },
+              ] as const).map(({ id, label, Icon }) => (
+                <button key={id} type="button" aria-pressed={view === id} onClick={() => setView(id)}
+                  className={`flex items-center gap-1.5 px-3 py-2 border border-[#062985] rounded-full text-xs font-bold cursor-pointer ${view === id ? 'bg-[#062985] text-white' : 'bg-white hover:bg-[#F4F6FB]'}`}>
+                  <Icon className="size-3.5" aria-hidden="true" />
+                  {label}
                 </button>
-              )}
+              ))}
             </div>
+
+            <label className="relative w-full sm:w-72">
+              <span className="sr-only">Поиск муниципалитета или организации</span>
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-4 pointer-events-none" aria-hidden="true" />
+              <input type="search" value={query} onChange={(event) => setQuery(event.target.value)}
+                placeholder="Найти муниципалитет"
+                className="w-full pl-9 pr-3 py-2.5 rounded-full border-2 border-[#062985]/30 text-sm bg-[#F4F6FB]" />
+            </label>
           </div>
 
-          {/* Quick Filter Pills */}
-          <div className="flex flex-wrap items-center gap-2 pt-1">
-            <span className="text-[11px] font-bold uppercase tracking-wider text-[#062985]/60 flex items-center gap-1 mr-1">
-              <Filter className="w-3 h-3" />
-              Фильтр:
-            </span>
-            <button
-              type="button"
-              onClick={() => setActiveFilter('all')}
-              className={`px-3 py-1.5 rounded-full text-xs font-display font-bold uppercase transition-all cursor-pointer border ${
-                activeFilter === 'all'
-                  ? 'bg-[#062985] text-white border-[#062985] shadow-[2px_2px_0px_#C4E538]'
-                  : 'bg-white text-[#062985] border-[#062985]/20 hover:border-[#062985]'
-              }`}
-            >
-              Все 55 ({counts.all})
-            </button>
-            <button
-              type="button"
-              onClick={() => setActiveFilter('vacancies')}
-              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-display font-bold uppercase transition-all cursor-pointer border ${
-                activeFilter === 'vacancies'
-                  ? 'bg-[#062985] text-[#C4E538] border-[#062985] shadow-[2px_2px_0px_#C4E538]'
-                  : 'bg-white text-[#062985] border-[#062985]/20 hover:border-[#062985]'
-              }`}
-            >
-              <span className="w-2 h-2 rounded-full bg-[#C4E538] inline-block ring-2 ring-[#062985]/20" />
-              С вакансиями ({counts.vacancies})
-            </button>
-            <button
-              type="button"
-              onClick={() => setActiveFilter('city')}
-              className={`px-3 py-1.5 rounded-full text-xs font-display font-bold uppercase transition-all cursor-pointer border ${
-                activeFilter === 'city'
-                  ? 'bg-[#062985] text-white border-[#062985] shadow-[2px_2px_0px_#C4E538]'
-                  : 'bg-white text-[#062985] border-[#062985]/20 hover:border-[#062985]'
-              }`}
-            >
-              Городские округа ({counts.city})
-            </button>
-            <button
-              type="button"
-              onClick={() => setActiveFilter('district')}
-              className={`px-3 py-1.5 rounded-full text-xs font-display font-bold uppercase transition-all cursor-pointer border ${
-                activeFilter === 'district'
-                  ? 'bg-[#062985] text-white border-[#062985] shadow-[2px_2px_0px_#C4E538]'
-                  : 'bg-white text-[#062985] border-[#062985]/20 hover:border-[#062985]'
-              }`}
-            >
-              Районы области ({counts.district})
-            </button>
+          <div className="flex flex-wrap gap-2 mt-4" role="group" aria-label="Фильтры территорий">
+            {filters.map(({ id, label, total }) => (
+              <button key={id} type="button" aria-pressed={filter === id} onClick={() => setFilter(id)}
+                className={`px-3 py-1.5 rounded-full border border-[#062985]/40 text-xs font-bold cursor-pointer ${filter === id ? 'bg-[#C4E538] border-[#062985]' : 'bg-white hover:bg-[#F4F6FB]'}`}>
+                {label} ({total})
+              </button>
+            ))}
           </div>
+          <p className="mt-3 text-xs text-[#062985]/80" role="status">Найдено территорий: {results.length}</p>
         </div>
 
-        {/* Interactive Layout: Map Area + Municipality Dossier Panel */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-8 items-start">
-          {/* Left Main View (Interactive SVG Regional Map or List) */}
-          <div className="lg:col-span-7 bg-white rounded-2xl sm:rounded-3xl border-2 sm:border-3 border-[#062985] p-3.5 min-[380px]:p-5 sm:p-6 shadow-[4px_4px_0px_#062985] sm:shadow-[8px_8px_0px_#062985] relative overflow-hidden">
-            {viewMode === 'map' ? (
-              <div className="relative">
-                <div className="flex items-center justify-between mb-4 pb-3 border-b border-[#062985]/10">
-                  <div className="flex items-center gap-2">
-                    <span className="w-2.5 h-2.5 rounded-full bg-[#C4E538] ring-4 ring-[#C4E538]/30 inline-block" />
-                    <span className="font-display font-bold text-xs uppercase text-[#062985]">
-                      Схема Ростовской области
-                    </span>
-                  </div>
-                  <span className="text-[11px] font-hand font-bold text-[#9B49DC]">
-                    *Кликните по узлу или метке района
-                  </span>
-                </div>
-
-                {/* SVG Visual Map */}
-                <div className="relative w-full aspect-[4/3] bg-[#F4F6FB] rounded-2xl border-2 border-[#062985]/20 overflow-hidden flex items-center justify-center p-4">
-                  {/* Stylized Regional SVG Contour Representation */}
-                  <svg
-                    viewBox="0 0 1000 800"
-                    className="w-full h-full select-none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    {/* Simplified Rostov Oblast Boundary Contour */}
-                    <path
-                      d="M 450 60 C 650 90, 720 180, 700 280 C 850 350, 920 450, 850 580 C 780 720, 650 780, 520 750 C 380 770, 240 680, 220 560 C 180 500, 280 400, 320 280 C 350 150, 380 80, 450 60 Z"
-                      fill="#E8F4EC"
-                      stroke="#062985"
-                      strokeWidth="4"
-                      strokeDasharray="6 6"
-                      className="opacity-80"
-                    />
-
-                    {/* Don River Stylized Curve */}
-                    <path
-                      d="M 520 120 Q 560 320, 580 430 T 420 550 T 260 570"
-                      fill="none"
-                      stroke="#51C3DD"
-                      strokeWidth="12"
-                      strokeLinecap="round"
-                      className="opacity-70"
-                    />
-
-                    {/* Municipality Interactive Nodes */}
-                    {municipalitiesData.map((m) => {
-                      const isSelected = m.id === selectedMunicipalityId;
-                      const hasVacancies = m.vacancies.length > 0;
-                      const matchesFilter = filteredMunicipalities.some((item) => item.id === m.id);
-
+          <div className="lg:col-span-7 bg-white rounded-2xl sm:rounded-3xl border-2 border-[#062985] p-3.5 sm:p-6 shadow-[4px_4px_0px_#062985] min-w-0">
+            {!selected ? (
+              <p className="p-4 text-sm">Территории не найдены. Измени запрос или фильтр.</p>
+            ) : view === 'map' ? (
+              <>
+                <p className="mb-2 font-display font-bold text-xs sm:text-sm">Условная схема Ростовской области</p>
+                <p className="mb-3 text-xs text-[#062985]/80" id="map-keyboard">
+                  Выбери метку мышью или перемещайся между территориями клавишами со стрелками.
+                </p>
+                <div className="bg-[#F4F6FB] rounded-xl border border-[#062985]/15 p-1 sm:p-3">
+                  <svg viewBox="48 13 858 755" role="group" aria-label="Метки территорий" aria-describedby="map-keyboard"
+                    className="w-full max-h-[31rem] select-none">
+                    <path d="M343 42 405 51 465 70 504 115 549 159 600 172 609 217 668 224 668 286 632 341 676 354 719 404 765 419 810 456 796 491 872 505 891 569 864 607 871 646 818 676 776 663 719 691 674 670 630 695 547 712 493 715 460 759 409 747 393 712 337 724 294 696 259 670 213 663 158 660 118 627 111 583 158 550 109 543 75 520 66 477 102 439 112 395 167 373 219 387 218 333 244 301 239 266 279 229 266 181 275 103 308 80Z"
+                      fill="#E8F4EC" stroke="#062985" strokeWidth="3" strokeDasharray="6 6" aria-hidden="true" />
+                    <path d="M435 65 Q429 132 551 165 Q658 194 616 298 Q597 351 653 374 Q681 397 628 416 Q558 425 518 460 Q464 490 403 492 Q328 515 270 545 Q229 549 181 569"
+                      fill="none" stroke="#51C3DD" strokeWidth="9" strokeLinecap="round" opacity=".75" aria-hidden="true" />
+                    {results.map((item) => {
+                      const active = selected.id === item.id;
+                      const [x, y] = item.mapPosition;
                       return (
-                        <g
-                          key={m.id}
-                          className={`cursor-pointer transition-all duration-300 ${
-                            matchesFilter
-                              ? 'opacity-100 hover:scale-110'
-                              : 'opacity-20 hover:opacity-70'
-                          }`}
-                          onClick={() => setSelectedMunicipalityId(m.id)}
-                        >
-                          {/* Outer pulse circle for selected */}
-                          {isSelected && (
-                            <circle
-                              cx={m.svgCoords.x}
-                              cy={m.svgCoords.y}
-                              r="26"
-                              fill="#9B49DC"
-                              opacity="0.3"
-                              className="animate-ping"
-                            />
-                          )}
-
-                          {/* Gentle vacancy pulsing aura ring for territories with job openings */}
-                          {hasVacancies && !isSelected && matchesFilter && (
-                            <circle
-                              cx={m.svgCoords.x}
-                              cy={m.svgCoords.y}
-                              r="18"
-                              fill="none"
-                              stroke="#C4E538"
-                              strokeWidth="2.5"
-                              className="animate-pulse"
-                            />
-                          )}
-
-                          {/* Pin circle */}
-                          <circle
-                            cx={m.svgCoords.x}
-                            cy={m.svgCoords.y}
-                            r={isSelected ? '18' : '13'}
-                            fill={isSelected ? '#9B49DC' : hasVacancies ? '#C4E538' : '#FFFFFF'}
-                            stroke="#062985"
-                            strokeWidth="3"
-                          />
-
-                          {/* Inner dot */}
-                          <circle
-                            cx={m.svgCoords.x}
-                            cy={m.svgCoords.y}
-                            r="5"
-                            fill={isSelected ? '#FFFFFF' : '#062985'}
-                          />
-
-                          {/* Municipality Label */}
-                          <text
-                            x={m.svgCoords.x}
-                            y={m.svgCoords.y + (isSelected ? 32 : 26)}
-                            textAnchor="middle"
-                            fill="#062985"
-                            fontSize={isSelected ? '15' : '12'}
-                            fontWeight={isSelected ? '900' : '700'}
-                            fontFamily="Onest, sans-serif"
-                            className="select-none pointer-events-none drop-shadow-sm"
-                          >
-                            {m.name}
-                          </text>
-
-                          {/* Vacancy indicator pill badge */}
-                          {hasVacancies && (
-                            <g transform={`translate(${m.svgCoords.x + 8}, ${m.svgCoords.y - 18})`}>
-                              <rect
-                                width="18"
-                                height="14"
-                                rx="5"
-                                fill="#062985"
-                                stroke="#C4E538"
-                                strokeWidth="1.5"
-                              />
-                              <text
-                                x="9"
-                                y="10"
-                                textAnchor="middle"
-                                fill="#C4E538"
-                                fontSize="9"
-                                fontWeight="bold"
-                                fontFamily="Onest, sans-serif"
-                              >
-                                {m.vacancies.length}
-                              </text>
-                            </g>
-                          )}
+                        <g id={`map-pin-${item.id}`} key={item.id} role="button" tabIndex={active ? 0 : -1}
+                          aria-label={item.name} aria-pressed={active}
+                          className="group cursor-pointer focus-visible:outline-none"
+                          onClick={() => setSelectedId(item.id)}
+                          onKeyDown={(event) => handlePinKeyDown(event, item)}>
+                          <title>{item.name}</title>
+                          <circle cx={x} cy={y} r="17" fill="transparent" />
+                          <circle cx={x} cy={y} r="13" fill="none" stroke="#7B2EBC" strokeWidth="3"
+                            className="opacity-0 group-hover:opacity-100 group-focus-visible:opacity-100" />
+                          <circle cx={x} cy={y} r={active ? 10 : 7} stroke="#062985" strokeWidth="2"
+                            fill={active ? '#9B49DC' : item.contact ? '#C4E538' : '#FFFFFF'} />
                         </g>
                       );
                     })}
                   </svg>
                 </div>
-
-                {/* Map Legend */}
-                <div className="flex flex-wrap items-center justify-between gap-3 mt-4 pt-3 border-t border-[#062985]/10 text-xs text-[#062985]/80">
-                  <div className="flex items-center gap-4">
-                    <span className="flex items-center gap-1.5">
-                      <span className="w-3 h-3 rounded-full bg-[#C4E538] border border-[#062985]" />
-                      Есть вакансии
-                    </span>
-                    <span className="flex items-center gap-1.5">
-                      <span className="w-3 h-3 rounded-full bg-[#9B49DC] border border-[#062985]" />
-                      Выбранный район
-                    </span>
-                    <span className="flex items-center gap-1.5">
-                      <span className="w-6 h-1.5 rounded-full bg-[#51C3DD]" />
-                      Река Дон
-                    </span>
-                  </div>
-                  <span className="font-hand font-bold text-xs">
-                    55 территорий области
-                  </span>
-                </div>
-              </div>
+                <p className="mt-3 text-sm font-bold" aria-live="polite">Выбрано: {selected.name}</p>
+                <p className="flex items-center gap-2 mt-1.5 text-xs">
+                  <span className="size-2.5 rounded-full border border-[#062985] bg-[#C4E538]" aria-hidden="true" />
+                  Есть местный контакт
+                </p>
+              </>
             ) : (
-              /* List Mode for fast search or mobile */
-              <div className="space-y-2.5 max-h-[520px] overflow-y-auto pr-1">
-                {filteredMunicipalities.map((m) => {
-                  const isSelected = m.id === selectedMunicipalityId;
-                  return (
-                    <button
-                      key={m.id}
-                      type="button"
-                      onClick={() => setSelectedMunicipalityId(m.id)}
-                      className={`w-full text-left p-3.5 rounded-2xl border-2 transition-all flex items-center justify-between gap-3 ${
-                        isSelected
-                          ? 'bg-[#062985] text-white border-[#062985] shadow-[3px_3px_0px_#C4E538]'
-                          : 'bg-[#F4F6FB] text-[#062985] border-[#062985]/20 hover:border-[#062985]'
-                      }`}
-                    >
-                      <div className="flex items-center gap-3">
-                        <MapPin className={`w-4 h-4 ${isSelected ? 'text-[#C4E538]' : 'text-[#062985]/60'}`} />
-                        <div>
-                          <span className="font-display font-bold text-xs sm:text-sm block">
-                            {m.name}
-                          </span>
-                          <span className="text-[11px] opacity-70">
-                            {m.type}
-                          </span>
-                        </div>
-                      </div>
-
-                      <div className="flex items-center gap-2">
-                        {m.vacancies.length > 0 && (
-                          <span className={`text-[10px] font-bold px-2 py-0.5 rounded-md ${
-                            isSelected ? 'bg-[#C4E538] text-[#062985]' : 'bg-[#C4E538]/30 text-[#062985]'
-                          }`}>
-                            {m.vacancies.length} вак.
-                          </span>
-                        )}
-                        <span className={`text-[11px] font-bold ${isSelected ? 'text-[#51C3DD]' : 'text-[#062985]/60'}`}>
-                          {m.organizations.length} МЦ
-                        </span>
-                      </div>
+              <ul className="grid gap-2 max-h-80 sm:max-h-[28rem] overflow-y-auto p-1">
+                {results.map((item) => (
+                  <li key={item.id}>
+                    <button type="button" aria-pressed={selected.id === item.id} onClick={() => setSelectedId(item.id)}
+                      className={`w-full flex items-center gap-2.5 text-left p-3 rounded-xl border-2 cursor-pointer ${selected.id === item.id ? 'bg-[#062985] text-white border-[#062985]' : 'bg-[#F4F6FB] border-[#062985]/15 hover:border-[#062985]'}`}>
+                      <MapPin className="size-4 shrink-0" aria-hidden="true" />
+                      <span className="min-w-0">
+                        <span className="block text-sm font-bold break-words">{item.name}</span>
+                        <span className="block text-xs">{item.type}</span>
+                      </span>
+                      {item.contact && <span className="ml-auto text-xs text-right">Есть контакт</span>}
                     </button>
-                  );
-                })}
-              </div>
-            )}
-          </div>
-
-          {/* Right Column: Selected Territory Dossier */}
-          <div className="lg:col-span-5 bg-[#062985] text-white p-4 min-[380px]:p-6 sm:p-8 rounded-2xl sm:rounded-3xl border-2 sm:border-3 border-[#062985] shadow-[4px_4px_0px_#C4E538] sm:shadow-[8px_8px_0px_#C4E538]">
-            <div className="flex items-start justify-between gap-4 mb-4 pb-4 border-b border-white/15">
-              <div className="min-w-0">
-                <div className="flex flex-wrap items-center gap-2 mb-1">
-                  <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase bg-[#C4E538] text-[#062985]">
-                    {selectedMunicipality.type}
-                  </span>
-                  <span className="font-hand text-xs font-bold text-[#51C3DD]">
-                    / карточка территории
-                  </span>
-                </div>
-                <h3 className="font-display font-black text-xl min-[380px]:text-2xl sm:text-3xl text-white break-words">
-                  {selectedMunicipality.name}
-                </h3>
-              </div>
-
-              <div className="flex items-center gap-2 shrink-0">
-                <button
-                  type="button"
-                  onClick={handleCopyContacts}
-                  className={`flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-display font-bold uppercase transition-all border cursor-pointer ${
-                    copiedContacts
-                      ? 'bg-[#C4E538] text-[#062985] border-[#C4E538] shadow-[2px_2px_0px_#FFFFFF]'
-                      : 'bg-white/10 hover:bg-[#C4E538] hover:text-[#062985] text-white border-white/20'
-                  }`}
-                  title="Скопировать контакты района"
-                  aria-label="Скопировать контакты района"
-                >
-                  {copiedContacts ? (
-                    <>
-                      <Check className="w-3.5 h-3.5 stroke-[3]" />
-                      <span className="text-[11px]">Скопировано!</span>
-                    </>
-                  ) : (
-                    <>
-                      <Copy className="w-3.5 h-3.5" />
-                      <span className="text-[11px] hidden min-[400px]:inline">Контакты</span>
-                    </>
-                  )}
-                </button>
-
-                <button
-                  type="button"
-                  onClick={() => setSelectedMunicipalityId('rostov-on-don')}
-                  className="p-2 rounded-xl bg-white/10 hover:bg-white/20 text-white/80 hover:text-white transition-colors shrink-0 cursor-pointer"
-                  title="Сбросить к Ростову-на-Дону"
-                  aria-label="Сбросить к Ростову-на-Дону"
-                >
-                  <RotateCcw className="w-4 h-4" />
-                </button>
-              </div>
-            </div>
-
-            {/* Organizations in Territory */}
-            <div className="mb-6">
-              <h4 className="font-display font-bold text-xs uppercase text-[#C4E538] tracking-wider mb-3 flex items-center gap-1.5">
-                <Building className="w-3.5 h-3.5 shrink-0" />
-                <span>Молодёжные центры и органы управления ({selectedMunicipality.organizations.length})</span>
-              </h4>
-
-              <div className="space-y-3">
-                {selectedMunicipality.organizations.map((org) => (
-                  <div
-                    key={org.id}
-                    className="p-3.5 rounded-2xl bg-white/10 border border-white/15 text-xs space-y-1.5"
-                  >
-                    <span className="font-display font-bold text-xs text-white block">
-                      {org.name}
-                    </span>
-                    <span className="text-[11px] text-[#51C3DD] font-medium block">
-                      {org.type} · {org.address}
-                    </span>
-
-                    <div className="flex flex-col min-[380px]:flex-row flex-wrap items-start min-[380px]:items-center gap-2 sm:gap-3 pt-1 text-[11px] text-white/70">
-                      <span className="flex items-center gap-1">
-                        <Phone className="w-3 h-3 text-[#C4E538] shrink-0" />
-                        <span className="break-all">{org.phone}</span>
-                      </span>
-                      <span className="flex items-center gap-1">
-                        <Mail className="w-3 h-3 text-[#C4E538] shrink-0" />
-                        <span className="break-all">{org.email}</span>
-                      </span>
-                      {org.vkUrl && (
-                        <a
-                          href={org.vkUrl}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="flex items-center gap-1 text-[#C4E538] hover:underline"
-                        >
-                          <span>Сообщество VK</span>
-                          <ExternalLink className="w-2.5 h-2.5" />
-                        </a>
-                      )}
-                    </div>
-                  </div>
+                  </li>
                 ))}
-              </div>
-            </div>
-
-            {/* Vacancies in Territory */}
-            <div className="mb-6">
-              <h4 className="font-display font-bold text-xs uppercase text-[#51C3DD] tracking-wider mb-3 flex items-center gap-1.5">
-                <Briefcase className="w-3.5 h-3.5" />
-                Открытые вакансии на территории ({selectedMunicipality.vacancies.length})
-              </h4>
-
-              {selectedMunicipality.vacancies.length > 0 ? (
-                <div className="space-y-2">
-                  {selectedMunicipality.vacancies.map((vac) => (
-                    <div
-                      key={vac.id}
-                      className="p-3 rounded-xl bg-white/5 border border-white/10 flex items-center justify-between gap-3 text-xs"
-                    >
-                      <div>
-                        <span className="font-bold text-white block">{vac.title}</span>
-                        <span className="text-[11px] text-white/70">{vac.organizationName}</span>
-                      </div>
-                      <div className="text-right shrink-0">
-                        <span className="font-bold text-[#C4E538] block text-[11px]">{vac.salaryText}</span>
-                        <span className="text-[10px] text-white/50">{vac.employmentType}</span>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              ) : (
-                <div className="p-3 rounded-xl bg-white/5 border border-dashed border-white/20 text-center text-xs text-white/60">
-                  Прямо сейчас открытых вакансий нет. Направьте резюме в районный молодёжный центр!
-                </div>
-              )}
-            </div>
-
-            {/* Highlighted Project on Territory */}
-            <div className="p-4 rounded-2xl bg-[#9B49DC]/25 border border-[#9B49DC]">
-              <span className="font-display font-bold text-[10px] uppercase text-[#C4E538] tracking-widest block mb-1">
-                Ключевой проект района:
-              </span>
-              <p className="text-xs font-semibold text-white">
-                «{selectedMunicipality.highlightedProject}»
-              </p>
-            </div>
+              </ul>
+            )}
+            <a href={territorySourceUrl} target="_blank" rel="noreferrer"
+              className="inline-flex items-center gap-1.5 mt-4 text-xs underline underline-offset-2">
+              Состав территорий · Ростовстат, 1 января 2026 года
+              <ExternalLink className="size-3 shrink-0" aria-hidden="true" />
+            </a>
           </div>
+
+          {selected && <MunicipalityDetails key={selected.id} item={selected} />}
         </div>
       </div>
     </section>
   );
-};
+}
+
+function MunicipalityDetails({ item }: { item: MunicipalityItem }) {
+  const [copyStatus, setCopyStatus] = useState<'ready' | 'copied' | 'error'>('ready');
+  const contact = item.contact ?? regionalYouthContact;
+  const contactText = [item.name, contact.name, contact.address, contact.phone, contact.email, contact.sourceUrl].filter(Boolean).join('\n');
+
+  async function copyContact() {
+    try {
+      await navigator.clipboard.writeText(contactText);
+      setCopyStatus('copied');
+    } catch {
+      setCopyStatus('error');
+    }
+  }
+
+  return (
+    <article className="lg:col-span-5 bg-[#062985] text-white rounded-2xl sm:rounded-3xl p-4 sm:p-7 border-2 border-[#062985] shadow-[4px_4px_0px_#C4E538] min-w-0"
+      aria-labelledby="map-territory-name">
+      <p className="text-xs text-[#C4E538] font-bold uppercase mb-2">{item.type}</p>
+      <h3 className="font-display font-extrabold text-lg sm:text-2xl break-words mb-4" id="map-territory-name">{item.name}</h3>
+      <div className="bg-white/10 border border-white/20 rounded-xl p-3.5 space-y-2 mb-5 text-sm">
+        <h4 className="font-bold text-[#C4E538]">{item.contact ? 'Местный контакт' : 'Областной контакт'}</h4>
+        {!item.contact && <p className="text-white/85">Местный контакт пока не подтверждён. Уточнить, к кому обратиться, можно в областном комитете.</p>}
+        <p className="font-semibold">{contact.name}</p>
+        {contact.address && <p>{contact.address}</p>}
+        {contact.phone && <a className="block underline" href={`tel:${contact.phone.replace(/[^+\d]/g, '')}`}>{contact.phone}</a>}
+        {contact.email && <a className="block underline break-all" href={`mailto:${contact.email}`}>{contact.email}</a>}
+        <a href={contact.sourceUrl} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1.5 text-[#C4E538] underline">
+          {contact.sourceLabel}
+          <ExternalLink className="size-3 shrink-0" aria-hidden="true" />
+        </a>
+        <div>
+          <button type="button" onClick={copyContact} className="text-xs rounded-lg px-3 py-2 border border-[#C4E538] hover:bg-[#C4E538] hover:text-[#062985] cursor-pointer">
+            Скопировать контакт
+          </button>
+          <p role="status" className="mt-1 text-xs">
+            {copyStatus === 'copied' && 'Контакт скопирован.'}
+            {copyStatus === 'error' && 'Браузер не смог скопировать контакт.'}
+          </p>
+        </div>
+      </div>
+      <h4 className="flex items-center gap-2 font-bold text-sm mb-2">
+        <Briefcase className="size-4" aria-hidden="true" /> Поиск вакансий
+      </h4>
+      <p className="text-sm text-white/85 mb-2">На портале выбери Ростовскую область и укажи нужный населённый пункт.</p>
+      <a href={vacancySearchUrl} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1.5 text-sm text-[#C4E538] underline">
+        Вакансии на портале «Работа России» <ExternalLink className="size-3 shrink-0" aria-hidden="true" />
+      </a>
+    </article>
+  );
+}
