@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { careerStages } from '../data/careerRouteData';
 import type { CareerStage } from '../types';
 import {
@@ -37,17 +37,20 @@ export const CareerRoute: React.FC = () => {
     }
   };
 
-  const handleStageKeyDown = (event: React.KeyboardEvent<HTMLButtonElement>, index: number) => {
-    const offset = event.key === 'ArrowRight' ? 1 : event.key === 'ArrowLeft' ? -1 : 0;
-    if (offset === 0) return;
-
-    event.preventDefault();
-    const next = careerStages[index + offset];
-    if (next) {
-      setSelectedStageId(next.id);
-      document.getElementById(`route-step-${next.id}`)?.focus();
-    }
-  };
+  // Keyboard navigation when user is on the section
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      // Only navigate if focus is not in an input
+      if (document.activeElement?.tagName === 'INPUT' || document.activeElement?.tagName === 'TEXTAREA') return;
+      if (e.key === 'ArrowRight' && currentStageIndex < careerStages.length - 1) {
+        setSelectedStageId(careerStages[currentStageIndex + 1].id);
+      } else if (e.key === 'ArrowLeft' && currentStageIndex > 0) {
+        setSelectedStageId(careerStages[currentStageIndex - 1].id);
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [currentStageIndex]);
 
   const handleCopyStage = () => {
     const text = `Этап ${selectedStage.stepNumber}: ${selectedStage.title} (${selectedStage.badge})\n\nСуть:\n${selectedStage.description}\n\nКлючевые задачи:\n${selectedStage.keyTasks.map((t, i) => `${i + 1}. ${t}`).join('\n')}\n\nКомпетенции: ${selectedStage.competencies.join(', ')}\n\nПлатформа «Карьерный маршрут: молодёжная сфера Ростовской области»`;
@@ -116,7 +119,7 @@ export const CareerRoute: React.FC = () => {
               Ступень {currentStageIndex + 1} из {careerStages.length}: {selectedStage.title}
             </span>
             <span className="text-xs text-[#062985]/60 font-hand hidden md:inline">
-              / на карточках этапов работают клавиши ← →
+              / нажимайте ← → на клавиатуре
             </span>
           </div>
 
@@ -148,17 +151,15 @@ export const CareerRoute: React.FC = () => {
           </div>
 
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2 sm:gap-4 relative z-10">
-            {careerStages.map((stage, index) => {
+            {careerStages.map((stage) => {
               const isSelected = stage.id === selectedStageId;
               const colorClasses = getColorClasses(stage.colorScheme, isSelected);
 
               return (
                 <button
                   key={stage.id}
-                  id={`route-step-${stage.id}`}
                   type="button"
                   onClick={() => setSelectedStageId(stage.id)}
-                  onKeyDown={(event) => handleStageKeyDown(event, index)}
                   className={`text-left p-3 min-[380px]:p-4 sm:p-5 rounded-2xl border-2 sm:border-3 transition-all duration-200 cursor-pointer flex flex-col justify-between min-h-[140px] min-[380px]:min-h-[160px] sm:min-h-[190px] relative ${colorClasses} ${
                     isSelected ? 'scale-[1.02] sm:scale-[1.03] z-20' : 'hover:-translate-y-1'
                   }`}
@@ -226,7 +227,7 @@ export const CareerRoute: React.FC = () => {
                 href="#professions"
                 className="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-[#C4E538] hover:bg-[#D9FB5F] text-[#062985] font-display font-bold text-xs uppercase px-5 py-3 rounded-full border-2 border-[#062985] transition-all"
               >
-                  <span>Каталог профессий</span>
+                <span>Вакансии и роли этапа</span>
                 <ArrowRight className="w-4 h-4" />
               </a>
             </div>

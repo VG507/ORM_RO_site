@@ -1,6 +1,5 @@
 import React from 'react';
 import { ArrowRight, Compass, Sparkles, MapPin, Award } from 'lucide-react';
-import heroPhoto from '../assets/hero-specialist.jpg';
 import {
   SignatureWavePurple,
   SignatureLoopArrow,
@@ -146,11 +145,10 @@ export const HeroSection: React.FC = () => {
               <div className="relative bg-[#062985] rounded-3xl border-3 border-[#C4E538] overflow-hidden shadow-2xl p-2.5 sm:p-3">
                 <div className="relative h-72 sm:h-96 md:h-[420px] rounded-2xl overflow-hidden bg-neutral-900">
                   <img
-              src={heroPhoto}
+                    src="/assets/hero-specialist.png"
                     alt="Специалист по работе с молодёжью Ростовской области"
                     className="w-full h-full object-cover object-center"
                     loading="eager"
-              fetchPriority="high"
                   />
                   {/* Inner Gradient */}
                   <div className="absolute inset-0 bg-gradient-to-t from-[#062985] via-transparent to-transparent opacity-80" />

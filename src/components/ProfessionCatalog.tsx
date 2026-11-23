@@ -9,11 +9,13 @@ export const ProfessionCatalog: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [selectedRole, setSelectedRole] = useState<ProfessionRole | null>(null);
-  const [favorites, setFavorites] = useState(getFavoriteRoleIds);
+  const [favorites, setFavorites] = useState<string[]>([]);
   const [copiedRole, setCopiedRole] = useState(false);
 
   useEffect(() => {
-    return subscribeToFavorites(setFavorites);
+    setFavorites(getFavoriteRoleIds());
+    const unsub = subscribeToFavorites((ids) => setFavorites(ids));
+    return unsub;
   }, []);
 
   const categories = useMemo(() => [
@@ -140,7 +142,7 @@ export const ProfessionCatalog: React.FC = () => {
                   role="button"
                   tabIndex={0}
                   onKeyDown={(e) => {
-                    if (e.target === e.currentTarget && (e.key === 'Enter' || e.key === ' ')) {
+                    if (e.key === 'Enter' || e.key === ' ') {
                       e.preventDefault();
                       setSelectedRole(role);
                     }
