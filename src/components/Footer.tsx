@@ -1,5 +1,5 @@
 import React from 'react';
-import { ArrowUp, MapPin, ExternalLink, Heart } from 'lucide-react';
+import { ArrowUp, ExternalLink, Heart } from 'lucide-react';
 import { HashSymbol, StickerPill } from './decorations/DecorativeSVGs';
 
 export const Footer: React.FC = () => {
@@ -66,7 +66,7 @@ export const Footer: React.FC = () => {
         </div>
 
         {/* Navigation Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8 py-8 sm:py-12 border-b border-white/15">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 py-8 sm:py-12 border-b border-white/15">
           {/* Col 1 */}
           <div>
             <h4 className="font-display font-bold text-xs uppercase text-[#C4E538] tracking-widest mb-4">
@@ -127,21 +127,6 @@ export const Footer: React.FC = () => {
             </ul>
           </div>
 
-          {/* Col 4 */}
-          <div>
-            <h4 className="font-display font-bold text-xs uppercase text-white tracking-widest mb-4">
-              География проекта
-            </h4>
-            <div className="p-4 rounded-2xl bg-white/5 border border-white/10 space-y-2">
-              <div className="flex items-center gap-2 text-xs text-[#C4E538] font-bold">
-                <MapPin className="w-4 h-4 shrink-0" />
-                <span>Ростовская область</span>
-              </div>
-              <p className="text-xs text-white/70 leading-relaxed">
-                55 муниципальных образований: 12 городских округов и 43 муниципальных района Дона.
-              </p>
-            </div>
-          </div>
         </div>
 
         {/* Bottom Sub-footer */}
