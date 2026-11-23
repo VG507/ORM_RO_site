@@ -18,7 +18,6 @@ export interface Direction {
   title: string;
   tagline: string;
   description: string;
-  fullDetails?: string;
   colorScheme: 'navy' | 'lime' | 'cyan' | 'purple' | 'light';
   size: 'large' | 'medium' | 'featured';
   badge: string;
