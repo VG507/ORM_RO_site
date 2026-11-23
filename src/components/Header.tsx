@@ -42,7 +42,6 @@ export const Header: React.FC = () => {
 
   const navLinks = [
     { label: 'О проекте', href: '#about' },
-    { label: 'Карта Дона', href: '#map' },
     { label: 'Маршрут', href: '#route' },
     { label: 'Направления', href: '#directions' },
     { label: 'Роли и профессии', href: '#professions' },
@@ -91,10 +90,10 @@ export const Header: React.FC = () => {
             <HashSymbol size={22} color="#062985" />
           </div>
           <div className="flex flex-col">
-            <span className="font-display font-extrabold text-xs sm:text-sm lg:text-base tracking-tight leading-tight text-white group-hover:text-[#C4E538] transition-colors">
+            <span className="font-display font-extrabold text-sm sm:text-lg lg:text-xl tracking-tight leading-tight text-white group-hover:text-[#C4E538] transition-colors">
               КАРЬЕРНЫЙ МАРШРУТ
             </span>
-            <span className="font-hand text-[11px] sm:text-xs lg:text-sm text-[#C4E538] font-bold tracking-wide">
+            <span className="font-hand text-xs sm:text-sm lg:text-base leading-tight text-[#C4E538] font-bold tracking-wide">
               молодёжная сфера Дона
             </span>
           </div>

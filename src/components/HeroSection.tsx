@@ -1,11 +1,10 @@
 import React from 'react';
-import { ArrowRight, Compass, Sparkles, MapPin, Award } from 'lucide-react';
+import { ArrowRight, Compass, Sparkles, Award } from 'lucide-react';
 import {
   SignatureWavePurple,
   SignatureLoopArrow,
   SparkStar,
   DiamondSpark,
-  HashSymbol,
   StickerPill,
 } from './decorations/DecorativeSVGs';
 
@@ -52,17 +51,12 @@ export const HeroSection: React.FC = () => {
             {/* Top Regional Badge */}
             <div className="flex flex-wrap items-center gap-2 mb-4 sm:mb-6">
               <StickerPill
-                text="Ростовская область"
+                text="Ростов-на-Дону"
                 bg="#C4E538"
                 textColor="#062985"
                 rotate="-2deg"
               />
-              <span className="inline-flex items-center gap-1.5 px-2.5 sm:px-3 py-1 rounded-full text-[11px] sm:text-xs font-semibold bg-white/10 text-white/90 border border-white/20">
-                <MapPin className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-[#51C3DD]" />
-                55 муниципалитетов Дона
-              </span>
-              <span className="hidden min-[480px]:inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-hand text-[#C4E538] font-bold">
-                <HashSymbol size={14} color="#C4E538" />
+              <span className="px-2.5 py-1 text-lg sm:text-xl font-hand text-[#C4E538] font-bold">
                 #молодёжная_сфера
               </span>
             </div>
@@ -91,7 +85,7 @@ export const HeroSection: React.FC = () => {
             </p>
 
             {/* CTAs */}
-            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-4 w-full sm:w-auto mb-8 sm:mb-10">
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-4 w-full sm:w-auto">
               <a
                 href="#route"
                 onClick={(e) => scrollToSection(e, '#route')}
@@ -111,27 +105,6 @@ export const HeroSection: React.FC = () => {
               </a>
             </div>
 
-            {/* Micro Stats Bar */}
-            <div className="grid grid-cols-3 gap-2 min-[400px]:gap-4 pt-4 sm:pt-6 border-t border-white/15 w-full max-w-lg">
-              <div>
-                <span className="block font-condensed font-bold text-xl sm:text-3xl text-[#C4E538]">
-                  6
-                </span>
-                <span className="text-[11px] sm:text-xs text-white/70">ступеней развития</span>
-              </div>
-              <div>
-                <span className="block font-condensed font-bold text-xl sm:text-3xl text-[#51C3DD]">
-                  55
-                </span>
-                <span className="text-[11px] sm:text-xs text-white/70">территорий Дона</span>
-              </div>
-              <div>
-                <span className="block font-condensed font-bold text-xl sm:text-3xl text-[#FFFFFF]">
-                  100%
-                </span>
-                <span className="text-[11px] sm:text-xs text-white/70">практика и опыт</span>
-              </div>
-            </div>
           </div>
 
           {/* Right Column: Editorial Visual Card */}
@@ -145,7 +118,7 @@ export const HeroSection: React.FC = () => {
               <div className="relative bg-[#062985] rounded-3xl border-3 border-[#C4E538] overflow-hidden shadow-2xl p-2.5 sm:p-3">
                 <div className="relative h-72 sm:h-96 md:h-[420px] rounded-2xl overflow-hidden bg-neutral-900">
                   <img
-                    src="/assets/hero-specialist.png"
+                    src={`${import.meta.env.BASE_URL}assets/hero-specialist.png`}
                     alt="Специалист по работе с молодёжью Ростовской области"
                     className="w-full h-full object-cover object-center"
                     loading="eager"

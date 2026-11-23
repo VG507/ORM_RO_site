@@ -15,7 +15,7 @@ export const directionsData: Direction[] = [
       'Клуб победителей грантовых конкурсов Дона'
     ],
     targetAudience: 'Молодые лидеры, НКО, авторы инициатив 14–35 лет',
-    image: '/assets/team-photo-3.png'
+    image: `${import.meta.env.BASE_URL}assets/team-photo-3.png`
   },
   {
     id: 'volunteering',
@@ -61,7 +61,7 @@ export const directionsData: Direction[] = [
       'Региональный подкаст «Спецы Дона»'
     ],
     targetAudience: 'Копирайтеры, дизайнеры, фотографы, блогеры',
-    image: '/assets/hero-specialist.png'
+    image: `${import.meta.env.BASE_URL}assets/hero-specialist.png`
   },
   {
     id: 'patriotism',

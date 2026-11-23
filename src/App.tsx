@@ -3,7 +3,6 @@ import { Header } from './components/Header';
 import { HeroSection } from './components/HeroSection';
 import { Marquee } from './components/Marquee';
 import { AboutSection } from './components/AboutSection';
-import { RegionalMapSection } from './components/RegionalMapSection';
 import { CareerRoute } from './components/CareerRoute';
 import { DirectionGrid } from './components/DirectionGrid';
 import { ProfessionCatalog } from './components/ProfessionCatalog';
@@ -31,10 +30,7 @@ export const App: React.FC = () => {
         {/* 4. About Section */}
         <AboutSection />
 
-        {/* 5. Regional Infrastructure Map */}
-        <RegionalMapSection />
-
-        {/* 6. Main Career Route */}
+        {/* 5. Main Career Route */}
         <CareerRoute />
 
         {/* 6. Directions of Activity */}
