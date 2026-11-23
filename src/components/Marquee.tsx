@@ -5,11 +5,10 @@ export const Marquee: React.FC = () => {
   const repetitions = [1, 2, 3, 4, 5, 6];
 
   return (
-    <div className="relative z-20 overflow-hidden py-4 sm:py-6 -my-4 sm:-my-6 pointer-events-none">
-      <section
-        className="relative w-[114%] -left-[7%] py-3.5 sm:py-4.5 bg-[#C4E538] border-y-3 border-[#062985] select-none -rotate-2 sm:-rotate-[2.8deg] shadow-[0_10px_25px_rgba(6,41,133,0.3)] pointer-events-auto"
-        aria-label="Бегущая полоса девиза проекта"
-      >
+    <section
+      className="relative z-20 py-4 bg-[#C4E538] border-y-3 border-[#062985] overflow-hidden select-none -rotate-1 shadow-md shadow-black/10"
+      aria-label="Бегущая полоса девиза проекта"
+    >
       {/* Top track (Lime with Navy Text) */}
       <div className="flex overflow-hidden">
         <div className="animate-marquee-left flex items-center shrink-0">
@@ -52,6 +51,5 @@ export const Marquee: React.FC = () => {
         </div>
       </div>
     </section>
-  </div>
-);
+  );
 };
