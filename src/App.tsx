@@ -2,6 +2,7 @@ import React from 'react';
 import { Header } from './components/Header';
 import { HeroSection } from './components/HeroSection';
 import { Marquee } from './components/Marquee';
+import { TaglineManifesto } from './components/TaglineManifesto';
 import { AboutSection } from './components/AboutSection';
 import { RegionalMapSection } from './components/RegionalMapSection';
 import { CareerRoute } from './components/CareerRoute';
@@ -21,48 +22,51 @@ export const App: React.FC = () => {
       {/* 1. Header with sticky & scroll states */}
       <Header />
 
-      <main className="flex-grow">
+      <main id="main-content" className="flex-grow">
         {/* 2. Hero Section */}
         <HeroSection />
 
         {/* 3. Marquee Ribbon */}
         <Marquee />
 
-        {/* 4. About Section */}
+        {/* 4. Tagline Reveal & Regional Youth Policy Manifesto (B11) */}
+        <TaglineManifesto />
+
+        {/* 5. About Section */}
         <AboutSection />
 
-        {/* 5. Regional Infrastructure Map */}
+        {/* 6. Regional Infrastructure Map */}
         <RegionalMapSection />
 
-        {/* 6. Main Career Route */}
+        {/* 7. Main Career Route */}
         <CareerRoute />
 
-        {/* 6. Directions of Activity */}
+        {/* 8. Directions of Activity */}
         <DirectionGrid />
 
-        {/* 7. Professions & Roles Catalog */}
+        {/* 9. Professions & Roles Catalog */}
         <ProfessionCatalog />
 
-        {/* 8. Skills & Professional Growth */}
+        {/* 10. Skills & Professional Growth */}
         <SkillsSection />
 
-        {/* 9. Success Stories & Case Studies */}
+        {/* 11. Success Stories & Case Studies */}
         <SuccessStories />
 
-        {/* 10. Interactive Career Selector */}
+        {/* 12. Interactive Career Selector */}
         <CareerSelector />
 
-        {/* 11. Additional Opportunities & Ecosystem */}
+        {/* 13. Additional Opportunities & Ecosystem */}
         <OpportunitiesSection />
 
-        {/* 12. Frequently Asked Questions */}
+        {/* 14. Frequently Asked Questions */}
         <FAQSection />
 
-        {/* 13. Final CTA Block */}
+        {/* 15. Final CTA Block */}
         <FinalCTA />
       </main>
 
-      {/* 14. Footer */}
+      {/* 16. Footer */}
       <Footer />
     </div>
   );

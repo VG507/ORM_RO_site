@@ -1,11 +1,34 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { successStoriesData } from '../data/storiesData';
 import type { SuccessStory } from '../types';
-import { Quote, MapPin, CheckCircle, ArrowRight, X } from 'lucide-react';
+import { Quote, MapPin, ArrowRight, X, Share2, Check } from 'lucide-react';
 import { StickerPill } from './decorations/DecorativeSVGs';
 
 export const SuccessStories: React.FC = () => {
   const [selectedStory, setSelectedStory] = useState<SuccessStory | null>(null);
+  const [copiedShare, setCopiedShare] = useState(false);
+
+  useEffect(() => {
+    if (selectedStory) {
+      document.body.style.overflow = 'hidden';
+      const handleKeyDown = (e: KeyboardEvent) => {
+        if (e.key === 'Escape') setSelectedStory(null);
+      };
+      window.addEventListener('keydown', handleKeyDown);
+      return () => {
+        document.body.style.overflow = '';
+        window.removeEventListener('keydown', handleKeyDown);
+      };
+    }
+  }, [selectedStory]);
+
+  const handleShareStory = () => {
+    if (!selectedStory) return;
+    const shareText = `«${selectedStory.name}» (${selectedStory.role}, ${selectedStory.municipality}) — история успеха в молодёжной политике Ростовской области:\n«${selectedStory.quote}»\n\nПодробнее: ${window.location.origin}/#stories`;
+    navigator.clipboard.writeText(shareText);
+    setCopiedShare(true);
+    setTimeout(() => setCopiedShare(false), 2200);
+  };
 
   return (
     <section
@@ -189,14 +212,18 @@ export const SuccessStories: React.FC = () => {
                 <h4 className="font-display font-bold text-xs uppercase text-[#062985] tracking-wider mb-3">
                   Ключевые вехи карьеры:
                 </h4>
-                <div className="space-y-2">
+                <div className="space-y-2.5">
                   {selectedStory.milestones.map((ms, mIdx) => (
                     <div
                       key={mIdx}
-                      className="flex items-start gap-2.5 p-3 rounded-xl bg-[#F4F6FB] border border-[#062985]/15 text-xs text-[#062985]"
+                      className="flex items-start gap-3 p-3.5 rounded-xl bg-[#F4F6FB] border-2 border-[#062985]/15 text-xs text-[#062985] hover:border-[#062985] transition-colors"
                     >
-                      <CheckCircle className="w-4 h-4 text-[#9B49DC] shrink-0 mt-0.5" />
-                      <span className="font-medium">{ms}</span>
+                      <div className="w-6 h-6 rounded-md bg-[#062985] text-[#C4E538] font-display font-black text-[11px] flex items-center justify-center shrink-0">
+                        0{mIdx + 1}
+                      </div>
+                      <div className="pt-0.5 font-medium leading-relaxed">
+                        {ms}
+                      </div>
                     </div>
                   ))}
                 </div>
@@ -212,11 +239,29 @@ export const SuccessStories: React.FC = () => {
               </div>
             </div>
 
-            <div className="flex justify-end pt-4 border-t border-[#062985]/15">
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 pt-4 border-t border-[#062985]/15">
+              <button
+                type="button"
+                onClick={handleShareStory}
+                className="btn-tactile inline-flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-full border-2 border-[#062985] text-xs font-display font-bold uppercase transition-all cursor-pointer bg-white hover:bg-neutral-100"
+              >
+                {copiedShare ? (
+                  <>
+                    <Check className="w-3.5 h-3.5 text-[#062985] stroke-[3]" />
+                    <span>Ссылка скопирована!</span>
+                  </>
+                ) : (
+                  <>
+                    <Share2 className="w-3.5 h-3.5 text-[#062985]" />
+                    <span>Поделиться историей</span>
+                  </>
+                )}
+              </button>
+
               <button
                 type="button"
                 onClick={() => setSelectedStory(null)}
-                className="bg-[#062985] text-white hover:bg-[#9B49DC] font-display font-bold text-xs uppercase px-6 py-3 rounded-full transition-colors"
+                className="btn-tactile bg-[#062985] text-white hover:bg-[#9B49DC] font-display font-bold text-xs uppercase px-6 py-3 rounded-full transition-colors cursor-pointer"
               >
                 Закрыть историю
               </button>

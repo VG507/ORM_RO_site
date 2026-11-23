@@ -1,16 +1,33 @@
 import React, { useState, useEffect } from 'react';
-import { Menu, X, ArrowUpRight, Compass } from 'lucide-react';
+import { Menu, X, ArrowUpRight, Compass, Bookmark } from 'lucide-react';
 import { HashSymbol, SparkStar } from './decorations/DecorativeSVGs';
+import { getFavoriteRoleIds, subscribeToFavorites } from '../utils/favorites';
 
 export const Header: React.FC = () => {
   const [isScrolled, setIsScrolled] = useState(false);
+  const [scrollProgress, setScrollProgress] = useState(0);
+  const [favoritesCount, setFavoritesCount] = useState(0);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  useEffect(() => {
+    // Initial favorites
+    setFavoritesCount(getFavoriteRoleIds().length);
+    const unsubscribe = subscribeToFavorites((ids) => {
+      setFavoritesCount(ids.length);
+    });
+    return unsubscribe;
+  }, []);
 
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 30);
+      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+      if (docHeight > 0) {
+        setScrollProgress(Math.min(100, Math.max(0, (window.scrollY / docHeight) * 100)));
+      }
     };
     window.addEventListener('scroll', handleScroll, { passive: true });
+    handleScroll();
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
@@ -69,14 +86,34 @@ export const Header: React.FC = () => {
   };
 
   return (
-    <header
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        isScrolled
-          ? 'bg-[#062985]/95 backdrop-blur-md border-b-2 border-[#C4E538]/30 py-2.5 sm:py-3 shadow-lg shadow-black/20'
-          : 'bg-[#062985]/80 backdrop-blur-sm lg:bg-transparent py-3 sm:py-5'
-      }`}
-    >
-      <div className="max-w-[1440px] mx-auto px-3 sm:px-6 lg:px-12 flex items-center justify-between">
+    <>
+      {/* Accessibility Skip Link */}
+      <a
+        href="#main-content"
+        className="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-4 focus:z-[100] focus:px-4 focus:py-2 focus:bg-[#C4E538] focus:text-[#062985] focus:font-display focus:font-bold focus:text-xs focus:uppercase focus:rounded-full focus:shadow-xl focus:border-2 focus:border-[#062985]"
+      >
+        Перейти к основному содержимому
+      </a>
+
+      <header
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+          isScrolled
+            ? 'bg-[#062985]/95 backdrop-blur-md border-b-2 border-[#C4E538]/30 py-2.5 sm:py-3 shadow-lg shadow-black/20'
+            : 'bg-[#062985]/80 backdrop-blur-sm lg:bg-transparent py-3 sm:py-5'
+        }`}
+      >
+        {/* Subtle Reading Progress Indicator Line */}
+        <div
+          className="absolute top-0 left-0 h-[3px] bg-gradient-to-r from-[#51C3DD] via-[#C4E538] to-[#9B49DC] transition-all duration-150"
+          style={{ width: `${scrollProgress}%` }}
+          role="progressbar"
+          aria-valuenow={Math.round(scrollProgress)}
+          aria-valuemin={0}
+          aria-valuemax={100}
+          aria-label="Прогресс чтения страницы"
+        />
+
+        <div className="max-w-[1440px] mx-auto px-3 sm:px-6 lg:px-12 flex items-center justify-between">
         {/* Brand Logo */}
         <a
           href="#"
@@ -119,10 +156,31 @@ export const Header: React.FC = () => {
 
         {/* Action Button & Mobile Menu Toggle */}
         <div className="flex items-center gap-2 sm:gap-3">
+          {/* Saved Roles Bookmark Button */}
+          <a
+            href="#professions"
+            onClick={(e) => handleLinkClick(e, '#professions')}
+            className={`flex items-center gap-1.5 px-3 py-2 rounded-full border-2 transition-all text-xs font-bold ${
+              favoritesCount > 0
+                ? 'bg-[#9B49DC] text-white border-[#C4E538] shadow-[2px_2px_0px_#C4E538]'
+                : 'bg-white/10 text-white/80 border-white/20 hover:bg-white/20 hover:text-white'
+            }`}
+            title="Сохранённые вакансии и роли"
+            aria-label={`Сохранённые роли: ${favoritesCount}`}
+          >
+            <Bookmark className={`w-3.5 h-3.5 ${favoritesCount > 0 ? 'fill-current text-[#C4E538]' : ''}`} />
+            <span className="hidden sm:inline">Избранное</span>
+            {favoritesCount > 0 && (
+              <span className="w-5 h-5 rounded-full bg-[#C4E538] text-[#062985] text-[10px] font-black font-condensed flex items-center justify-center">
+                {favoritesCount}
+              </span>
+            )}
+          </a>
+
           <a
             href="#route"
             onClick={(e) => handleLinkClick(e, '#route')}
-            className="hidden md:inline-flex items-center gap-2 bg-[#C4E538] hover:bg-[#D9FB5F] text-[#062985] font-display font-bold text-[11px] sm:text-xs uppercase px-4 sm:px-5 py-2.5 rounded-full border-2 border-[#062985] shadow-[2px_2px_0px_#FFFFFF] transition-all"
+            className="hidden md:inline-flex items-center gap-2 bg-[#C4E538] hover:bg-[#D9FB5F] text-[#062985] font-display font-bold text-[11px] sm:text-xs uppercase px-4 sm:px-5 py-2.5 rounded-full border-2 border-[#062985] shadow-[2px_2px_0px_#FFFFFF] transition-all btn-tactile"
           >
             <span>Начать маршрут</span>
             <ArrowUpRight className="w-3.5 h-3.5" />
@@ -188,5 +246,6 @@ export const Header: React.FC = () => {
         </div>
       )}
     </header>
-  );
+  </>
+);
 };
