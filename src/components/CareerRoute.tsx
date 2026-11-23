@@ -1,17 +1,14 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { careerStages } from '../data/careerRouteData';
 import type { CareerStage } from '../types';
 import {
   Check,
   ChevronRight,
-  ChevronLeft,
   BookOpen,
   ArrowRight,
   Sparkles,
   Layers,
   GraduationCap,
-  Copy,
-  CheckCheck,
 } from 'lucide-react';
 import {
   StickerPill,
@@ -20,44 +17,9 @@ import {
 
 export const CareerRoute: React.FC = () => {
   const [selectedStageId, setSelectedStageId] = useState<string>(careerStages[0].id);
-  const [copiedStage, setCopiedStage] = useState(false);
 
-  const currentStageIndex = careerStages.findIndex((s) => s.id === selectedStageId);
-  const selectedStage = careerStages[currentStageIndex] || careerStages[0];
-
-  const handlePrevStage = () => {
-    if (currentStageIndex > 0) {
-      setSelectedStageId(careerStages[currentStageIndex - 1].id);
-    }
-  };
-
-  const handleNextStage = () => {
-    if (currentStageIndex < careerStages.length - 1) {
-      setSelectedStageId(careerStages[currentStageIndex + 1].id);
-    }
-  };
-
-  // Keyboard navigation when user is on the section
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      // Only navigate if focus is not in an input
-      if (document.activeElement?.tagName === 'INPUT' || document.activeElement?.tagName === 'TEXTAREA') return;
-      if (e.key === 'ArrowRight' && currentStageIndex < careerStages.length - 1) {
-        setSelectedStageId(careerStages[currentStageIndex + 1].id);
-      } else if (e.key === 'ArrowLeft' && currentStageIndex > 0) {
-        setSelectedStageId(careerStages[currentStageIndex - 1].id);
-      }
-    };
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [currentStageIndex]);
-
-  const handleCopyStage = () => {
-    const text = `Этап ${selectedStage.stepNumber}: ${selectedStage.title} (${selectedStage.badge})\n\nСуть:\n${selectedStage.description}\n\nКлючевые задачи:\n${selectedStage.keyTasks.map((t, i) => `${i + 1}. ${t}`).join('\n')}\n\nКомпетенции: ${selectedStage.competencies.join(', ')}\n\nПлатформа «Карьерный маршрут: молодёжная сфера Ростовской области»`;
-    navigator.clipboard.writeText(text);
-    setCopiedStage(true);
-    setTimeout(() => setCopiedStage(false), 2000);
-  };
+  const selectedStage =
+    careerStages.find((s) => s.id === selectedStageId) || careerStages[0];
 
   const getColorClasses = (scheme: CareerStage['colorScheme'], isSelected: boolean) => {
     switch (scheme) {
@@ -109,38 +71,6 @@ export const CareerRoute: React.FC = () => {
             до управления инфраструктурой и формирования региональной повестки.
             Выбери этап, чтобы увидеть задачи, навыки и ресурсы для перехода.
           </p>
-        </div>
-
-        {/* Progress Meter Indicator */}
-        <div className="mb-4 flex flex-wrap items-center justify-between gap-3 bg-[#F4F6FB] p-3 rounded-2xl border border-[#062985]/15">
-          <div className="flex items-center gap-2">
-            <span className="w-2 h-2 rounded-full bg-[#C4E538] ring-4 ring-[#C4E538]/30 animate-pulse" />
-            <span className="text-xs font-bold font-display uppercase tracking-wider text-[#062985]">
-              Ступень {currentStageIndex + 1} из {careerStages.length}: {selectedStage.title}
-            </span>
-            <span className="text-xs text-[#062985]/60 font-hand hidden md:inline">
-              / нажимайте ← → на клавиатуре
-            </span>
-          </div>
-
-          <div className="flex items-center gap-1.5 ml-auto">
-            {careerStages.map((s, idx) => (
-              <button
-                key={s.id}
-                type="button"
-                onClick={() => setSelectedStageId(s.id)}
-                className={`h-2.5 rounded-full transition-all cursor-pointer ${
-                  idx === currentStageIndex
-                    ? 'w-8 bg-[#062985]'
-                    : idx < currentStageIndex
-                    ? 'w-3 bg-[#C4E538]'
-                    : 'w-3 bg-[#062985]/20 hover:bg-[#062985]/40'
-                }`}
-                title={`Ступень ${idx + 1}: ${s.title}`}
-                aria-label={`Перейти к ступени ${idx + 1}`}
-              />
-            ))}
-          </div>
         </div>
 
         {/* Desktop Interactive Route Steps (Horizontal Connected Flow) */}
@@ -338,60 +268,6 @@ export const CareerRoute: React.FC = () => {
                   *Обучение доступно бесплатно для участников молодёжных программ Ростовской области.
                 </p>
               </div>
-            </div>
-          </div>
-
-          {/* Dossier Bottom Interactive Actions & Navigation */}
-          <div className="mt-8 pt-6 border-t border-white/15 flex flex-wrap items-center justify-between gap-4">
-            <button
-              type="button"
-              onClick={handleCopyStage}
-              className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-full bg-white/10 hover:bg-white/20 text-white text-xs font-bold transition-all border border-white/20"
-              title="Скопировать чек-лист ступени"
-            >
-              {copiedStage ? (
-                <>
-                  <CheckCheck className="w-3.5 h-3.5 text-[#C4E538]" />
-                  <span className="text-[#C4E538]">План скопирован!</span>
-                </>
-              ) : (
-                <>
-                  <Copy className="w-3.5 h-3.5 text-[#51C3DD]" />
-                  <span>Скопировать план ступени</span>
-                </>
-              )}
-            </button>
-
-            <div className="flex items-center gap-2 ml-auto">
-              <button
-                type="button"
-                onClick={handlePrevStage}
-                disabled={currentStageIndex === 0}
-                className={`inline-flex items-center gap-1 px-4 py-2.5 rounded-full border text-xs font-bold transition-all ${
-                  currentStageIndex === 0
-                    ? 'opacity-30 cursor-not-allowed border-white/10 text-white/40'
-                    : 'border-white/20 hover:border-[#C4E538] text-white hover:bg-white/10'
-                }`}
-                aria-label="Предыдущая ступень"
-              >
-                <ChevronLeft className="w-4 h-4" />
-                <span className="hidden sm:inline">Ступень {currentStageIndex > 0 ? currentStageIndex : 1}</span>
-              </button>
-
-              <button
-                type="button"
-                onClick={handleNextStage}
-                disabled={currentStageIndex === careerStages.length - 1}
-                className={`inline-flex items-center gap-1 px-4 py-2.5 rounded-full border text-xs font-bold transition-all ${
-                  currentStageIndex === careerStages.length - 1
-                    ? 'opacity-30 cursor-not-allowed border-white/10 text-white/40'
-                    : 'bg-[#C4E538] text-[#062985] border-[#C4E538] hover:bg-[#D9FB5F] font-extrabold shadow-[2px_2px_0px_#FFFFFF]'
-                }`}
-                aria-label="Следующая ступень"
-              >
-                <span>{currentStageIndex === careerStages.length - 1 ? 'Финал маршрута' : `Ступень ${currentStageIndex + 2}`}</span>
-                <ChevronRight className="w-4 h-4" />
-              </button>
             </div>
           </div>
         </div>
