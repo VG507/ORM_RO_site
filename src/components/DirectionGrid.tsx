@@ -97,7 +97,7 @@ export const DirectionGrid: React.FC = () => {
                     {item.tagline}
                   </p>
 
-                  <p className={`text-xs sm:text-sm opacity-85 leading-relaxed mb-6 ${item.id === 'projects-grants' || item.id === 'volunteering' ? '' : 'line-clamp-3'}`}>
+                  <p className={`text-xs sm:text-sm opacity-85 leading-relaxed mb-6 ${item.id === 'volunteering' ? '' : 'line-clamp-3'}`}>
                     {item.description}
                   </p>
                 </div>
@@ -105,7 +105,7 @@ export const DirectionGrid: React.FC = () => {
                 <div className="pt-4 border-t border-current/15 flex items-center justify-between">
                   <span className="text-xs font-bold uppercase tracking-wider flex items-center gap-1.5">
                     <FolderKanban className="w-4 h-4" />
-                    {item.keyProjects.length} ключевых {item.keyProjects.length === 2 ? 'формата' : 'проекта'}
+                    {item.keyProjects.length === 1 ? '1 ключевой формат' : `${item.keyProjects.length} ключевых ${item.keyProjects.length === 2 ? 'формата' : 'проекта'}`}
                   </span>
                   <span className="text-xs underline font-display font-bold group-hover:translate-x-1 transition-transform">
                     Подробнее →
