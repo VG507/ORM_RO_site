@@ -159,7 +159,7 @@ export const CareerRoute: React.FC = () => {
                   type="button"
                   onClick={() => setSelectedStageId(stage.id)}
                   onKeyDown={(event) => handleStageKeyDown(event, index)}
-                  className={`min-w-0 text-left p-3 min-[380px]:p-4 sm:p-5 rounded-2xl border-2 sm:border-3 transition-all duration-200 cursor-pointer flex flex-col justify-between min-h-24 sm:min-h-28 relative ${colorClasses} ${
+                  className={`text-left p-3 min-[380px]:p-4 sm:p-5 rounded-2xl border-2 sm:border-3 transition-all duration-200 cursor-pointer flex flex-col justify-between min-h-[140px] min-[380px]:min-h-[160px] sm:min-h-[190px] relative ${colorClasses} ${
                     isSelected ? 'scale-[1.02] sm:scale-[1.03] z-20' : 'hover:-translate-y-1'
                   }`}
                   aria-pressed={isSelected}
@@ -175,11 +175,20 @@ export const CareerRoute: React.FC = () => {
                         <span className="w-2 sm:w-2.5 h-2 sm:h-2.5 rounded-full bg-current animate-ping" />
                       )}
                     </div>
+                    <span className="text-[9px] min-[380px]:text-[10px] font-bold uppercase tracking-wider px-1.5 sm:px-2 py-0.5 rounded-md bg-black/10 inline-block mb-1.5 sm:mb-2 line-clamp-1">
+                      {stage.badge}
+                    </span>
                   </div>
 
-                  <span className="font-body font-bold text-sm sm:text-base leading-snug break-words w-full">
-                    {stage.title}
-                  </span>
+                  {/* Title and subtitle */}
+                  <div>
+                    <h3 className="font-display font-bold text-[11px] min-[380px]:text-xs sm:text-sm leading-snug line-clamp-2">
+                      {stage.title}
+                    </h3>
+                    <p className="text-[10px] min-[380px]:text-[11px] opacity-80 line-clamp-1 mt-0.5 sm:mt-1 font-medium">
+                      {stage.subtitle}
+                    </p>
+                  </div>
                 </button>
               );
             })}

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { directionsData } from '../data/directionsData';
 import type { Direction } from '../types';
 import { ArrowUpRight, Check, X, Sparkles, FolderKanban } from 'lucide-react';
+import { StickerPill } from './decorations/DecorativeSVGs';
 
 export const DirectionGrid: React.FC = () => {
   const [activeModalDirection, setActiveModalDirection] = useState<Direction | null>(null);
@@ -29,12 +30,23 @@ export const DirectionGrid: React.FC = () => {
     >
       <div className="max-w-[1440px] mx-auto px-3 min-[380px]:px-4 sm:px-6 lg:px-12 relative z-10">
         {/* Section Header */}
-        <div className="mb-8 sm:mb-12 max-w-3xl">
-          <h2 className="font-display font-extrabold text-2xl sm:text-4xl xl:text-5xl tracking-tight leading-tight mb-4">
-            Направления деятельности
+        <div className="flex flex-col items-start mb-10 sm:mb-14 max-w-3xl">
+          <div className="flex flex-wrap items-center gap-2 mb-3">
+            <StickerPill text="Сферы реализации" bg="#51C3DD" textColor="#062985" rotate="2deg" />
+            <span className="font-hand text-base sm:text-lg text-[#062985] font-bold">
+              / выбери своё призвание
+            </span>
+          </div>
+
+          <h2 className="font-display font-extrabold text-2xl min-[380px]:text-3xl sm:text-5xl lg:text-6xl tracking-tight leading-tight uppercase mb-4 text-[#062985] break-words">
+            Направления <br className="hidden sm:inline" />
+            <span className="text-[#51C3DD] relative inline-block">
+              деятельности
+              <span className="absolute -bottom-1.5 sm:-bottom-2 left-0 right-0 h-1 sm:h-1.5 bg-[#062985] rounded-full" />
+            </span>
           </h2>
 
-          <p className="text-base lg:text-lg text-[#062985]/85 leading-relaxed">
+          <p className="font-body text-sm sm:text-base lg:text-lg text-[#062985]/75 leading-relaxed">
             Для специалиста по работе с молодежью нет однообразных задач. Каждое направление требует
             своего набора компетенций, характера и драйва. Кликни по направлению,
             чтобы узнать ключевые проекты и форматы участия.
@@ -81,11 +93,11 @@ export const DirectionGrid: React.FC = () => {
                     {item.title}
                   </h3>
 
-                  <p className="text-sm sm:text-base font-semibold mb-4">
+                  <p className="font-hand text-base sm:text-lg opacity-90 font-bold mb-4">
                     {item.tagline}
                   </p>
 
-                  <p className={`text-sm sm:text-base leading-relaxed mb-6 ${item.size === 'large' ? '' : 'line-clamp-3'}`}>
+                  <p className={`text-xs sm:text-sm opacity-85 leading-relaxed mb-6 ${item.size === 'large' ? '' : 'line-clamp-3'}`}>
                     {item.description}
                   </p>
                 </div>
@@ -140,7 +152,7 @@ export const DirectionGrid: React.FC = () => {
               {activeModalDirection.title}
             </h3>
 
-            <p className="text-base text-[#7B2EBC] font-semibold mb-4">
+            <p className="font-hand text-lg text-[#9B49DC] font-bold mb-4">
               {activeModalDirection.tagline}
             </p>
 
@@ -155,7 +167,7 @@ export const DirectionGrid: React.FC = () => {
               </h4>
               <ul className="space-y-2">
                 {activeModalDirection.keyProjects.map((proj, idx) => (
-                  <li key={idx} className="flex items-center gap-2 text-sm text-[#062985]">
+                  <li key={idx} className="flex items-center gap-2 text-xs sm:text-sm text-[#062985]">
                     <Check className="w-4 h-4 text-[#C4E538] shrink-0" />
                     <span>{proj}</span>
                   </li>
@@ -167,7 +179,7 @@ export const DirectionGrid: React.FC = () => {
               <span className="text-xs font-bold uppercase tracking-wider text-[#062985]/60 block mb-1">
                 Целевая аудитория и резиденты:
               </span>
-              <p className="text-sm font-medium text-[#062985]">
+              <p className="text-xs sm:text-sm font-medium text-[#062985]">
                 {activeModalDirection.targetAudience}
               </p>
             </div>

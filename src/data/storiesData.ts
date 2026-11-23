@@ -1,8 +1,7 @@
 import type { SuccessStory } from '../types';
+import teamPhotoOne from '../assets/team-photo-1.jpg';
 import teamPhotoTwo from '../assets/team-photo-2.jpg';
 import teamPhotoThree from '../assets/team-photo-3.jpg';
-
-const workshopPhoto = `${import.meta.env.BASE_URL}assets/career-group.jpg`;
 
 export const successStoriesData: SuccessStory[] = [
   {
@@ -10,8 +9,7 @@ export const successStoriesData: SuccessStory[] = [
     name: 'Анастасия Кравцова',
     role: 'Программный директор форума, экс-волонтёр',
     municipality: 'г. Ростов-на-Дону',
-    image: teamPhotoTwo,
-    imageAlt: 'Выступление с микрофоном перед аудиторией',
+    image: teamPhotoOne,
     quote: '«Я пришла волонтёром просто подавать микрофоны на форуме, а через три года координировала образовательную программу для 1500 участников со всего Юга России.»',
     background: 'Начинала со студенческого актива ЮФУ и волонтёрского корпуса #МЫВМЕСТЕ. Прошла ступени от куратора смены до ведущего специалиста регионального молодёжного центра.',
     milestones: [
@@ -28,8 +26,7 @@ export const successStoriesData: SuccessStory[] = [
     name: 'Дмитрий Васильев',
     role: 'Руководитель молодёжного IT-пространства',
     municipality: 'г. Таганрог',
-    image: workshopPhoto,
-    imageAlt: 'Участник практического занятия с блокнотом и маркерами',
+    image: teamPhotoTwo,
     quote: '«Когда мы выиграли первый грант в 1.2 млн рублей, многие думали, что открыть бесплатный коворкинг для подростков в райцентре невозможно. Сегодня у нас 60 резидентов каждый день.»',
     background: 'Инженер по образованию, который увлёкся профориентацией школьников. Разработал концепцию открытой мастерской робототехники и социального программирования.',
     milestones: [
@@ -47,7 +44,6 @@ export const successStoriesData: SuccessStory[] = [
     role: 'Директор муниципального молодёжного центра',
     municipality: 'г. Шахты',
     image: teamPhotoThree,
-    imageAlt: 'Участница молодёжного мероприятия в конференц-зале',
     quote: '«Молодёжный центр должен быть местом, куда хочется прийти просто выпить чаю и обсудить идею, а не строгим кабинетом с табличкой на двери.»',
     background: 'Пять лет работала в школе педагогом-организатором, затем перешла в муниципальный отдел по делам молодёжи. В 2022 году возглавила реорганизованный молодёжный центр.',
     milestones: [
