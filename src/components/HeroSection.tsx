@@ -47,7 +47,7 @@ export const HeroSection: React.FC = () => {
       <div className="relative z-10 max-w-[1440px] mx-auto px-3.5 sm:px-6 lg:px-12 w-full">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
           {/* Left Column: Asymmetrical Typography & Content */}
-          <div className="lg:col-span-7 flex flex-col items-start">
+          <div className="@container lg:col-span-7 flex flex-col items-start">
             {/* Top Regional Badge */}
             <div className="flex flex-wrap items-center gap-2 mb-4 sm:mb-6">
               <StickerPill
@@ -62,9 +62,9 @@ export const HeroSection: React.FC = () => {
             </div>
 
             {/* Giant Display Headline */}
-            <h1 className="font-display font-black text-3xl min-[380px]:text-4xl sm:text-6xl md:text-7xl xl:text-8xl tracking-tight leading-[0.98] sm:leading-[0.95] text-white uppercase mb-3 sm:mb-4 break-words w-full">
+            <h1 className="font-display font-black text-[length:min(1.875rem,11.5cqi)] min-[380px]:text-[length:min(2.25rem,11.5cqi)] sm:text-[length:min(3.75rem,11.5cqi)] md:text-[length:min(4.5rem,11.5cqi)] xl:text-[length:min(6rem,11.5cqi)] tracking-tight leading-[0.98] sm:leading-[0.95] text-white uppercase mb-3 sm:mb-4 whitespace-nowrap">
               КАРЬЕРНЫЙ <br />
-              <span className="text-[#C4E538] inline-block hover:scale-[1.01] transition-transform">
+              <span className="text-[#C4E538]">
                 МАРШРУТ
               </span>
             </h1>

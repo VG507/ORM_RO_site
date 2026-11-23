@@ -1,5 +1,5 @@
 import React from 'react';
-import { ArrowRight, Compass, MapPin } from 'lucide-react';
+import { ArrowRight, Compass } from 'lucide-react';
 import {
   SignatureWaveLime,
   SparkStar,
@@ -60,7 +60,7 @@ export const FinalCTA: React.FC = () => {
         </p>
 
         {/* CTAs */}
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 max-w-md mx-auto mb-10 sm:mb-14">
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 max-w-md mx-auto">
           <a
             href="#route"
             onClick={(e) => scrollTo(e, '#route')}
@@ -80,11 +80,6 @@ export const FinalCTA: React.FC = () => {
           </a>
         </div>
 
-        {/* Territory Indicator */}
-        <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 border border-white/20 text-xs text-white/80">
-          <MapPin className="w-3.5 h-3.5 text-[#C4E538]" />
-          <span>Единая платформа для 55 муниципалитетов Ростовской области</span>
-        </div>
       </div>
 
       {/* Decorative Wave Line at bottom */}

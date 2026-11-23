@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@source "./components/TaglineManifesto.tsx";
 
 @theme {
   --color-brand-navy: #062985;

@@ -2,6 +2,7 @@ import React from 'react';
 import { Header } from './components/Header';
 import { HeroSection } from './components/HeroSection';
 import { Marquee } from './components/Marquee';
+import { TaglineManifesto } from './components/TaglineManifesto';
 import { AboutSection } from './components/AboutSection';
 import { CareerRoute } from './components/CareerRoute';
 import { DirectionGrid } from './components/DirectionGrid';
@@ -26,6 +27,7 @@ export const App: React.FC = () => {
 
         {/* 3. Marquee Ribbon */}
         <Marquee />
+        <TaglineManifesto />
 
         {/* 4. About Section */}
         <AboutSection />
