@@ -117,10 +117,9 @@ export const AboutSection: React.FC = () => {
             </ul>
           </div>
 
-          {/* Right Column: Editorial Photo Collage */}
+          {/* Right Column: Photo */}
           <div className="lg:col-span-5 relative">
             <div className="relative mx-auto max-w-sm sm:max-w-md">
-              {/* Back Photo Card */}
               <div className="relative rounded-3xl overflow-hidden border-3 border-[#062985] shadow-[8px_8px_0px_#9B49DC] bg-white">
                 <img
                   src={`${import.meta.env.BASE_URL}assets/team-photo-3.png`}
@@ -145,20 +144,6 @@ export const AboutSection: React.FC = () => {
                 </div>
               </div>
 
-              {/* Overlapping Small Photo Card */}
-              <div className="absolute -bottom-8 -left-6 sm:-left-10 w-44 sm:w-56 rounded-2xl overflow-hidden border-3 border-[#062985] shadow-[6px_6px_0px_#C4E538] bg-white hidden sm:block">
-                <img
-                  src={`${import.meta.env.BASE_URL}assets/career-group.png`}
-                  alt="Молодой специалист"
-                  className="w-full h-32 sm:h-40 object-cover object-top"
-                  loading="lazy"
-                />
-                <div className="p-2 bg-[#062985] text-white text-center">
-                  <span className="font-hand text-xs text-[#C4E538] font-bold block">
-                    «Творим историю вместе»
-                  </span>
-                </div>
-              </div>
             </div>
           </div>
         </div>
