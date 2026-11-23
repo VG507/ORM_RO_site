@@ -62,7 +62,7 @@ export const SuccessStories: React.FC = () => {
                   <img
                     src={story.image}
                     alt={story.name}
-                    className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500"
+                    className="w-full h-full object-cover object-top origin-top group-hover:scale-105 transition-transform duration-500"
                     loading="lazy"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
@@ -146,7 +146,7 @@ export const SuccessStories: React.FC = () => {
                 <img
                   src={selectedStory.image}
                   alt={selectedStory.name}
-                  className="w-full h-full object-cover"
+                  className="w-full h-full object-cover object-top"
                 />
               </div>
               <div className="min-w-0">

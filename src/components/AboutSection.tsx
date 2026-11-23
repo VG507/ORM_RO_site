@@ -125,7 +125,7 @@ export const AboutSection: React.FC = () => {
                 <img
                   src={`${import.meta.env.BASE_URL}assets/team-photo-3.png`}
                   alt="Командная работа специалистов по работе с молодёжью"
-                  className="w-full h-80 sm:h-96 object-cover object-center"
+                  className="w-full h-80 sm:h-96 object-cover object-top"
                   loading="lazy"
                 />
                 <div className="p-4 bg-white border-t-2 border-[#062985]">
@@ -148,9 +148,9 @@ export const AboutSection: React.FC = () => {
               {/* Overlapping Small Photo Card */}
               <div className="absolute -bottom-8 -left-6 sm:-left-10 w-44 sm:w-56 rounded-2xl overflow-hidden border-3 border-[#062985] shadow-[6px_6px_0px_#C4E538] bg-white hidden sm:block">
                 <img
-                  src={`${import.meta.env.BASE_URL}assets/team-photo-1.png`}
+                  src={`${import.meta.env.BASE_URL}assets/career-group.png`}
                   alt="Молодой специалист"
-                  className="w-full h-32 sm:h-40 object-cover object-center"
+                  className="w-full h-32 sm:h-40 object-cover object-top"
                   loading="lazy"
                 />
                 <div className="p-2 bg-[#062985] text-white text-center">
